@@ -26,14 +26,6 @@
     cursor: pointer;
   }
 
-  button:hover {
-    opacity: 0.9;
-  }
-
-  input[type="range"] {
-    width: 200px;
-  }
-
   #imageArea {
     width: 80%;
     max-width: 600px;
@@ -42,10 +34,7 @@
 
   #mainImage {
     width: 100%;
-    display: block;
     border-radius: 10px;
-    opacity: 0.95;
-    filter: brightness(0.9) contrast(1.1);
   }
 
   #messageBox {
@@ -53,73 +42,25 @@
     padding: 16px;
     background: rgba(255,255,255,0.08);
     border-radius: 12px;
-    box-sizing: border-box;
   }
 
-  #messageName {
-    font-size: 14px;
-    color: #b8c0ff;
-    text-align: left;
-    margin-bottom: 8px;
-  }
-
-  #message {
-    font-size: 20px;
-    color: #f2f2f2;
-    text-align: left;
-    line-height: 1.6;
-    min-height: 32px;
-  }
-
-  #trackName {
-    font-size: 18px;
-    margin-top: 20px;
-    color: #d6dcff;
-  }
-
-  #mode {
-    font-size: 24px;
-    margin-top: 24px;
-  }
-
-  #timer {
-    font-size: 48px;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  #statusMessage {
-    margin-top: 14px;
-    font-size: 18px;
-    color: #ffe9a8;
-    min-height: 28px;
-  }
+  #trackName { margin-top: 20px; }
+  #mode { font-size: 24px; margin-top: 24px; }
+  #timer { font-size: 48px; margin-top: 10px; }
 
   #noticeOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.72);
+    background: rgba(0,0,0,0.7);
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 10000;
-    padding: 20px;
-    box-sizing: border-box;
   }
 
   #noticeBox {
     background: #2b2b44;
-    border-radius: 16px;
-    padding: 28px 24px;
-    width: 90%;
-    max-width: 460px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  }
-
-  #noticeText {
-    font-size: 28px;
-    line-height: 1.5;
-    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
   }
 
   #lockScreen {
@@ -127,49 +68,21 @@
     inset: 0;
     background: #1e1e2f;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    padding: 20px;
-    box-sizing: border-box;
+    flex-direction: column;
   }
 
-  #lockScreen h2 {
-    margin-bottom: 20px;
-    font-size: 28px;
-  }
-
-  #passwordInput {
-    font-size: 18px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: none;
-    width: 260px;
-    max-width: 80%;
-    box-sizing: border-box;
-  }
-
-  #errorMessage {
-    color: #ff9b9b;
-    margin-top: 12px;
-    min-height: 24px;
-  }
-
-  #appContent {
-    display: none;
-  }
+  #appContent { display: none; }
 </style>
 </head>
 
 <body>
 
 <div id="lockScreen">
-  <h2>🔒 パスワードを入力</h2>
-  <input type="password" id="passwordInput" placeholder="Password">
-  <br><br>
+  <h2>🔒 パスワード</h2>
+  <input type="password" id="passwordInput">
   <button onclick="checkPassword()">入る</button>
-  <div id="errorMessage"></div>
 </div>
 
 <div id="noticeOverlay">
@@ -181,333 +94,121 @@
 
 <div id="appContent">
 
-  <h1>🎧 Lo-fi 作業アプリ</h1>
+<h1>🎧 Lo-fi 作業アプリ</h1>
 
-  <div id="imageArea">
-    <img src="image.png" id="mainImage" alt="ドット絵イラスト">
-
-    <div id="messageBox">
-      <div id="messageName">Girl</div>
-      <div id="message"></div>
-    </div>
+<div id="imageArea">
+  <img src="image.png" id="mainImage">
+  <div id="messageBox">
+    <div id="message"></div>
   </div>
+</div>
 
-  <audio id="music"></audio>
-  <audio id="bell" src="bell.mp3"></audio>
+<audio id="music"></audio>
+<audio id="bell" src="bell.mp3"></audio>
 
-  <div id="trackName">現在の曲：未再生</div>
+<div id="trackName"></div>
 
-  <br><br>
+<br>
 
-  音量<br>
-  <input type="range" min="0" max="1" step="0.01" value="1"
-         oninput="setVolume(this.value)">
+音量<br>
+<input type="range" min="0" max="1" step="0.01" value="1"
+oninput="music.volume=this.value">
 
-  <div id="mode">作業時間</div>
-  <div id="timer">25:00</div>
-  <div id="statusMessage"></div>
+<div id="mode"></div>
+<div id="timer"></div>
 
-  <button id="timerButton" onclick="toggleTimer()">タイマー開始</button>
-  <button onclick="resetTimer()">リセット</button>
+<button onclick="toggleTimer()" id="timerButton">開始</button>
 
 </div>
 
 <script>
-  const music = document.getElementById("music");
-  const bell = document.getElementById("bell");
-  const modeDisplay = document.getElementById("mode");
-  const timerDisplay = document.getElementById("timer");
-  const timerButton = document.getElementById("timerButton");
-  const messageDisplay = document.getElementById("message");
-  const trackNameDisplay = document.getElementById("trackName");
-  const statusMessageDisplay = document.getElementById("statusMessage");
-  const passwordInput = document.getElementById("passwordInput");
-  const errorMessage = document.getElementById("errorMessage");
-  const lockScreen = document.getElementById("lockScreen");
-  const appContent = document.getElementById("appContent");
-  const noticeOverlay = document.getElementById("noticeOverlay");
-  const noticeText = document.getElementById("noticeText");
+const music = document.getElementById("music");
+const bell = document.getElementById("bell");
+const noticeText = document.getElementById("noticeText");
+const noticeOverlay = document.getElementById("noticeOverlay");
 
-  const WORK_TIME = 0.5 * 60;
-  const BREAK_TIME = 0.5 * 60;
-  const APP_PASSWORD = "storycat";
+const WORK = 1500;
+const BREAK = 300;
+const PASSWORD = "storycat";
 
-  const tracks = [
-    "Epoch.mp3",
-    "Barely.mp3",
-    "Notion.mp3",
-    "Reflection.mp3",
-    "Woozy.mp3",
-    "Cozy.mp3",
-    "Fake.mp3",
-    "Yawn.mp3",
-    "Glass.mp3",
-    "Walk.mp3"
-  ];
+let time = WORK;
+let endTime = null;
+let isRunning = false;
+let isWork = true;
 
-  const messages = [
-    "……雨の音、落ち着くね。",
-    "コーヒー、まだ温かい？",
-    "焦らなくていいよ。",
-    "ゆっくり進めば大丈夫。",
-    "ちゃんと頑張ってるね。",
-    "あと少しだよ。",
-    "無理しないでね。",
-    "休憩も大事だよ。",
-    "いいペースだね。",
-    "……ここで一緒に頑張ろう。"
-  ];
+function checkPassword(){
+  if(passwordInput.value===PASSWORD){
+    lockScreen.style.display="none";
+    appContent.style.display="block";
+  }
+}
 
-  let isRunning = false;
-  let isWorkMode = true;
-  let remainingTime = WORK_TIME;
-  let endTime = null;
+function playBell(){
+  bell.currentTime=0;
+  bell.play();
+}
 
-  let intervalId = null;
-  let messageIntervalId = null;
+function update(){
+  document.getElementById("timer").innerText =
+    Math.floor(time/60)+":"+("0"+time%60).slice(-2);
+}
 
-  let lastMessageIndex = -1;
-  let currentTrackIndex = -1;
+function showNotice(text){
+  noticeText.innerText=text;
+  noticeOverlay.style.display="flex";
+}
 
-  function checkPassword() {
-    const input = passwordInput.value;
+function closeNoticeAndStartNext(){
+  noticeOverlay.style.display="none";
+  startTimer();
+}
 
-    if (input === APP_PASSWORD) {
-      lockScreen.style.display = "none";
-      appContent.style.display = "block";
-      errorMessage.innerText = "";
-    } else {
-      errorMessage.innerText = "パスワードが違います";
-      passwordInput.value = "";
-      passwordInput.focus();
-    }
+function finish(){
+  stopTimer();
+
+  if(isWork){
+    isWork=false;
+    time=BREAK;
+    showNotice("作業終了！");
+  }else{
+    isWork=true;
+    time=WORK;
+    showNotice("休憩終了！");
   }
 
-  passwordInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      checkPassword();
-    }
-  });
+  update();
+}
 
-  function setVolume(v) {
-    const volume = Number(v);
-    music.volume = volume;
-    bell.volume = Math.min(volume, 0.6);
+function tick(){
+  if(!isRunning) return;
+
+  time = Math.max(0, Math.ceil((endTime-Date.now())/1000));
+  update();
+
+  if(time<=0){
+    playBell();  // ←ここだけで鳴る
+    finish();
   }
+}
 
-  function playBell() {
-    bell.currentTime = 0;
-    bell.play().catch(() => {});
-  }
+function startTimer(){
+  if(isRunning) return;
 
-  function updateTimerDisplay() {
-    const min = Math.floor(remainingTime / 60);
-    const sec = remainingTime % 60;
-    timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
-  }
+  isRunning=true;
+  endTime=Date.now()+time*1000;
+  setInterval(tick,250);
+}
 
-  function updateModeDisplay() {
-    modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
-  }
+function stopTimer(){
+  isRunning=false;
+}
 
-  function setStatusMessage(text) {
-    statusMessageDisplay.innerText = text;
-  }
+function toggleTimer(){
+  if(isRunning) stopTimer();
+  else startTimer();
+}
 
-  function showNotice(text) {
-    noticeText.innerText = text;
-    noticeOverlay.style.display = "flex";
-  }
-
-  function closeNoticeAndStartNext() {
-    noticeOverlay.style.display = "none";
-    setStatusMessage("");
-    startTimer();
-  }
-
-  function getRandomMessageIndex() {
-    if (messages.length === 1) return 0;
-
-    let randomIndex;
-    do {
-      randomIndex = Math.floor(Math.random() * messages.length);
-    } while (randomIndex === lastMessageIndex);
-
-    return randomIndex;
-  }
-
-  function showRandomMessage() {
-    const randomIndex = getRandomMessageIndex();
-    lastMessageIndex = randomIndex;
-    messageDisplay.innerText = messages[randomIndex];
-  }
-
-  function startMessageLoop() {
-    if (messageIntervalId) return;
-
-    messageIntervalId = setInterval(() => {
-      if (!isRunning) return;
-      showRandomMessage();
-    }, 60000);
-  }
-
-  function stopMessageLoop() {
-    clearInterval(messageIntervalId);
-    messageIntervalId = null;
-  }
-
-  function getRandomTrackIndex() {
-    if (tracks.length === 1) return 0;
-
-    let randomIndex;
-    do {
-      randomIndex = Math.floor(Math.random() * tracks.length);
-    } while (randomIndex === currentTrackIndex);
-
-    return randomIndex;
-  }
-
-  function updateTrackName(index) {
-    const trackName = tracks[index].replace(".mp3", "");
-    trackNameDisplay.innerText = "現在の曲：" + trackName;
-  }
-
-  function playRandomTrack() {
-    const randomIndex = getRandomTrackIndex();
-    currentTrackIndex = randomIndex;
-    music.src = tracks[randomIndex];
-    updateTrackName(randomIndex);
-    music.play().catch(() => {});
-  }
-
-  music.addEventListener("ended", () => {
-    if (isRunning) {
-      playRandomTrack();
-    }
-  });
-
-  function notifyModeChange(text) {
-    setStatusMessage(text);
-    showNotice(text);
-    playBell();
-  }
-
-  function finishCurrentMode() {
-    stopTimer();
-
-    if (isWorkMode) {
-      isWorkMode = false;
-      remainingTime = BREAK_TIME;
-      messageDisplay.innerText = "おつかれさま。少し休もうか。";
-      lastMessageIndex = -1;
-      notifyModeChange("作業終了！ 5分休憩です。");
-    } else {
-      isWorkMode = true;
-      remainingTime = WORK_TIME;
-      messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
-      lastMessageIndex = -1;
-      notifyModeChange("休憩終了！ 作業を再開しましょう。");
-    }
-
-    updateModeDisplay();
-    updateTimerDisplay();
-  }
-
-  function tickTimer() {
-    if (!isRunning || endTime === null) return;
-
-    const now = Date.now();
-    const diffMs = endTime - now;
-    remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-
-    updateTimerDisplay();
-
-    if (remainingTime <= 0) {
-      finishCurrentMode();
-    }
-  }
-
-  function startTimer() {
-    if (isRunning) return;
-
-    isRunning = true;
-    timerButton.innerText = "タイマー停止";
-    endTime = Date.now() + remainingTime * 1000;
-
-    if (music.paused) {
-      if (!music.src) {
-        playRandomTrack();
-      } else {
-        music.play().catch(() => {});
-      }
-    }
-
-    startMessageLoop();
-    setStatusMessage("");
-
-    tickTimer();
-    intervalId = setInterval(tickTimer, 250);
-  }
-
-  function stopTimer() {
-    clearInterval(intervalId);
-    intervalId = null;
-
-    if (isRunning && endTime !== null) {
-      const diffMs = endTime - Date.now();
-      remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-    }
-
-    isRunning = false;
-    endTime = null;
-    timerButton.innerText = "タイマー開始";
-
-    music.pause();
-    stopMessageLoop();
-    updateTimerDisplay();
-  }
-
-  function toggleTimer() {
-    if (isRunning) {
-      stopTimer();
-    } else {
-      startTimer();
-    }
-  }
-
-  function resetTimer() {
-    stopTimer();
-
-    isWorkMode = true;
-    remainingTime = WORK_TIME;
-    endTime = null;
-    lastMessageIndex = -1;
-    currentTrackIndex = -1;
-
-    updateModeDisplay();
-    updateTimerDisplay();
-    showRandomMessage();
-
-    music.pause();
-    music.currentTime = 0;
-    music.removeAttribute("src");
-    music.load();
-
-    trackNameDisplay.innerText = "現在の曲：未再生";
-    setStatusMessage("");
-    noticeOverlay.style.display = "none";
-  }
-
-  document.addEventListener("visibilitychange", () => {
-    if (isRunning) {
-      tickTimer();
-    }
-  });
-
-  bell.volume = 0.6;
-  updateModeDisplay();
-  updateTimerDisplay();
-  showRandomMessage();
+update();
 </script>
 
 </body>
