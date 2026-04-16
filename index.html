@@ -256,6 +256,7 @@
   }
 
   #visualizer {
+    margin-right: 10px;
     display: flex;
     align-items: flex-end;
     gap: 4px;
@@ -363,6 +364,8 @@
 </div>
 
 <script>
+  const USE_PASSWORD = false;
+  
   const music = document.getElementById("music");
   const bell = document.getElementById("bell");
   const modeDisplay = document.getElementById("mode");
@@ -372,8 +375,15 @@
   const trackNameDisplay = document.getElementById("trackName");
   const passwordInput = document.getElementById("passwordInput");
   const errorMessage = document.getElementById("errorMessage");
+  
   const lockScreen = document.getElementById("lockScreen");
   const appContent = document.getElementById("appContent");
+
+if (!USE_PASSWORD) {
+  lockScreen.style.display = "none";
+  appContent.style.display = "block";
+}
+  
   const noticeOverlay = document.getElementById("noticeOverlay");
   const noticeText = document.getElementById("noticeText");
 
