@@ -175,7 +175,7 @@
 <div id="noticeOverlay">
   <div id="noticeBox">
     <div id="noticeText"></div>
-    <button onclick="closeNotice()">閉じる</button>
+    <button onclick="closeNoticeAndStartNext()">閉じる</button>
   </div>
 </div>
 
@@ -213,8 +213,6 @@
 </div>
 
 <script>
-  const DEFAULT_TITLE = "Lo-fi 作業アプリ";
-
   const music = document.getElementById("music");
   const bell = document.getElementById("bell");
   const modeDisplay = document.getElementById("mode");
@@ -230,8 +228,8 @@
   const noticeOverlay = document.getElementById("noticeOverlay");
   const noticeText = document.getElementById("noticeText");
 
-  const WORK_TIME = 0.5 * 60;
-  const BREAK_TIME = 0.5 * 60;
+  const WORK_TIME = 25 * 60;
+  const BREAK_TIME = 5 * 60;
   const APP_PASSWORD = "storycat";
 
   const tracks = [
@@ -316,19 +314,15 @@
     statusMessageDisplay.innerText = text;
   }
 
-  function updateTitle(extra = "") {
-    document.title = extra ? `${extra} | ${DEFAULT_TITLE}` : DEFAULT_TITLE;
-  }
-
   function showNotice(text) {
     noticeText.innerText = text;
     noticeOverlay.style.display = "flex";
-    updateTitle(text);
   }
 
-  function closeNotice() {
+  function closeNoticeAndStartNext() {
     noticeOverlay.style.display = "none";
-    updateTitle("");
+    setStatusMessage("");
+    startTimer();
   }
 
   function getRandomMessageIndex() {
@@ -436,8 +430,6 @@
   function startTimer() {
     if (isRunning) return;
 
-    closeNotice();
-
     isRunning = true;
     timerButton.innerText = "タイマー停止";
     endTime = Date.now() + remainingTime * 1000;
@@ -503,7 +495,7 @@
 
     trackNameDisplay.innerText = "現在の曲：未再生";
     setStatusMessage("");
-    closeNotice();
+    noticeOverlay.style.display = "none";
   }
 
   document.addEventListener("visibilitychange", () => {
@@ -516,7 +508,6 @@
   updateModeDisplay();
   updateTimerDisplay();
   showRandomMessage();
-  updateTitle("");
 </script>
 
 </body>
