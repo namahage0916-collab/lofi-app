@@ -523,6 +523,7 @@
     music.src = tracks[randomIndex];
     updateTrackName(randomIndex);
     music.play().catch(() => {});
+    startVisualizer();
   }
 
   music.addEventListener("ended", () => {
