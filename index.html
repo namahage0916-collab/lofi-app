@@ -192,10 +192,7 @@
     </div>
   </div>
 
-  <!-- ランダム再生用の音楽 -->
   <audio id="music"></audio>
-
-  <!-- ベル音 -->
   <audio id="bell" src="bell.mp3"></audio>
 
   <div id="trackName">現在の曲：未再生</div>
@@ -295,7 +292,7 @@
   function setVolume(v) {
     const volume = Number(v);
     music.volume = volume;
-    bell.volume = Math.min(volume, 0.8);
+    bell.volume = Math.min(volume, 0.6);
   }
 
   function playBell() {
@@ -426,7 +423,6 @@
     updateTimerDisplay();
 
     if (remainingTime <= 0) {
-      playBell();
       finishCurrentMode();
     }
   }
@@ -508,7 +504,7 @@
     }
   });
 
-  bell.volume = 0.8;
+  bell.volume = 0.6;
   updateModeDisplay();
   updateTimerDisplay();
   showRandomMessage();
