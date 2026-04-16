@@ -88,6 +88,14 @@
     color: #d6dcff;
   }
 
+  #dateText {
+  font-size: 14px;
+  margin-left: 12px;
+  color: #d6dcff;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
   /* レイアウト調整：
      音量エリアとタイマー表示を横並びのパネルにする */
   #controlRow {
@@ -250,7 +258,9 @@
 
 <div id="appContent">
 
-  <h1>🎧 Lo-fi 作業アプリ</h1>
+  <h1>🎧 Lo-fi 作業アプリ
+   <span id="dateText"></span>
+  </h1>
 
   <div id="imageArea">
     <img src="image.png" id="mainImage" class="fade-in" alt="ドット絵イラスト">
@@ -582,6 +592,23 @@
   updateModeDisplay();
   updateTimerDisplay();
   showRandomMessage();
+
+function updateDate() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+
+  const week = ["日", "月", "火", "水", "木", "金", "土"];
+  const dayOfWeek = week[now.getDay()];
+
+  const text = `${year}/${month}/${day}（${dayOfWeek}）`;
+
+  document.getElementById("dateText").innerText = text;
+}
+
+updateDate();  
 </script>
 
 </body>
