@@ -210,6 +210,23 @@
   #appContent {
     display: none;
   }
+
+/* フェードイン */
+.fade-in {
+  animation: fadeIn 1.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  
 </style>
 </head>
 
@@ -235,7 +252,7 @@
   <h1>🎧 Lo-fi 作業アプリ</h1>
 
   <div id="imageArea">
-    <img src="image.png" id="mainImage" alt="ドット絵イラスト">
+    <img src="image.png" id="mainImage" class="fade-in" alt="ドット絵イラスト">
 
     <div id="messageBox">
       <div id="messageName">Girl</div>
