@@ -77,9 +77,37 @@
     color: #d6dcff;
   }
 
+  /* レイアウト調整：
+     音量エリアとタイマー表示を横並びのパネルにする */
+  #controlRow {
+    width: 80%;
+    max-width: 600px;
+    margin: 24px auto 0;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .panel {
+    flex: 1 1 240px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+  }
+
+  .panelTitle {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #d6dcff;
+  }
+
   #mode {
     font-size: 24px;
-    margin-top: 24px;
+    margin-top: 0;
+    color: #d6dcff;
   }
 
   #timer {
@@ -88,11 +116,9 @@
     font-weight: bold;
   }
 
-  #statusMessage {
-    margin-top: 14px;
-    font-size: 18px;
-    color: #ffe9a8;
-    min-height: 28px;
+  /* ボタン群を少し整理 */
+  #buttonRow {
+    margin-top: 24px;
   }
 
   #noticeOverlay {
@@ -197,18 +223,31 @@
 
   <div id="trackName">現在の曲：未再生</div>
 
-  <br><br>
+  <!--
+    ここを新しく整理：
+    左に音量、右に作業時間と残り時間を置く
+  -->
+  <div id="controlRow">
+    <div class="panel">
+      <div class="panelTitle">音量</div>
+      <input type="range" min="0" max="1" step="0.01" value="1"
+             oninput="setVolume(this.value)">
+    </div>
 
-  音量<br>
-  <input type="range" min="0" max="1" step="0.01" value="1"
-         oninput="setVolume(this.value)">
+    <div class="panel">
+      <div id="mode">作業時間</div>
+      <div id="timer">25:00</div>
+    </div>
+  </div>
 
-  <div id="mode">作業時間</div>
-  <div id="timer">25:00</div>
-  <div id="statusMessage"></div>
-
-  <button id="timerButton" onclick="toggleTimer()">タイマー開始</button>
-  <button onclick="resetTimer()">リセット</button>
+  <!--
+    通知文の常時表示は削除。
+    今後はオーバーレイ通知だけを使う。
+  -->
+  <div id="buttonRow">
+    <button id="timerButton" onclick="toggleTimer()">タイマー開始</button>
+    <button onclick="resetTimer()">リセット</button>
+  </div>
 
 </div>
 
@@ -220,7 +259,6 @@
   const timerButton = document.getElementById("timerButton");
   const messageDisplay = document.getElementById("message");
   const trackNameDisplay = document.getElementById("trackName");
-  const statusMessageDisplay = document.getElementById("statusMessage");
   const passwordInput = document.getElementById("passwordInput");
   const errorMessage = document.getElementById("errorMessage");
   const lockScreen = document.getElementById("lockScreen");
@@ -228,8 +266,8 @@
   const noticeOverlay = document.getElementById("noticeOverlay");
   const noticeText = document.getElementById("noticeText");
 
-  const WORK_TIME = 0.5 * 60;
-  const BREAK_TIME = 0.5 * 60;
+  const WORK_TIME = 25 * 60;
+  const BREAK_TIME = 5 * 60;
   const APP_PASSWORD = "storycat";
 
   const tracks = [
@@ -310,18 +348,14 @@
     modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
   }
 
-  function setStatusMessage(text) {
-    statusMessageDisplay.innerText = text;
-  }
-
   function showNotice(text) {
     noticeText.innerText = text;
     noticeOverlay.style.display = "flex";
   }
 
+  /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
   function closeNoticeAndStartNext() {
     noticeOverlay.style.display = "none";
-    setStatusMessage("");
     startTimer();
   }
 
@@ -386,8 +420,8 @@
     }
   });
 
+  /* 常時表示の通知文はやめて、オーバーレイ通知だけ使う */
   function notifyModeChange(text) {
-    setStatusMessage(text);
     showNotice(text);
     playBell();
   }
@@ -443,7 +477,6 @@
     }
 
     startMessageLoop();
-    setStatusMessage("");
 
     tickTimer();
     intervalId = setInterval(tickTimer, 250);
@@ -494,7 +527,6 @@
     music.load();
 
     trackNameDisplay.innerText = "現在の曲：未再生";
-    setStatusMessage("");
     noticeOverlay.style.display = "none";
   }
 
