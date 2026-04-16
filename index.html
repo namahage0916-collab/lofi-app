@@ -26,16 +26,17 @@
   color: white;
   cursor: pointer;
 
-  /* 浮き上がり演出用 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.2s ease;
 }
 
   button:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  opacity: 1;
+  background: #7f8cff;
 }
+
+  button:active {
+    background: #5a68c0;
+  }
 
   input[type="range"] {
     width: 200px;
