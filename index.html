@@ -6,6 +6,58 @@
 <meta name="robots" content="noindex">
 
 <style>
+  /* =========================
+   雨エフェクト本体
+========================= */
+
+.rain {
+  position: fixed;
+  top: -50%;
+  width: 2px;
+  height: 100px;
+  background: rgba(200, 200, 255, 0.2);
+  animation: drop 1s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rain::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 30px;
+  background: rgba(255,255,255,0.3);
+  top: 0;
+  left: 0;
+}
+
+/* あなたが持ってきたコード（そのまま） */
+.rain:nth-child(3) { margin-left: -20%; }
+.rain:nth-child(3)::after { animation-delay: .6s; }
+
+.rain:nth-child(4) { margin-left: -10%; }
+.rain:nth-child(4)::after { animation-delay: 2.3s; }
+
+.rain:nth-child(5) { margin-left: 0%; }
+.rain:nth-child(5)::after { animation-delay: 1s; }
+
+.rain:nth-child(6) { margin-left: 10%; }
+.rain:nth-child(6)::after { animation-delay: .3s; }
+
+.rain:nth-child(7) { margin-left: 20%; }
+.rain:nth-child(7)::after { animation-delay: 2.6s; }
+
+.rain:nth-child(8) { margin-left: 30%; }
+.rain:nth-child(8)::after { animation-delay: 1.9s; }
+
+.rain:nth-child(9) { margin-left: 40%; }
+.rain:nth-child(9)::after { animation-delay: .7s; }
+
+@keyframes drop {
+  0% { top: -50%; }
+  100% { top: 150%; }
+}
+  
   body {
     background: #1e1e2f;
     color: #fff;
@@ -201,6 +253,17 @@
 </head>
 
 <body>
+
+<!-- ★ここに追加 -->
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
+<div class="rain"></div>
 
 <div id="lockScreen">
   <h2>🔒 パスワードを入力</h2>
