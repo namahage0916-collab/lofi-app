@@ -235,6 +235,53 @@
     transform: translateY(0);
   }
 }
+
+    /* =========================
+     ビジュアライザー関連（★追加）
+  ========================= */
+
+  #buttonRow {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  #buttonGroup {
+    display: flex;
+    gap: 10px;
+  }
+
+  #visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 30px;
+  }
+
+  #visualizer span {
+    width: 4px;
+    height: 6px;
+    background: #d6dcff;
+    border-radius: 2px;
+    animation: bounce 1s infinite ease-in-out;
+  }
+
+  #visualizer span:nth-child(1) { animation-delay: 0s; }
+  #visualizer span:nth-child(2) { animation-delay: 0.2s; }
+  #visualizer span:nth-child(3) { animation-delay: 0.4s; }
+  #visualizer span:nth-child(4) { animation-delay: 0.6s; }
+  #visualizer span:nth-child(5) { animation-delay: 0.8s; }
+
+  #visualizer.paused span {
+    animation: none;
+    height: 6px;
+  }
+
+  @keyframes bounce {
+    0%, 100% { height: 6px; }
+    50% { height: 28px; }
+  }
   
 </style>
 </head>
@@ -297,10 +344,19 @@
     今後はオーバーレイ通知だけを使う。
   -->
   <div id="buttonRow">
-    <button id="timerButton" class="fade-in" onclick="toggleTimer()">タイマー開始</button>
-    <button class="fade-in" onclick="resetTimer()">リセット</button>
+    <div id="buttonGroup">
+     <button id="timerButton" class="fade-in" onclick="toggleTimer()">タイマー開始</button>
+     <button class="fade-in" onclick="resetTimer()">リセット</button>
   </div>
 
+    <div id="visualizer" class="paused">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+    
 </div>
 
 <script>
@@ -525,6 +581,7 @@
         playRandomTrack();
       } else {
         music.play().catch(() => {});
+        startVisualizer();
       }
     }
 
@@ -549,6 +606,7 @@
 
     music.pause();
     stopMessageLoop();
+    stopVisualizer();
     updateTimerDisplay();
   }
 
@@ -609,6 +667,17 @@ function updateDate() {
 }
 
 updateDate();  
+
+const visualizer = document.getElementById("visualizer");
+
+function startVisualizer() {
+  visualizer.classList.remove("paused");
+}
+
+function stopVisualizer() {
+  visualizer.classList.add("paused");
+}
+  
 </script>
 
 </body>
