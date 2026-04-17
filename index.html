@@ -1,33 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
-<!-- ▼ 文字コード設定 -->
 <meta charset="UTF-8">
-
-<!-- ▼ ページタイトル（ブラウザのタブに表示） -->
-<title>Lo-fi 作業アプリ</title>
-
-<!-- ▼ 検索エンジンに表示させない -->
+<title>Lo-fi 作業アプリ</title>  
 <meta name="robots" content="noindex">
 
-<!-- =========================
-     ▼ CSS（見た目のデザイン）
-========================= -->
 <style>
 
-/* ▼ 全体の背景・文字設定 */
-body {
+  body {
   background: #1e1e2f;
-  color: #fff;
-  text-align: center;
-  font-family: sans-serif;
-  padding-top: 50px;
-  margin: 0;
-}
+    color: #fff;
+    text-align: center;
+    font-family: sans-serif;
+    padding-top: 50px;
+    margin: 0;
+  }
 
-/* ▼ ボタンの見た目 */
-button {
+  button {
   font-size: 20px;
   padding: 10px 20px;
   margin: 10px;
@@ -41,18 +30,19 @@ button {
   transition: background 0.2s ease;
 }
 
-/* ▼ ボタンにマウスを乗せた時 */
-button:hover {
+  button:hover {
   background: #5a68c0;
 }
 
-/* ▼ ボタンを押した瞬間 */
-button:active {
-  background: #4a57a8;
-}
+  button:active {
+    background: #4a57a8;
+  }
 
-/* ▼ ボタン＋ビジュアライザーの横並び */
-#buttonRow {
+  input[type="range"] {
+    width: 200px;
+  }
+
+  #buttonRow {
   margin: 10px auto 0;
   width: 80%;
   max-width: 600px;
@@ -62,166 +52,641 @@ button:active {
   padding: 0 8px;
 }
 
-/* ▼ ボタン同士の間隔 */
-#buttonGroup {
+  #imageArea {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto 0;
+  }
+
+  #mainImage {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+    opacity: 0.95;
+    filter: brightness(0.9) contrast(1.1);
+  }
+
+  #messageBox {
+    margin-top: 10px;
+    padding: 16px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    box-sizing: border-box;
+
+  /* ★追加 */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  #messageName {
+    font-size: 14px;
+    color: #b8c0ff;
+    text-align: left;
+    margin-bottom: 8px;
+  }
+
+  #message {
+    font-size: 20px;
+    color: #f2f2f2;
+    text-align: left;
+    line-height: 1.6;
+    min-height: 32px;
+  }
+
+  #trackName {
+    font-size: 18px;
+    margin-top: 20px;
+    color: #d6dcff;
+  }
+
+  #dateText {
+  font-size: 14px;
+  margin-left: 12px;
+  color: #d6dcff;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+  /* レイアウト調整：
+     音量エリアとタイマー表示を横並びのパネルにする */
+  #controlRow {
+    width: 80%;
+    max-width: 600px;
+    margin: 10px auto 0;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .panel {
+    flex: 1 1 240px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+
+  /* ★追加 */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .panelTitle {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #d6dcff;
+  }
+
+  #mode {
+    font-size: 24px;
+    margin-top: 0;
+    color: #d6dcff;
+  }
+
+  #timer {
+    font-size: 48px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  #buttonGroup {
   display: flex;
   gap: 10px;
 }
+  
+  #noticeOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    padding: 20px;
+    box-sizing: border-box;
+  }
 
-/* ▼ ビジュアライザー（棒） */
-#visualizer {
-  margin-right: 10px;
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 30px;
+  #noticeBox {
+    background: #2b2b44;
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: 90%;
+    max-width: 460px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  #noticeText {
+    font-size: 28px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  #lockScreen {
+    position: fixed;
+    inset: 0;
+    background: #1e1e2f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  #lockScreen h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+  }
+
+  #passwordInput {
+    font-size: 18px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    width: 260px;
+    max-width: 80%;
+    box-sizing: border-box;
+  }
+
+  #errorMessage {
+    color: #ff9b9b;
+    margin-top: 12px;
+    min-height: 24px;
+  }
+
+  #appContent {
+    display: none;
+  }
+
+/* フェードイン */
+.fade-in {
+  animation: fadeIn 1.5s ease-in;
 }
 
-/* ▼ 棒1本の見た目 */
-#visualizer span {
-  width: 4px;
-  height: 6px;
-  background: #d6dcff;
-  border-radius: 2px;
-  animation: bounce 1s infinite ease-in-out;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ▼ アニメーション（伸び縮み） */
-@keyframes bounce {
-  0%, 100% { height: 6px; }
-  50% { height: 28px; }
-}
+    /* =========================
+     ビジュアライザー関連（★追加）
+  ========================= */
 
-/* ▼ 停止状態（動かない） */
-#visualizer.paused span {
-  animation: none;
-  height: 6px;
-}
+  #buttonRow {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
+  #buttonGroup {
+    display: flex;
+    gap: 10px;
+  }
+
+  #visualizer {
+    margin-right: 10px;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 30px;
+  }
+
+  #visualizer span {
+    width: 4px;
+    height: 6px;
+    background: #d6dcff;
+    border-radius: 2px;
+    animation: bounce 1s infinite ease-in-out;
+  }
+
+  #visualizer span:nth-child(1) { animation-delay: 0s; }
+  #visualizer span:nth-child(2) { animation-delay: 0.2s; }
+  #visualizer span:nth-child(3) { animation-delay: 0.4s; }
+  #visualizer span:nth-child(4) { animation-delay: 0.6s; }
+  #visualizer span:nth-child(5) { animation-delay: 0.8s; }
+
+  #visualizer.paused span {
+    animation: none;
+    height: 6px;
+  }
+
+  @keyframes bounce {
+    0%, 100% { height: 6px; }
+    50% { height: 28px; }
+  }
+  
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     ▼ HTML（画面の構造）
-========================= -->
+<div id="lockScreen">
+  <h2>🔒 パスワードを入力</h2>
+  <input type="password" id="passwordInput" placeholder="Password">
+  <br><br>
+  <button onclick="checkPassword()">入る</button>
+  <div id="errorMessage"></div>
+</div>
+
+<div id="noticeOverlay">
+  <div id="noticeBox">
+    <div id="noticeText"></div>
+    <button onclick="closeNoticeAndStartNext()">閉じる</button>
+  </div>
+</div>
 
 <div id="appContent">
 
-  <!-- ▼ タイトル -->
-  <h1>
-    🎧 Lo-fi 作業アプリ
-    <span id="dateText"></span> <!-- 日付表示 -->
+  <h1>🎧 Lo-fi 作業アプリ
+   <span id="dateText"></span>
   </h1>
 
-  <!-- ▼ 画像＋セリフ -->
   <div id="imageArea">
-    <img src="image.png" id="mainImage">
+    <img src="image.png" id="mainImage" class="fade-in" alt="ドット絵イラスト">
 
-    <div id="messageBox">
+    <div id="messageBox" class="fade-in">
       <div id="messageName">Girl</div>
       <div id="message"></div>
     </div>
   </div>
 
-  <!-- ▼ 音楽 -->
   <audio id="music"></audio>
   <audio id="bell" src="bell.mp3"></audio>
 
-  <!-- ▼ 音量とタイマー -->
+  <!--
+    ここを新しく整理：
+    左に音量、右に作業時間と残り時間を置く
+  -->
   <div id="controlRow">
-
-    <div class="panel">
-      <div>音量</div>
-      <input type="range" min="0" max="1" step="0.01"
+    <div class="panel fade-in">
+      <div class="panelTitle">音量</div>
+      <input type="range" min="0" max="1" step="0.01" value="1"
              oninput="setVolume(this.value)">
-      <div id="trackName"></div>
+      <div id="trackName">現在の曲：未再生</div>
     </div>
 
-    <div class="panel">
+    <div class="panel fade-in">
       <div id="mode">作業時間</div>
       <div id="timer">25:00</div>
     </div>
-
   </div>
 
-  <!-- ▼ ボタン＋ビジュアライザー -->
+  <!--
+    通知文の常時表示は削除。
+    今後はオーバーレイ通知だけを使う。
+  -->
   <div id="buttonRow">
-
     <div id="buttonGroup">
-      <button onclick="toggleTimer()">タイマー開始</button>
-      <button onclick="resetTimer()">リセット</button>
-    </div>
+     <button id="timerButton" class="fade-in" onclick="toggleTimer()">タイマー開始</button>
+     <button class="fade-in" onclick="resetTimer()">リセット</button>
+  </div>
 
     <div id="visualizer" class="paused">
-      <span></span><span></span><span></span>
-      <span></span><span></span>
-    </div>
-
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
-
+    
 </div>
 
-<!-- =========================
-     ▼ JavaScript（動き）
-========================= -->
 <script>
+  const USE_PASSWORD = false;
+  
+  const music = document.getElementById("music");
+  const bell = document.getElementById("bell");
+  const modeDisplay = document.getElementById("mode");
+  const timerDisplay = document.getElementById("timer");
+  const timerButton = document.getElementById("timerButton");
+  const messageDisplay = document.getElementById("message");
+  const trackNameDisplay = document.getElementById("trackName");
+  const passwordInput = document.getElementById("passwordInput");
+  const errorMessage = document.getElementById("errorMessage");
+  
+  const lockScreen = document.getElementById("lockScreen");
+  const appContent = document.getElementById("appContent");
 
-/* ▼ 要素を取得（画面のパーツを操作するため） */
-const music = document.getElementById("music");
+if (!USE_PASSWORD) {
+  lockScreen.style.display = "none";
+  appContent.style.display = "block";
+}
+  
+  const noticeOverlay = document.getElementById("noticeOverlay");
+  const noticeText = document.getElementById("noticeText");
+
+  const WORK_TIME = 25 * 60;
+  const BREAK_TIME = 5 * 60;
+  const APP_PASSWORD = "storycat";
+
+  const tracks = [
+    "Epoch.mp3",
+    "Barely.mp3",
+    "Notion.mp3",
+    "Reflection.mp3",
+    "Woozy.mp3",
+    "Cozy.mp3",
+    "Fake.mp3",
+    "Yawn.mp3",
+    "Glass.mp3",
+    "Walk.mp3"
+  ];
+
+  const messages = [
+    "……雨の音、落ち着くね。",
+    "コーヒー、まだ温かい？",
+    "焦らなくていいよ。",
+    "ゆっくり進めば大丈夫。",
+    "ちゃんと頑張ってるね。",
+    "あと少しだよ。",
+    "無理しないでね。",
+    "休憩も大事だよ。",
+    "いいペースだね。",
+    "……ここで一緒に頑張ろう。"
+  ];
+
+  let isRunning = false;
+  let isWorkMode = true;
+  let remainingTime = WORK_TIME;
+  let endTime = null;
+
+  let intervalId = null;
+  let messageIntervalId = null;
+
+  let lastMessageIndex = -1;
+  let currentTrackIndex = -1;
+
+  function checkPassword() {
+    const input = passwordInput.value;
+
+    if (input === APP_PASSWORD) {
+      lockScreen.style.display = "none";
+      appContent.style.display = "block";
+      errorMessage.innerText = "";
+    } else {
+      errorMessage.innerText = "パスワードが違います";
+      passwordInput.value = "";
+      passwordInput.focus();
+    }
+  }
+
+  passwordInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      checkPassword();
+    }
+  });
+
+  function setVolume(v) {
+    const volume = Number(v);
+    music.volume = volume;
+    bell.volume = Math.min(volume, 0.6);
+  }
+
+  function playBell() {
+    bell.currentTime = 0;
+    bell.play().catch(() => {});
+  }
+
+  function updateTimerDisplay() {
+    const min = Math.floor(remainingTime / 60);
+    const sec = remainingTime % 60;
+    timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
+  }
+
+  function updateModeDisplay() {
+    modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
+  }
+
+  function showNotice(text) {
+    noticeText.innerText = text;
+    noticeOverlay.style.display = "flex";
+  }
+
+  /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
+  function closeNoticeAndStartNext() {
+    noticeOverlay.style.display = "none";
+    startTimer();
+  }
+
+  function getRandomMessageIndex() {
+    if (messages.length === 1) return 0;
+
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * messages.length);
+    } while (randomIndex === lastMessageIndex);
+
+    return randomIndex;
+  }
+
+  function showRandomMessage() {
+    const randomIndex = getRandomMessageIndex();
+    lastMessageIndex = randomIndex;
+    messageDisplay.innerText = messages[randomIndex];
+  }
+
+  function startMessageLoop() {
+    if (messageIntervalId) return;
+
+    messageIntervalId = setInterval(() => {
+      if (!isRunning) return;
+      showRandomMessage();
+    }, 60000);
+  }
+
+  function stopMessageLoop() {
+    clearInterval(messageIntervalId);
+    messageIntervalId = null;
+  }
+
+  function getRandomTrackIndex() {
+    if (tracks.length === 1) return 0;
+
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * tracks.length);
+    } while (randomIndex === currentTrackIndex);
+
+    return randomIndex;
+  }
+
+  function updateTrackName(index) {
+    const trackName = tracks[index].replace(".mp3", "");
+    trackNameDisplay.innerText = "現在の曲：" + trackName;
+  }
+
+  function playRandomTrack() {
+    const randomIndex = getRandomTrackIndex();
+    currentTrackIndex = randomIndex;
+    music.src = tracks[randomIndex];
+    updateTrackName(randomIndex);
+    music.play().catch(() => {});
+    startVisualizer();
+  }
+
+  music.addEventListener("ended", () => {
+    if (isRunning) {
+      playRandomTrack();
+    }
+  });
+
+  /* 常時表示の通知文はやめて、オーバーレイ通知だけ使う */
+  function notifyModeChange(text) {
+    showNotice(text);
+    playBell();
+  }
+
+  function finishCurrentMode() {
+    stopTimer();
+
+    if (isWorkMode) {
+      isWorkMode = false;
+      remainingTime = BREAK_TIME;
+      messageDisplay.innerText = "おつかれさま。少し休もうか。";
+      lastMessageIndex = -1;
+      notifyModeChange("作業終了！ 5分休憩です。");
+    } else {
+      isWorkMode = true;
+      remainingTime = WORK_TIME;
+      messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
+      lastMessageIndex = -1;
+      notifyModeChange("休憩終了！ 作業を再開しましょう。");
+    }
+
+    updateModeDisplay();
+    updateTimerDisplay();
+  }
+
+  function tickTimer() {
+    if (!isRunning || endTime === null) return;
+
+    const now = Date.now();
+    const diffMs = endTime - now;
+    remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+
+    updateTimerDisplay();
+
+    if (remainingTime <= 0) {
+      finishCurrentMode();
+    }
+  }
+
+  function startTimer() {
+    if (isRunning) return;
+
+    isRunning = true;
+    timerButton.innerText = "タイマー停止";
+    endTime = Date.now() + remainingTime * 1000;
+
+    if (music.paused) {
+      if (!music.src) {
+        playRandomTrack();
+      } else {
+        music.play().catch(() => {});
+        startVisualizer();
+      }
+    }
+
+    startMessageLoop();
+
+    tickTimer();
+    intervalId = setInterval(tickTimer, 250);
+  }
+
+  function stopTimer() {
+    clearInterval(intervalId);
+    intervalId = null;
+
+    if (isRunning && endTime !== null) {
+      const diffMs = endTime - Date.now();
+      remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+    }
+
+    isRunning = false;
+    endTime = null;
+    timerButton.innerText = "タイマー開始";
+
+    music.pause();
+    stopMessageLoop();
+    stopVisualizer();
+    updateTimerDisplay();
+  }
+
+  function toggleTimer() {
+    if (isRunning) {
+      stopTimer();
+    } else {
+      startTimer();
+    }
+  }
+
+  function resetTimer() {
+    stopTimer();
+
+    isWorkMode = true;
+    remainingTime = WORK_TIME;
+    endTime = null;
+    lastMessageIndex = -1;
+    currentTrackIndex = -1;
+
+    updateModeDisplay();
+    updateTimerDisplay();
+    showRandomMessage();
+
+    music.pause();
+    music.currentTime = 0;
+    music.removeAttribute("src");
+    music.load();
+
+    trackNameDisplay.innerText = "現在の曲：未再生";
+    noticeOverlay.style.display = "none";
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (isRunning) {
+      tickTimer();
+    }
+  });
+
+  bell.volume = 0.6;
+  updateModeDisplay();
+  updateTimerDisplay();
+  showRandomMessage();
+
+function updateDate() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+
+  const week = ["日", "月", "火", "水", "木", "金", "土"];
+  const dayOfWeek = week[now.getDay()];
+
+  const text = `${year}/${month}/${day}（${dayOfWeek}）`;
+
+  document.getElementById("dateText").innerText = text;
+}
+
+updateDate();  
+
 const visualizer = document.getElementById("visualizer");
 
-/* ▼ 音量調整 */
-function setVolume(v) {
-  music.volume = Number(v);
-}
-
-/* ▼ 音楽再生＋ビジュアライザー開始 */
-function playMusic() {
-  music.play();
-  startVisualizer();
-}
-
-/* ▼ ビジュアライザー開始 */
 function startVisualizer() {
   visualizer.classList.remove("paused");
 }
 
-/* ▼ ビジュアライザー停止 */
 function stopVisualizer() {
   visualizer.classList.add("paused");
 }
-
-/* ▼ タイマー開始/停止 */
-let isRunning = false;
-
-function toggleTimer() {
-  if (isRunning) {
-    stopTimer();
-  } else {
-    startTimer();
-  }
-}
-
-/* ▼ タイマー開始 */
-function startTimer() {
-  isRunning = true;
-  playMusic();
-}
-
-/* ▼ タイマー停止 */
-function stopTimer() {
-  isRunning = false;
-  music.pause();
-  stopVisualizer();
-}
-
-/* ▼ リセット */
-function resetTimer() {
-  stopTimer();
-}
-
+  
 </script>
 
 </body>
