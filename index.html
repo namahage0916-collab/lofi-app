@@ -260,6 +260,16 @@
     animation: fadeIn 1.5s ease-in;
   }
 
+  /* 初回表示用（ゆっくり） */
+  .fade-in-long {
+    animation: fadeIn 1.5s ease-in;
+  }
+
+  /* 切り替え用（少し速い） */
+  .fade-in-short {
+    animation: fadeIn 0.6s ease-in;
+  }
+
   /* フェードインの動き */
   @keyframes fadeIn {
     from {
@@ -305,7 +315,12 @@
     height: 6px;
     background: #d6dcff;
     border-radius: 2px;
-    animation: bounce 1s infinite ease-in-out;
+
+    /* ←ここがポイント */
+    animation-name: bounce;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
   }
 
   /* 棒ごとに開始タイミングを少しずらす */
@@ -325,6 +340,17 @@
   @keyframes bounce {
     0%, 100% { height: 6px; }
     50% { height: 28px; }
+  }
+
+  /* 音量が下がっているときは、小さく動かす */
+  #visualizer.low-volume span {
+    animation-name: bounce-low;
+  }
+
+  /* 通知中の小さい動き */
+  @keyframes bounce-low {
+    0%, 100% { height: 6px; }
+    50% { height: 14px; }
   }
   
 </style>
@@ -365,7 +391,7 @@
 
   <!-- 画像＋セリフ枠 -->
   <div id="imageArea">
-    <img src="image.png" id="mainImage" class="fade-in" alt="ドット絵イラスト">
+    <img src="image.png" id="mainImage" class="fade-in-long" alt="ドット絵イラスト">
 
     <div id="messageBox" class="fade-in">
       <div id="messageName">Girl</div>
@@ -423,7 +449,7 @@
   /* パスワード機能を使うかどうかのスイッチ
      true なら使う
      false なら使わない */
-  const USE_PASSWORD = false;
+  const USE_PASSWORD = true;
   
   /* HTMLの部品をJavaScriptで使えるように取得 */
   const music = document.getElementById("music");
@@ -451,7 +477,7 @@
 
   /* 時間設定（秒） */
   const WORK_TIME = 25 * 60;
-  const BREAK_TIME = 5 * 60;
+  const BREAK_TIME = 1 * 60;
   const APP_PASSWORD = "storycat";
 
   /* 作業中・休憩中の画像ファイル */
@@ -567,9 +593,22 @@ const workEndMessages = [
 
   /* 今のモードに合わせて画像を切り替える
      作業中なら勉強画像
-     休憩中ならコーヒー休憩画像 */
+     休憩中ならコーヒー休憩画像
+     切り替え時にフェードインもやり直す */
   function updateModeImage() {
-  mainImage.src = isWorkMode ? WORK_IMAGE : BREAK_IMAGE;
+
+    /* 両方のフェードクラスを一旦外す */
+    mainImage.classList.remove("fade-in-long");
+    mainImage.classList.remove("fade-in-short");
+
+    /* 画像を切り替え */
+    mainImage.src = isWorkMode ? WORK_IMAGE : BREAK_IMAGE;
+
+    /* 強制再描画（これがないとアニメーションが再発火しない） */
+    void mainImage.offsetWidth;
+
+    /* 切り替え時は短いフェード */
+    mainImage.classList.add("fade-in-short");
   }
 
   /* オーバーレイ通知を表示する */
@@ -578,16 +617,25 @@ const workEndMessages = [
     noticeOverlay.style.display = "flex";
   }
 
+
   /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
   function closeNoticeAndStartNext() {
     noticeOverlay.style.display = "none";
 
-    /* 音量を元に戻す */
+    /* 音量を戻す */
     music.volume = normalVolume;
 
+    /* ビジュアライザーも元に戻す */
+    visualizer.classList.remove("low-volume");
+
     updateModeImage();
+
+    /* 念のため再開 */
+    startVisualizer();
+
     startTimer();
   }
+
 
   /* 前回と同じセリフを避けながらランダムに選ぶ */
   function getRandomMessageIndex() {
@@ -666,6 +714,9 @@ const workEndMessages = [
 
     /* 音楽の音量を下げる（30%くらい） */
     music.volume = normalVolume * 0.2;
+
+   /* ビジュアライザーを小さくする */
+   visualizer.classList.add("low-volume");
   }
 
   /* 作業終了 / 休憩終了時の処理 */
@@ -765,7 +816,6 @@ const workEndMessages = [
 
     /* 音楽は止めない */
     stopMessageLoop();
-    stopVisualizer();
     updateTimerDisplay();
   }
 
@@ -815,7 +865,6 @@ const workEndMessages = [
   updateModeDisplay();
   updateTimerDisplay();
   showRandomMessage();
-  updateModeImage();
 
 /* 作業終了時のセリフをランダム表示する
    ただし前回と同じセリフはできるだけ避ける */
