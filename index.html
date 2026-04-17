@@ -246,6 +246,7 @@
     /* オーバーレイの中の箱 */
     #noticeBox {
       background: #2b2b44;
+      color: #ffffff; /* 追加 */
       border-radius: 16px;
       padding: 28px 24px;
       width: 90%;
@@ -258,8 +259,13 @@
       font-size: 28px;
       line-height: 1.5;
       margin-bottom: 20px;
+      color: #ffffff; /* 追加 */
     }
 
+#noticeBox button {
+  background: #6c7ae0;
+  color: #ffffff;
+}
 
     /* ========================================
        ロック画面
@@ -569,8 +575,8 @@
     ======================================== */
 
     /* 時間設定（秒） */
-    const WORK_TIME = 25 * 60;
-    const BREAK_TIME = 5 * 60;
+    const WORK_TIME = 0.1 * 60;
+    const BREAK_TIME = 0.1 * 60;
     const APP_PASSWORD = "storycat";
 
 
