@@ -309,11 +309,11 @@
   }
 
   /* 棒ごとに開始タイミングを少しずらす */
-  #visualizer span:nth-child(1) { animation-delay: 0s; }
-  #visualizer span:nth-child(2) { animation-delay: 0.2s; }
-  #visualizer span:nth-child(3) { animation-delay: 0.4s; }
+  #visualizer span:nth-child(1) { animation-delay: 0.2s; }
+  #visualizer span:nth-child(2) { animation-delay: 0s; }
+  #visualizer span:nth-child(3) { animation-delay: 0.5s; }
   #visualizer span:nth-child(4) { animation-delay: 0.6s; }
-  #visualizer span:nth-child(5) { animation-delay: 0.8s; }
+  #visualizer span:nth-child(5) { animation-delay: 0.3s; }
 
   /* 停止中は棒を動かさない */
   #visualizer.paused span {
@@ -435,9 +435,9 @@
   const trackNameDisplay = document.getElementById("trackName");
   const passwordInput = document.getElementById("passwordInput");
   const errorMessage = document.getElementById("errorMessage");
-  
   const lockScreen = document.getElementById("lockScreen");
   const appContent = document.getElementById("appContent");
+  const mainImage = document.getElementById("mainImage");
 
   /* パスワード機能をオフにしている場合は、
      最初からロック画面を消してアプリ本体を出す */
@@ -453,6 +453,10 @@
   const WORK_TIME = 25 * 60;
   const BREAK_TIME = 5 * 60;
   const APP_PASSWORD = "storycat";
+
+  /* 作業中・休憩中の画像ファイル */
+  const WORK_IMAGE = "image.png";
+  const BREAK_IMAGE = "image_break.png";
 
   /* 再生する曲一覧 */
   const tracks = [
@@ -482,6 +486,16 @@
     "……ここで一緒に頑張ろう。"
   ];
 
+/* 作業終了した時専用のセリフ一覧 */
+const workEndMessages = [
+  "おつかれさま。少し休もうか。",
+  "ここまでよく頑張ったね。ひと休みしよう。",
+  "ふう……ひと区切りだね。休憩にしようか。",
+  "えらいえらい。少し肩の力を抜こう。",
+  "頑張ったぶん、ちゃんと休もうね。",
+  "少し休んで、またゆっくり始めよう。"
+];
+
   /* タイマーや再生状態を管理する変数 */
   let isRunning = false;
   let isWorkMode = true;
@@ -493,6 +507,12 @@
 
   let lastMessageIndex = -1;
   let currentTrackIndex = -1;
+
+/* 通常時の音量を記録しておく */
+  let normalVolume = 1;
+
+/* 前回の作業終了セリフを覚えておく */
+  let lastWorkEndIndex = -1;
 
   /* パスワードチェック */
   function checkPassword() {
@@ -519,6 +539,10 @@
   /* 音量調整 */
   function setVolume(v) {
     const volume = Number(v);
+
+    /* 通常音量として記録 */
+    normalVolume = volume;
+
     music.volume = volume;
     bell.volume = Math.min(volume, 0.6);
   }
@@ -541,6 +565,13 @@
     modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
   }
 
+  /* 今のモードに合わせて画像を切り替える
+     作業中なら勉強画像
+     休憩中ならコーヒー休憩画像 */
+  function updateModeImage() {
+  mainImage.src = isWorkMode ? WORK_IMAGE : BREAK_IMAGE;
+  }
+
   /* オーバーレイ通知を表示する */
   function showNotice(text) {
     noticeText.innerText = text;
@@ -550,6 +581,11 @@
   /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
   function closeNoticeAndStartNext() {
     noticeOverlay.style.display = "none";
+
+    /* 音量を元に戻す */
+    music.volume = normalVolume;
+
+    updateModeImage();
     startTimer();
   }
 
@@ -627,22 +663,25 @@
   function notifyModeChange(text) {
     showNotice(text);
     playBell();
+
+    /* 音楽の音量を下げる（30%くらい） */
+    music.volume = normalVolume * 0.2;
   }
 
   /* 作業終了 / 休憩終了時の処理 */
   function finishCurrentMode() {
-    stopTimer();
+    stopTimerForNotice();
 
     if (isWorkMode) {
       isWorkMode = false;
       remainingTime = BREAK_TIME;
-      messageDisplay.innerText = "おつかれさま。少し休もうか。";
+      showRandomWorkEndMessage();
       lastMessageIndex = -1;
       notifyModeChange("作業終了！ 5分休憩です。");
     } else {
       isWorkMode = true;
       remainingTime = WORK_TIME;
-      messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
+    messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
       lastMessageIndex = -1;
       notifyModeChange("休憩終了！ 作業を再開しましょう。");
     }
@@ -709,6 +748,27 @@
     updateTimerDisplay();
   }
 
+  /* 時間切れ時専用の停止
+     タイマーは止めるが、音楽は止めない */
+  function stopTimerForNotice() {
+    clearInterval(intervalId);
+    intervalId = null;
+
+    if (isRunning && endTime !== null) {
+      const diffMs = endTime - Date.now();
+      remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+    }
+
+    isRunning = false;
+    endTime = null;
+    timerButton.innerText = "タイマー開始";
+
+    /* 音楽は止めない */
+    stopMessageLoop();
+    stopVisualizer();
+    updateTimerDisplay();
+  }
+
   /* 開始と停止を切り替える */
   function toggleTimer() {
     if (isRunning) {
@@ -727,10 +787,12 @@
     endTime = null;
     lastMessageIndex = -1;
     currentTrackIndex = -1;
+    lastWorkEndIndex = -1;
 
     updateModeDisplay();
     updateTimerDisplay();
     showRandomMessage();
+    updateModeImage();
 
     music.pause();
     music.currentTime = 0;
@@ -753,6 +815,31 @@
   updateModeDisplay();
   updateTimerDisplay();
   showRandomMessage();
+  updateModeImage();
+
+/* 作業終了時のセリフをランダム表示する
+   ただし前回と同じセリフはできるだけ避ける */
+function showRandomWorkEndMessage() {
+  /* セリフが1個しかないなら、その1個を使う */
+  if (workEndMessages.length === 1) {
+    lastWorkEndIndex = 0;
+    messageDisplay.innerText = workEndMessages[0];
+    return;
+  }
+
+  let randomIndex;
+
+  /* 前回と同じ番号になったら引き直す */
+  do {
+    randomIndex = Math.floor(Math.random() * workEndMessages.length);
+  } while (randomIndex === lastWorkEndIndex);
+
+  /* 今回の番号を覚えておく */
+  lastWorkEndIndex = randomIndex;
+
+  /* セリフ表示 */
+  messageDisplay.innerText = workEndMessages[randomIndex];
+}
 
   /* 今日の日付を表示する */
   function updateDate() {
