@@ -97,7 +97,6 @@ button {
       width: 200px;
     }
 
-
     /* ==================================================
        3. レイアウト系
     ================================================== */
@@ -227,6 +226,10 @@ button {
       margin-bottom: 12px;
       color: #d6dcff;
     }
+
+.panelTitle.focusTitle {
+  font-size: 24px;
+}
 
     /* タイマーパネル全体 */
     #timerPanel {
@@ -501,6 +504,11 @@ button {
   justify-content: center;
 }
 
+.timerSettingButtons button {
+  flex: 1;
+  text-align: center;
+}
+
 /* 作業中・休憩中の操作エリア全体 */
 #timerActionButtons {
   width: 100%;
@@ -544,6 +552,7 @@ button {
     ================================================== */
 
     @media (max-width: 768px) {
+
       body {
         padding-top: 20px;
       }
@@ -602,6 +611,14 @@ button {
       .panelTitle {
         font-size: 16px;
       }
+
+  .panelTitle.focusTitle {
+    font-size: 18px;
+  }
+
+  #focusMeter {
+    font-size: 20px;
+  }
 
       #mode {
         font-size: 18px;
@@ -729,7 +746,6 @@ button {
 
 <div class="timerActionButtonList">
   <button id="pauseResumeButton" onclick="togglePauseFromSettings()">一時停止</button>
-  <button onclick="resetFromSettings()">リセット</button>
   <button id="finishModeButton" onclick="finishFromSettings()">作業終了</button>
 </div>
 
@@ -771,12 +787,10 @@ button {
     <!-- 左に音量、右にタイマー表示 -->
     <div id="controlRow">
 
-      <!-- 音量パネル -->
-      <div class="panel fade-in">
-        <div class="panelTitle">音量</div>
-        <input type="range" min="0" max="1" step="0.01" value="1"
-               oninput="setVolume(this.value)">
-      </div>
+<div class="panel fade-in">
+  <div class="panelTitle focusTitle">今日の集中</div>
+  <div id="focusMeter" style="font-size: 28px; letter-spacing: 4px; margin-top: 8px;">□□□□□</div>
+</div>
 
       <!-- タイマーパネル -->
       <div id="timerPanel" class="panel fade-in" onclick="openTimerSettings()">
@@ -944,17 +958,23 @@ button {
     let intervalId = null;
     let messageIntervalId = null;
 
-    let lastMessageIndex = -1;
-    let currentTrackIndex = -1;
+let lastMessageIndex = -1;
+let currentTrackIndex = -1;
 
-    /* 通常時の音量を記録しておく */
-    let normalVolume = 1;
+/* 通常時の音量を記録しておく */
+let normalVolume = 1;
 
-    /* 前回の作業終了セリフを覚えておく */
-    let lastWorkEndIndex = -1;
+/* 今日の作業セッション数 */
+let sessionCount = 0;
+const SESSION_GOAL = 5;
 
-    /* 前回の再開セリフを覚えておく */
-    let lastResumeMessageIndex = -1;
+/* 前回の作業終了セリフを覚えておく */
+let lastWorkEndIndex = -1;
+
+/* 前回の再開セリフを覚えておく */
+let lastResumeMessageIndex = -1;
+
+
 
     /* ==================================================
        7. テーマ設定
@@ -971,7 +991,7 @@ const themes = [
   subText: "#5a4f45",
   mainText: "#2f2a24",
   visualizerColor: "#8b6f5a",
-  popupBg: "#f3ede4",
+  popupBg: "#e8dfd2",
   isDark: false
 },
 {
@@ -982,7 +1002,18 @@ const themes = [
   subText: "#4a5c68",
   mainText: "#24313a",
   visualizerColor: "#4a90e2",
-  popupBg: "#e8f0f6",
+  popupBg: "#cfdbe6",
+  isDark: false
+},
+{
+  bodyBg: "#bfcfc3",
+  bodyText: "#2f3d33",
+  panelBg: "rgba(255,255,255,0.30)",
+  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+  subText: "#567a63",
+  mainText: "#2f3d33",
+  visualizerColor: "#5f9e7a",
+  popupBg: "#cfe0d5",
   isDark: false
 },
 {
@@ -1425,13 +1456,16 @@ music.addEventListener("ended", () => {
       stopTimerForNotice();
       isPaused = false;
 
-      if (isWorkMode) {
-        isWorkMode = false;
-        remainingTime = BREAK_TIME;
-        showRandomWorkEndMessage();
-        lastMessageIndex = -1;
-        notifyModeChange(`作業終了！\n${BREAK_TIME / 60}分休憩です。`);
-      } else {
+ if (isWorkMode) {
+  sessionCount++;
+  updateFocusDisplay();
+
+  isWorkMode = false;
+  remainingTime = BREAK_TIME;
+  showRandomWorkEndMessage();
+  lastMessageIndex = -1;
+  notifyModeChange(`作業終了！\n${BREAK_TIME / 60}分休憩です。`);
+} else {
         isWorkMode = true;
         remainingTime = WORK_TIME;
         messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
@@ -1541,14 +1575,17 @@ function startTimer() {
       isWorkMode = true;
       remainingTime = WORK_TIME;
       endTime = null;
-      lastMessageIndex = -1;
-      currentTrackIndex = -1;
-      lastWorkEndIndex = -1;
 
-      updateModeDisplay();
-      updateTimerDisplay();
-      showRandomMessage();
-      updateModeImage();
+lastMessageIndex = -1;
+currentTrackIndex = -1;
+lastWorkEndIndex = -1;
+sessionCount = 0;
+
+updateModeDisplay();
+updateTimerDisplay();
+updateFocusDisplay();
+showRandomMessage();
+updateModeImage();
 
       music.pause();
       music.currentTime = 0;
@@ -1597,11 +1634,12 @@ function pauseTimerOnly() {
        20. 初期設定
     ================================================== */
 
-    bell.volume = 0.5;
-    updateModeDisplay();
-    updateTimerDisplay();
-    showRandomMessage();
-    applyTheme(themes[currentTheme]);
+bell.volume = 0.5;
+updateModeDisplay();
+updateTimerDisplay();
+updateFocusDisplay();
+showRandomMessage();
+applyTheme(themes[currentTheme]);
 
 
     /* ==================================================
@@ -1697,6 +1735,16 @@ function pauseTimerOnly() {
     function stopVisualizer() {
       visualizer.classList.add("paused");
     }
+
+function updateFocusDisplay() {
+  const focusMeter = document.getElementById("focusMeter");
+  if (!focusMeter) return;
+
+  const filled = "■".repeat(Math.min(sessionCount, SESSION_GOAL));
+  const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
+
+  focusMeter.innerText = filled + empty;
+}
 
   </script>
 
