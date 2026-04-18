@@ -103,15 +103,16 @@ button {
     ================================================== */
 
     /* ボタン群とビジュアライザーをまとめる横並びエリア */
-    #buttonRow {
-      margin: 10px auto 0;
-      width: 80%;
-      max-width: 600px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 8px;
-    }
+#buttonRow {
+  margin: 10px auto 0;
+  width: 80%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 0 8px;
+}
 
     /* ボタンを横並びにする */
     #buttonGroup {
@@ -176,11 +177,12 @@ button {
     }
 
     /* 曲名表示 */
-    #trackName {
-      font-size: 18px;
-      margin-top: 20px;
-      color: #d6dcff;
-    }
+#trackName {
+  font-size: 16px;
+  margin-top: 0;
+  color: #d6dcff;
+  white-space: nowrap;
+}
 
     /* タイトル横の日付表示 */
     #dateText {
@@ -614,9 +616,15 @@ button {
         max-width: 100%;
       }
 
-      #trackName {
-        font-size: 14px;
-      }
+#trackName {
+  font-size: 15px;
+  opacity: 0.85;
+  letter-spacing: 0.03em;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
       #buttonRow {
         gap: 10px;
@@ -768,7 +776,6 @@ button {
         <div class="panelTitle">音量</div>
         <input type="range" min="0" max="1" step="0.01" value="1"
                oninput="setVolume(this.value)">
-        <div id="trackName">現在の曲：未再生</div>
       </div>
 
       <!-- タイマーパネル -->
@@ -794,7 +801,7 @@ button {
         <span></span>
       </div>
 
-    </div>
+    <div id="trackName">No track</div>
 
   </div>
 
@@ -1239,7 +1246,14 @@ function startFromSettings() {
 
     /* 作業時間 / 休憩時間 の表示を切り替える */
 function updateModeDisplay() {
-  if (!isRunning && !isPaused && isWorkMode && remainingTime === WORK_TIME) {
+  const isInitialState =
+    !isRunning &&
+    !isPaused &&
+    isWorkMode &&
+    remainingTime === WORK_TIME &&
+    currentTrackIndex === -1;
+
+  if (isInitialState) {
     modeDisplay.innerText = "タイマー設定";
   } else {
     modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
@@ -1364,7 +1378,7 @@ function closeNoticeAndStartNext() {
     /* 曲名表示を更新する */
     function updateTrackName(index) {
       const trackName = tracks[index].replace(".mp3", "");
-      trackNameDisplay.innerText = "現在の曲：" + trackName;
+      trackNameDisplay.innerText = trackName;
     }
 
     /* ランダムな曲を再生する */
@@ -1450,27 +1464,29 @@ music.addEventListener("ended", () => {
     }
 
     /* タイマー開始 */
-    function startTimer() {
-      if (isRunning) return;
+function startTimer() {
+  if (isRunning) return;
 
-      isRunning = true;
-      isPaused = false;
-      endTime = Date.now() + remainingTime * 1000;
+  isRunning = true;
+  isPaused = false;
+  endTime = Date.now() + remainingTime * 1000;
 
-      if (music.paused) {
-        if (!music.src) {
-          playRandomTrack();
-        } else {
-          music.play().catch(() => {});
-          startVisualizer();
-        }
-      }
+  updateModeDisplay();
 
-      startMessageLoop();
-
-      tickTimer();
-      intervalId = setInterval(tickTimer, 250);
+  if (music.paused) {
+    if (!music.src) {
+      playRandomTrack();
+    } else {
+      music.play().catch(() => {});
+      startVisualizer();
     }
+  }
+
+  startMessageLoop();
+
+  tickTimer();
+  intervalId = setInterval(tickTimer, 250);
+}
 
     /* タイマー停止 */
     function stopTimer() {
@@ -1539,7 +1555,7 @@ music.addEventListener("ended", () => {
       music.removeAttribute("src");
       music.load();
 
-      trackNameDisplay.innerText = "現在の曲：未再生";
+      trackNameDisplay.innerText = "No track";
       noticeOverlay.style.display = "none";
 
       visualizer.classList.remove("low-volume");
