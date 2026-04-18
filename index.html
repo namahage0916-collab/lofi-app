@@ -488,19 +488,50 @@
       border: none;
     }
 
-    /* ポップアップ内のボタン群 */
-    .timerSettingButtons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
+/* ポップアップ内のボタン群 */
+.timerSettingButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
 
-    /* 作業中・休憩中の操作ボタンは幅をそろえる */
-    #timerActionButtons .timerSettingButtons button {
-      min-width: 120px;
-      white-space: nowrap;
-    }
+/* 作業中・休憩中の操作エリア全体 */
+#timerActionButtons {
+  width: 100%;
+}
 
+/* 作業中・休憩中の3ボタンを並べる専用エリア */
+.timerActionButtonList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 3ボタン本体 */
+.timerActionButtonList button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* 閉じるボタンの行 */
+.timerCloseRow {
+  width: 100%;
+  margin-top: 14px;
+}
+
+/* 閉じるボタン */
+.timerCloseRow button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+  box-sizing: border-box;
+}
 
     /* ==================================================
        11. スマホ向け調整
@@ -610,7 +641,7 @@
       #visualizer span {
         width: 3px;
       }
-    }
+     }
 
   </style>
 </head>
@@ -684,15 +715,15 @@
           25:00
         </div>
 
-        <div class="timerSettingButtons">
-          <button id="pauseResumeButton" onclick="togglePauseFromSettings()">一時停止</button>
-          <button onclick="resetFromSettings()">リセット</button>
-          <button id="finishModeButton" onclick="finishFromSettings()">作業終了</button>
-        </div>
+<div class="timerActionButtonList">
+  <button id="pauseResumeButton" onclick="togglePauseFromSettings()">一時停止</button>
+  <button onclick="resetFromSettings()">リセット</button>
+  <button id="finishModeButton" onclick="finishFromSettings()">作業終了</button>
+</div>
 
-        <div style="margin-top: 14px;">
-          <button onclick="closeTimerSettings()">閉じる</button>
-        </div>
+<div class="timerCloseRow">
+  <button onclick="closeTimerSettings()">閉じる</button>
+</div>
       </div>
 
     </div>
@@ -1121,17 +1152,15 @@
     }
 
     /* ポップアップから一時停止 / 再開を切り替える */
-    function togglePauseFromSettings() {
-      if (isRunning) {
-        stopTimer();
-        isPaused = true;
-      } else if (isPaused) {
-        startTimer();
-        isPaused = false;
-      }
-
-      openTimerSettings();
-    }
+function togglePauseFromSettings() {
+  if (isRunning) {
+    pauseTimerOnly();
+    openTimerSettings();   // 一時停止時は開き直す
+  } else if (isPaused) {
+    startTimer();
+    closeTimerSettings();  // ← ここを追加
+  }
+}
 
     /* ポップアップからリセットする */
     function resetFromSettings() {
@@ -1146,27 +1175,28 @@
     }
 
     /* 設定した時間でタイマーを開始する */
-    function startFromSettings() {
-      const workMinutes = Number(document.getElementById("workMinutesInput").value);
-      const breakMinutes = Number(document.getElementById("breakMinutesInput").value);
+ function startFromSettings() {
+  const workMinutes = Number(document.getElementById("workMinutesInput").value);
+  const breakMinutes = Number(document.getElementById("breakMinutesInput").value);
 
-      if (workMinutes < 1 || breakMinutes < 1) return;
+  if (workMinutes < 1 || breakMinutes < 1) return;
 
-      WORK_TIME = workMinutes * 60;
-      BREAK_TIME = breakMinutes * 60;
+  WORK_TIME = workMinutes * 60;
+  BREAK_TIME = breakMinutes * 60;
 
-      isWorkMode = true;
-      isPaused = false;
-      remainingTime = WORK_TIME;
-      endTime = null;
+  isWorkMode = true;
+  isPaused = false;
+  remainingTime = WORK_TIME;
+  endTime = null;
 
-      updateModeDisplay();
-      updateTimerDisplay();
-      updateModeImage();
+  updateTimerDisplay();
+  updateModeImage();
 
-      closeTimerSettings();
-      startTimer();
-    }
+  closeTimerSettings();
+
+  startTimer();          // ← 先にこれ
+  updateModeDisplay();   // ← 後でこれ
+}
 
 
     /* ==================================================
@@ -1184,13 +1214,13 @@
     }
 
     /* 作業時間 / 休憩時間 の表示を切り替える */
-    function updateModeDisplay() {
-      if (!isRunning && isWorkMode && remainingTime === WORK_TIME) {
-        modeDisplay.innerText = "タイマー設定";
-      } else {
-        modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
-      }
-    }
+function updateModeDisplay() {
+  if (!isRunning && !isPaused && isWorkMode && remainingTime === WORK_TIME) {
+    modeDisplay.innerText = "タイマー設定";
+  } else {
+    modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
+  }
+}
 
 
     /* ==================================================
@@ -1319,11 +1349,11 @@
     }
 
     /* 曲が終わったら次の曲へ */
-    music.addEventListener("ended", () => {
-      if (isRunning) {
-        playRandomTrack();
-      }
-    });
+music.addEventListener("ended", () => {
+  if (isRunning || isPaused) {
+    playRandomTrack();
+  }
+});
 
 
     /* ==================================================
@@ -1357,7 +1387,7 @@
         remainingTime = BREAK_TIME;
         showRandomWorkEndMessage();
         lastMessageIndex = -1;
-        notifyModeChange("作業終了！ 5分休憩です。");
+        notifyModeChange(`作業終了！ ${BREAK_TIME / 60}分休憩です。`);
       } else {
         isWorkMode = true;
         remainingTime = WORK_TIME;
@@ -1482,8 +1512,29 @@
 
       trackNameDisplay.innerText = "現在の曲：未再生";
       noticeOverlay.style.display = "none";
+
+      visualizer.classList.remove("low-volume");
+      music.volume = normalVolume;
     }
 
+    /* 一時停止
+       タイマーだけ止めて、音楽は止めない */
+function pauseTimerOnly() {
+  clearInterval(intervalId);
+  intervalId = null;
+
+  if (isRunning && endTime !== null) {
+    const diffMs = endTime - Date.now();
+    remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+  }
+
+  isRunning = false;
+  isPaused = true;
+  endTime = null;
+
+  /* 音楽は止めない */
+  updateTimerDisplay();
+}
 
     /* ==================================================
        19. ページ表示状態の変化
