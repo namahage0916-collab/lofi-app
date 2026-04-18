@@ -29,6 +29,12 @@
   ================================================== -->
   <style>
 
+:root {
+  --button-bg: rgba(255,255,255,0.30);
+  --button-text: #24313a;
+  --popup-button-bg: rgba(255,255,255,0.30);
+}
+
     /* ==================================================
        1. ページ全体
     ================================================== */
@@ -49,18 +55,18 @@
     ================================================== */
 
     /* すべてのbutton要素の共通デザイン */
-    button {
-      font-size: 20px;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 10px;
-      border: none;
-      background: #6c7ae0;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: filter 0.2s ease, transform 0.1s ease;
-    }
+button {
+  font-size: 20px;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--button-bg);
+  color: var(--button-text);
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
 
     /* 通常ボタンにマウスを乗せたとき */
     button:hover {
@@ -81,6 +87,10 @@
     .dark-popup button:active {
       filter: brightness(1.1);
     }
+
+#timerSettingBox.dark-popup button {
+  background: var(--popup-button-bg);
+}
 
     /* 音量スライダーの幅 */
     input[type="range"] {
@@ -281,18 +291,12 @@
 
     /* オーバーレイに出る文字 */
     #noticeText {
-      font-size: 28px;
-      line-height: 1.5;
+      font-size: 22px;
+      line-height: 1.6;
       margin-bottom: 20px;
+      white-space: pre-line;
       color: #ffffff;
     }
-
-    /* 通知内のボタン */
-    #noticeBox button {
-      background: #6c7ae0;
-      color: #ffffff;
-    }
-
 
     /* ==================================================
        7. ロック画面
@@ -908,6 +912,15 @@
       "少し休んで、またゆっくり始めよう。"
     ];
 
+    /* 作業再開した時専用のセリフ一覧 */
+    const resumeMessages = [
+      "おかえり。続きをゆっくり進めよう。",
+      "それじゃ、また始めようか。",
+      "無理せず、少しずつ進めよう。",
+      "よし、ここからまた頑張ろう。",
+      "いい感じ。作業に戻ろうか。",
+      "落ち着いて、また進めていこう。"
+    ];
 
     /* ==================================================
        6. 状態管理用の変数
@@ -933,6 +946,8 @@
     /* 前回の作業終了セリフを覚えておく */
     let lastWorkEndIndex = -1;
 
+    /* 前回の再開セリフを覚えておく */
+    let lastResumeMessageIndex = -1;
 
     /* ==================================================
        7. テーマ設定
@@ -940,112 +955,118 @@
 
     let currentTheme = 0;
 
-    const themes = [
-      {
-        bodyBg: "#ddd2c3",
-        bodyText: "#2f2a24",
-        panelBg: "rgba(255,255,255,0.35)",
-        panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-        subText: "#5a4f45",
-        mainText: "#2f2a24",
-        visualizerColor: "#8b6f5a"
-      },
-      {
-        bodyBg: "#bfcfda",
-        bodyText: "#24313a",
-        panelBg: "rgba(255,255,255,0.30)",
-        panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-        subText: "#4a5c68",
-        mainText: "#24313a",
-        visualizerColor: "#4a90e2"
-      },
-      {
-        bodyBg: "#2b2f3a",
-        bodyText: "#f2f2f2",
-        panelBg: "rgba(255,255,255,0.08)",
-        panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
-        subText: "#d6dcff",
-        mainText: "#f2f2f2",
-        visualizerColor: "#d6dcff"
-      }
-    ];
+const themes = [
+{
+  bodyBg: "#ddd2c3",
+  bodyText: "#2f2a24",
+  panelBg: "rgba(255,255,255,0.35)",
+  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+  subText: "#5a4f45",
+  mainText: "#2f2a24",
+  visualizerColor: "#8b6f5a",
+  popupBg: "#f3ede4",
+  isDark: false
+},
+{
+  bodyBg: "#bfcfda",
+  bodyText: "#24313a",
+  panelBg: "rgba(255,255,255,0.30)",
+  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+  subText: "#4a5c68",
+  mainText: "#24313a",
+  visualizerColor: "#4a90e2",
+  popupBg: "#e8f0f6",
+  isDark: false
+},
+{
+  bodyBg: "#2b2f3a",
+  bodyText: "#f2f2f2",
+  panelBg: "rgba(255,255,255,0.08)",
+  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
+  subText: "#d6dcff",
+  mainText: "#f2f2f2",
+  visualizerColor: "#d6dcff",
+  popupBg: "#2b2f3a",
+  isDark: true
+}
+];
 
-    /* テーマを実際に画面へ反映する */
-    function applyTheme(theme) {
+function applyTheme(theme) {
 
-      /* ページ全体 */
-      document.body.style.background = theme.bodyBg;
-      document.body.style.color = theme.bodyText;
+  /* ページ全体 */
+  document.body.style.background = theme.bodyBg;
+  document.body.style.color = theme.bodyText;
 
-      /* パネル類 */
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.background = theme.panelBg;
-        panel.style.boxShadow = theme.panelShadow;
-      });
+  /* パネル類 */
+  document.querySelectorAll(".panel").forEach(panel => {
+    panel.style.background = theme.panelBg;
+    panel.style.boxShadow = theme.panelShadow;
+  });
 
-      /* セリフ枠 */
-      const messageBox = document.getElementById("messageBox");
-      messageBox.style.background = theme.panelBg;
-      messageBox.style.boxShadow = theme.panelShadow;
+  /* セリフ枠 */
+  const messageBox = document.getElementById("messageBox");
+  messageBox.style.background = theme.panelBg;
+  messageBox.style.boxShadow = theme.panelShadow;
 
-      /* 補助色テキスト */
-      document.getElementById("messageName").style.color = theme.subText;
-      document.getElementById("trackName").style.color = theme.subText;
-      document.getElementById("dateText").style.color = theme.subText;
-      document.getElementById("mode").style.color = theme.subText;
+  /* 補助色テキスト */
+  document.getElementById("messageName").style.color = theme.subText;
+  document.getElementById("trackName").style.color = theme.subText;
+  document.getElementById("dateText").style.color = theme.subText;
+  document.getElementById("mode").style.color = theme.subText;
 
-      document.querySelectorAll(".panelTitle").forEach(el => {
-        el.style.color = theme.subText;
-      });
+  document.querySelectorAll(".panelTitle").forEach(el => {
+    el.style.color = theme.subText;
+  });
 
-      /* 本文色 */
-      document.getElementById("message").style.color = theme.mainText;
-      document.getElementById("timer").style.color = theme.mainText;
+  /* 本文色 */
+  document.getElementById("message").style.color = theme.mainText;
+  document.getElementById("timer").style.color = theme.mainText;
 
-      /* ビジュアライザー */
-      document.querySelectorAll("#visualizer span").forEach(bar => {
-        bar.style.background = theme.visualizerColor;
-      });
+  /* ビジュアライザー */
+  document.querySelectorAll("#visualizer span").forEach(bar => {
+    bar.style.background = theme.visualizerColor;
+  });
 
-      /* ポップアップ */
-      const timerBox = document.getElementById("timerSettingBox");
-      if (timerBox) {
-        if (theme.bodyBg === "#ddd2c3") {
-          timerBox.style.background = "#f3ede4";
-        } else if (theme.bodyBg === "#bfcfda") {
-          timerBox.style.background = "#e8f0f6";
-        } else {
-          timerBox.style.background = "#2b2f3a";
-        }
+/* タイマー設定ポップアップ */
+const timerBox = document.getElementById("timerSettingBox");
+if (timerBox) {
+  timerBox.style.background = theme.popupBg;
+  timerBox.style.boxShadow = theme.panelShadow;
+  timerBox.style.color = theme.mainText;
 
-        timerBox.style.boxShadow = theme.panelShadow;
-        timerBox.style.color = theme.mainText;
+  if (theme.isDark) {
+    document.documentElement.style.setProperty("--popup-button-bg", "#3a4050");
+    timerBox.classList.add("dark-popup");
+  } else {
+    document.documentElement.style.setProperty("--popup-button-bg", theme.panelBg);
+    timerBox.classList.remove("dark-popup");
+  }
+}
 
-        /* 黒テーマ時だけ special class を付ける */
-        if (theme.bodyBg === "#2b2f3a") {
-          timerBox.classList.add("dark-popup");
-        } else {
-          timerBox.classList.remove("dark-popup");
-        }
-      }
+  /* 通知ポップアップ */
+  const noticeBox = document.getElementById("noticeBox");
+  const noticeTextEl = document.getElementById("noticeText");
 
-      /* ボタン */
-      document.querySelectorAll("button").forEach(btn => {
-        btn.style.color = theme.mainText;
+if (noticeBox) {
+  noticeBox.style.background = theme.popupBg;
+  noticeBox.style.boxShadow = theme.panelShadow;
+  noticeBox.style.color = theme.mainText;
+}
 
-        if (theme.bodyBg === "#2b2f3a" && btn.closest("#timerSettingBox")) {
-          btn.style.background = "#3a4050";
-        } else {
-          btn.style.background = theme.panelBg;
-        }
-      });
-    }
+  if (noticeTextEl) {
+    noticeTextEl.style.color = theme.mainText;
+  }
 
-    /* テーマを次の番号へ切り替える */
-    function toggleTheme() {
-      currentTheme = (currentTheme + 1) % themes.length;
-      applyTheme(themes[currentTheme]);
-    }
+document.documentElement.style.setProperty("--button-bg", theme.panelBg);
+document.documentElement.style.setProperty("--button-text", theme.mainText);
+}
+
+/* テーマを次の番号へ切り替える */
+function toggleTheme() {
+  currentTheme = (currentTheme + 1) % themes.length;
+  applyTheme(themes[currentTheme]);
+}
+
 
 
     /* ==================================================
@@ -1155,10 +1176,10 @@
 function togglePauseFromSettings() {
   if (isRunning) {
     pauseTimerOnly();
-    openTimerSettings();   // 一時停止時は開き直す
+    openTimerSettings();
   } else if (isPaused) {
     startTimer();
-    closeTimerSettings();  // ← ここを追加
+    closeTimerSettings();
   }
 }
 
@@ -1175,27 +1196,30 @@ function togglePauseFromSettings() {
     }
 
     /* 設定した時間でタイマーを開始する */
- function startFromSettings() {
+function startFromSettings() {
   const workMinutes = Number(document.getElementById("workMinutesInput").value);
   const breakMinutes = Number(document.getElementById("breakMinutesInput").value);
 
   if (workMinutes < 1 || breakMinutes < 1) return;
 
+  /* 入力値を秒に変換 */
   WORK_TIME = workMinutes * 60;
   BREAK_TIME = breakMinutes * 60;
 
+  /* 作業モードの初期状態に戻す */
   isWorkMode = true;
   isPaused = false;
   remainingTime = WORK_TIME;
   endTime = null;
 
+  /* 表示を先に更新 */
+  updateModeDisplay();
   updateTimerDisplay();
   updateModeImage();
 
+  /* ポップアップを閉じて開始 */
   closeTimerSettings();
-
-  startTimer();          // ← 先にこれ
-  updateModeDisplay();   // ← 後でこれ
+  startTimer();
 }
 
 
@@ -1256,24 +1280,29 @@ function updateModeDisplay() {
     }
 
     /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
-    function closeNoticeAndStartNext() {
-      noticeOverlay.style.display = "none";
+function closeNoticeAndStartNext() {
+  noticeOverlay.style.display = "none";
 
-      isPaused = false;
+  isPaused = false;
 
-      /* 音量を戻す */
-      music.volume = normalVolume;
+  /* 音量を戻す */
+  music.volume = normalVolume;
 
-      /* ビジュアライザーも元に戻す */
-      visualizer.classList.remove("low-volume");
+  /* ビジュアライザーも元に戻す */
+  visualizer.classList.remove("low-volume");
 
-      updateModeImage();
+  updateModeImage();
 
-      /* 念のため再開 */
-      startVisualizer();
+  /* 念のため再開 */
+  startVisualizer();
 
-      startTimer();
-    }
+  startTimer();
+
+  /* 休憩明けで作業に戻るときだけ、再開セリフを出す */
+  if (isWorkMode) {
+    showRandomResumeMessage();
+  }
+}
 
 
     /* ==================================================
@@ -1387,13 +1416,13 @@ music.addEventListener("ended", () => {
         remainingTime = BREAK_TIME;
         showRandomWorkEndMessage();
         lastMessageIndex = -1;
-        notifyModeChange(`作業終了！ ${BREAK_TIME / 60}分休憩です。`);
+        notifyModeChange(`作業終了！\n${BREAK_TIME / 60}分休憩です。`);
       } else {
         isWorkMode = true;
         remainingTime = WORK_TIME;
         messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
         lastMessageIndex = -1;
-        notifyModeChange("休憩終了！ 作業を再開しましょう。");
+        notifyModeChange("休憩終了！\n作業を再開しましょう。");
       }
 
       updateModeDisplay();
@@ -1588,6 +1617,30 @@ function pauseTimerOnly() {
       messageDisplay.innerText = workEndMessages[randomIndex];
     }
 
+    /* 作業再開時のセリフをランダム表示する
+       ただし前回と同じセリフはできるだけ避ける */
+    function showRandomResumeMessage() {
+
+      /* セリフが1個しかないなら、その1個を使う */
+      if (resumeMessages.length === 1) {
+        lastResumeMessageIndex = 0;
+        messageDisplay.innerText = resumeMessages[0];
+        return;
+      }
+
+      let randomIndex;
+
+      /* 前回と同じ番号になったら引き直す */
+      do {
+        randomIndex = Math.floor(Math.random() * resumeMessages.length);
+      } while (randomIndex === lastResumeMessageIndex);
+
+      /* 今回の番号を覚えておく */
+      lastResumeMessageIndex = randomIndex;
+
+      /* セリフ表示 */
+      messageDisplay.innerText = resumeMessages[randomIndex];
+    }
 
     /* ==================================================
        22. 日付表示
