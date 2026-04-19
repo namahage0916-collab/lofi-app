@@ -29,11 +29,17 @@
   ================================================== -->
   <style>
 
-:root {
-  --button-bg: rgba(255,255,255,0.30);
-  --button-text: #24313a;
-  --popup-button-bg: rgba(255,255,255,0.30);
-}
+    /* ==================================================
+       0. CSS変数
+       テーマによって色を切り替えやすくするための変数
+    ================================================== */
+    :root {
+      --button-bg: rgba(255,255,255,0.30);
+      --button-text: #24313a;
+      --popup-button-bg: rgba(255,255,255,0.30);
+    }
+
+
 
     /* ==================================================
        1. ページ全体
@@ -50,23 +56,24 @@
     }
 
 
+
     /* ==================================================
        2. ボタン・入力系
     ================================================== */
 
     /* すべてのbutton要素の共通デザイン */
-button {
-  font-size: 20px;
-  padding: 10px 20px;
-  margin: 10px;
-  border-radius: 10px;
-  border: none;
-  background: var(--button-bg);
-  color: var(--button-text);
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: filter 0.2s ease, transform 0.1s ease;
-}
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+      background: var(--button-bg);
+      color: var(--button-text);
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: filter 0.2s ease, transform 0.1s ease;
+    }
 
     /* 通常ボタンにマウスを乗せたとき */
     button:hover {
@@ -88,30 +95,33 @@ button {
       filter: brightness(1.1);
     }
 
-#timerSettingBox.dark-popup button {
-  background: var(--popup-button-bg);
-}
+    /* タイマー設定ポップアップ内のボタン背景 */
+    #timerSettingBox.dark-popup button {
+      background: var(--popup-button-bg);
+    }
 
     /* 音量スライダーの幅 */
     input[type="range"] {
       width: 200px;
     }
 
+
+
     /* ==================================================
        3. レイアウト系
     ================================================== */
 
     /* ボタン群とビジュアライザーをまとめる横並びエリア */
-#buttonRow {
-  margin: 10px auto 0;
-  width: 80%;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  padding: 0 8px;
-}
+    #buttonRow {
+      margin: 10px auto 0;
+      width: 80%;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 0 8px;
+    }
 
     /* ボタンを横並びにする */
     #buttonGroup {
@@ -133,6 +143,7 @@ button {
       max-width: 600px;
       margin: 20px auto 0;
     }
+
 
 
     /* ==================================================
@@ -176,12 +187,12 @@ button {
     }
 
     /* 曲名表示 */
-#trackName {
-  font-size: 16px;
-  margin-top: 0;
-  color: #d6dcff;
-  white-space: nowrap;
-}
+    #trackName {
+      font-size: 16px;
+      margin-top: 0;
+      color: #d6dcff;
+      white-space: nowrap;
+    }
 
     /* タイトル横の日付表示 */
     #dateText {
@@ -191,6 +202,7 @@ button {
       opacity: 0.7;
       letter-spacing: 0.5px;
     }
+
 
 
     /* ==================================================
@@ -220,6 +232,12 @@ button {
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
 
+/* 左右のパネルの高さをそろえる */
+#focusPanel,
+#timerPanel {
+  height: 146px;
+}
+
     /* パネルの見出し */
     .panelTitle {
       font-size: 18px;
@@ -227,9 +245,17 @@ button {
       color: #d6dcff;
     }
 
-.panelTitle.focusTitle {
-  font-size: 24px;
-}
+    /* 「今日の集中」だけ少し大きめ */
+    .panelTitle.focusTitle {
+      font-size: 24px;
+    }
+
+    /* 今日の集中ゲージ */
+    #focusMeter {
+      font-size: 32px;
+      letter-spacing: -3px;
+      margin-top: 8px;
+    }
 
     /* タイマーパネル全体 */
     #timerPanel {
@@ -262,6 +288,7 @@ button {
       margin-top: 10px;
       font-weight: bold;
     }
+
 
 
     /* ==================================================
@@ -302,6 +329,8 @@ button {
       white-space: pre-line;
       color: #ffffff;
     }
+
+
 
     /* ==================================================
        7. ロック画面
@@ -351,6 +380,7 @@ button {
     }
 
 
+
     /* ==================================================
        8. フェードインアニメーション
     ================================================== */
@@ -382,6 +412,7 @@ button {
         transform: translateY(0);
       }
     }
+
 
 
     /* ==================================================
@@ -438,6 +469,7 @@ button {
       0%, 100% { height: 6px; }
       50% { height: 14px; }
     }
+
 
 
     /* ==================================================
@@ -497,181 +529,187 @@ button {
       border: none;
     }
 
-/* ポップアップ内のボタン群 */
-.timerSettingButtons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
+    /* ポップアップ内のボタン群 */
+    .timerSettingButtons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
 
-.timerSettingButtons button {
-  flex: 1;
-  text-align: center;
-}
+    .timerSettingButtons button {
+      flex: 1;
+      text-align: center;
+    }
 
-/* 作業中・休憩中の操作エリア全体 */
-#timerActionButtons {
-  width: 100%;
-}
+    /* 作業中・休憩中の操作エリア全体 */
+    #timerActionButtons {
+      width: 100%;
+    }
 
-/* 作業中・休憩中の3ボタンを並べる専用エリア */
-.timerActionButtonList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
+    /* 作業中・休憩中の3ボタンを並べる専用エリア */
+    .timerActionButtonList {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
 
-/* 3ボタン本体 */
-.timerActionButtonList button {
-  display: block;
-  width: 100%;
-  margin: 0;
-  min-width: 0;
-  box-sizing: border-box;
-  white-space: nowrap;
-}
+    /* 3ボタン本体 */
+    .timerActionButtonList button {
+      display: block;
+      width: 100%;
+      margin: 0;
+      min-width: 0;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
 
-/* 閉じるボタンの行 */
-.timerCloseRow {
-  width: 100%;
-  margin-top: 14px;
-}
+    /* 閉じるボタンの行 */
+    .timerCloseRow {
+      width: 100%;
+      margin-top: 14px;
+    }
 
-/* 閉じるボタン */
-.timerCloseRow button {
-  display: block;
-  width: 100%;
-  margin: 0;
-  min-width: 0;
-  box-sizing: border-box;
-}
+    /* 閉じるボタン */
+    .timerCloseRow button {
+      display: block;
+      width: 100%;
+      margin: 0;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+
 
     /* ==================================================
        11. スマホ向け調整
     ================================================== */
+@media (max-width: 768px) {
 
-    @media (max-width: 768px) {
+  body {
+    padding-top: 20px;
+  }
 
-      body {
-        padding-top: 20px;
-      }
+  h1 {
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
 
-      h1 {
-        font-size: 22px;
-        margin-bottom: 14px;
-      }
+  #dateText {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 12px;
+  }
 
-      #dateText {
-        display: inline-block;
-        margin-left: 8px;
-        font-size: 12px;
-      }
+  #imageArea,
+  #controlRow,
+  #buttonRow {
+    width: 94%;
+    max-width: none;
+  }
 
-      #imageArea,
-      #controlRow,
-      #buttonRow {
-        width: 94%;
-        max-width: none;
-      }
+  #imageArea {
+    margin-top: 14px;
+  }
 
-      #imageArea {
-        margin-top: 14px;
-      }
+  #mainImage {
+    border-radius: 12px;
+  }
 
-      #mainImage {
-        border-radius: 12px;
-      }
+  #messageBox {
+    padding: 14px;
+  }
 
-      #messageBox {
-        padding: 14px;
-      }
+  #message {
+    font-size: 18px;
+  }
 
-      #message {
-        font-size: 18px;
-      }
+  #controlRow {
+    width: 94%;
+    max-width: none;
+    margin: 10px auto 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: stretch;
+  }
 
-      #controlRow {
-        width: 94%;
-        max-width: none;
-        margin: 10px auto 0;
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 10px;
-        justify-content: center;
-        align-items: stretch;
-      }
+  .panel {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 14px 10px;
+  }
 
-      .panel {
-        flex: 1 1 0;
-        min-width: 0;
-        padding: 14px 10px;
-      }
-
-      .panelTitle {
-        font-size: 16px;
-      }
+  .panelTitle {
+    font-size: 16px;
+  }
 
   .panelTitle.focusTitle {
     font-size: 18px;
   }
 
   #focusMeter {
-    font-size: 20px;
+    font-size: 28px;
+    letter-spacing: -2px;
   }
 
-      #mode {
-        font-size: 18px;
-      }
+  #mode {
+    font-size: 18px;
+  }
 
-      #timer {
-        font-size: 34px;
-      }
+  #timer {
+    font-size: 34px;
+  }
 
-      input[type="range"] {
-        width: 100%;
-        max-width: 100%;
-      }
+  input[type="range"] {
+    width: 100%;
+    max-width: 100%;
+  }
 
-#trackName {
-  font-size: 15px;
-  opacity: 0.85;
-  letter-spacing: 0.03em;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  #trackName {
+    font-size: 15px;
+    opacity: 0.85;
+    letter-spacing: 0.03em;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #buttonRow {
+    gap: 10px;
+    align-items: center;
+  }
+
+  #buttonGroup {
+    flex: 1;
+    gap: 6px;
+  }
+
+  #buttonGroup button {
+    font-size: 14px;
+    padding: 10px 6px;
+    margin: 0;
+  }
+
+  #visualizer {
+    margin-right: 0;
+    margin-left: 4px;
+    gap: 3px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  #visualizer span {
+    width: 3px;
+  }
+
+  #focusPanel,
+  #timerPanel {
+    height: 118px;
+  }
 }
-
-      #buttonRow {
-        gap: 10px;
-        align-items: center;
-      }
-
-      #buttonGroup {
-        flex: 1;
-        gap: 6px;
-      }
-
-      #buttonGroup button {
-        font-size: 14px;
-        padding: 10px 6px;
-        margin: 0;
-      }
-
-      #visualizer {
-        margin-right: 0;
-        margin-left: 4px;
-        gap: 3px;
-        height: 24px;
-        flex-shrink: 0;
-      }
-
-      #visualizer span {
-        width: 3px;
-      }
-     }
-
   </style>
 </head>
 
@@ -687,6 +725,7 @@ button {
   ================================================== -->
 
 
+
   <!-- ==================================================
        1. ロック画面
   ================================================== -->
@@ -699,6 +738,7 @@ button {
   </div>
 
 
+
   <!-- ==================================================
        2. 作業終了・休憩終了の通知オーバーレイ
   ================================================== -->
@@ -708,6 +748,7 @@ button {
       <button onclick="closeNoticeAndStartNext()">閉じる</button>
     </div>
   </div>
+
 
 
   <!-- ==================================================
@@ -744,18 +785,19 @@ button {
           25:00
         </div>
 
-<div class="timerActionButtonList">
-  <button id="pauseResumeButton" onclick="togglePauseFromSettings()">一時停止</button>
-  <button id="finishModeButton" onclick="finishFromSettings()">作業終了</button>
-</div>
+        <div class="timerActionButtonList">
+          <button id="pauseResumeButton" onclick="togglePauseFromSettings()">一時停止</button>
+          <button id="finishModeButton" onclick="finishFromSettings()">作業終了</button>
+        </div>
 
-<div class="timerCloseRow">
-  <button onclick="closeTimerSettings()">閉じる</button>
-</div>
+        <div class="timerCloseRow">
+          <button onclick="closeTimerSettings()">閉じる</button>
+        </div>
       </div>
 
     </div>
   </div>
+
 
 
   <!-- ==================================================
@@ -784,12 +826,12 @@ button {
     <!-- ベル音 -->
     <audio id="bell" src="bell.mp3"></audio>
 
-    <!-- 左に音量、右にタイマー表示 -->
+    <!-- 左に今日の集中、右にタイマー表示 -->
     <div id="controlRow">
 
-<div class="panel fade-in">
+<div id="focusPanel" class="panel fade-in">
   <div class="panelTitle focusTitle">今日の集中</div>
-  <div id="focusMeter" style="font-size: 28px; letter-spacing: 4px; margin-top: 8px;">□□□□□</div>
+  <div id="focusMeter">□□□□□</div>
 </div>
 
       <!-- タイマーパネル -->
@@ -815,792 +857,844 @@ button {
         <span></span>
       </div>
 
-    <div id="trackName">No track</div>
+      <div id="trackName">No track</div>
 
-  </div>
-
-
-  <!-- ==================================================
-       JavaScript
-       アプリの動きを書く場所
-       ・タイマー
-       ・音楽
-       ・画像切り替え
-       ・セリフ表示
-       ・テーマ変更
-  ================================================== -->
-  <script>
-
-    /* ==================================================
-       1. 基本設定
-    ================================================== */
-
-    /* パスワード機能を使うかどうか
-       true なら使う
-       false なら使わない */
-    const USE_PASSWORD = false;
-
-
-    /* ==================================================
-       2. HTML要素を取得
-       HTML側の部品をJavaScriptから使えるようにする
-    ================================================== */
-
-    const music = document.getElementById("music");
-    const bell = document.getElementById("bell");
-    const modeDisplay = document.getElementById("mode");
-    const timerDisplay = document.getElementById("timer");
-    const messageDisplay = document.getElementById("message");
-    const trackNameDisplay = document.getElementById("trackName");
-    const passwordInput = document.getElementById("passwordInput");
-    const errorMessage = document.getElementById("errorMessage");
-    const lockScreen = document.getElementById("lockScreen");
-    const appContent = document.getElementById("appContent");
-    const mainImage = document.getElementById("mainImage");
-
-    const noticeOverlay = document.getElementById("noticeOverlay");
-    const noticeText = document.getElementById("noticeText");
-
-
-    /* パスワード機能をオフにしている場合は、
-       最初からロック画面を消してアプリ本体を出す */
-    if (!USE_PASSWORD) {
-      lockScreen.style.display = "none";
-      appContent.style.display = "block";
-    }
-
-
-    /* ==================================================
-       3. 時間・パスワード設定
-    ================================================== */
-
-    /* 時間設定（秒） */
-    let WORK_TIME = 25 * 60;
-    let BREAK_TIME = 5 * 60;
-
-    /* パスワード */
-    const APP_PASSWORD = "storycat";
-
-
-    /* ==================================================
-       4. 画像ファイル設定
-    ================================================== */
-
-    /* 作業中・休憩中の画像ファイル */
-    const WORK_IMAGE = "image.png";
-    const BREAK_IMAGE = "image_break.png";
-
-
-    /* ==================================================
-       5. 音楽・セリフデータ
-    ================================================== */
-
-    /* 再生する曲一覧 */
-    const tracks = [
-      "Epoch.mp3",
-      "Barely.mp3",
-      "Notion.mp3",
-      "Reflection.mp3",
-      "Woozy.mp3",
-      "Cozy.mp3",
-      "Fake.mp3",
-      "Yawn.mp3",
-      "Glass.mp3",
-      "Walk.mp3"
-    ];
-
-    /* 通常時のセリフ一覧 */
-    const messages = [
-      "……雨の音、落ち着くね。",
-      "コーヒー、まだ温かい？",
-      "焦らなくていいよ。",
-      "ゆっくり進めば大丈夫。",
-      "ちゃんと頑張ってるね。",
-      "あと少しだよ。",
-      "無理しないでね。",
-      "休憩も大事だよ。",
-      "いいペースだね。",
-      "……ここで一緒に頑張ろう。"
-    ];
-
-    /* 作業終了した時専用のセリフ一覧 */
-    const workEndMessages = [
-      "おつかれさま。少し休もうか。",
-      "ここまでよく頑張ったね。ひと休みしよう。",
-      "ふう……ひと区切りだね。休憩にしようか。",
-      "えらいえらい。少し肩の力を抜こう。",
-      "頑張ったぶん、ちゃんと休もうね。",
-      "少し休んで、またゆっくり始めよう。"
-    ];
-
-    /* 作業再開した時専用のセリフ一覧 */
-    const resumeMessages = [
-      "おかえり。続きをゆっくり進めよう。",
-      "それじゃ、また始めようか。",
-      "無理せず、少しずつ進めよう。",
-      "よし、ここからまた頑張ろう。",
-      "いい感じ。作業に戻ろうか。",
-      "落ち着いて、また進めていこう。"
-    ];
-
-    /* ==================================================
-       6. 状態管理用の変数
-       アプリが今どういう状態かを記録する
-    ================================================== */
-
-    /* タイマーや再生状態を管理する変数 */
-    let isRunning = false;
-    let isPaused = false;
-    let isWorkMode = true;
-    let remainingTime = WORK_TIME;
-    let endTime = null;
-
-    let intervalId = null;
-    let messageIntervalId = null;
-
-let lastMessageIndex = -1;
-let currentTrackIndex = -1;
-
-/* 通常時の音量を記録しておく */
-let normalVolume = 1;
-
-/* 今日の作業セッション数 */
-let sessionCount = 0;
-const SESSION_GOAL = 5;
-
-/* 前回の作業終了セリフを覚えておく */
-let lastWorkEndIndex = -1;
-
-/* 前回の再開セリフを覚えておく */
-let lastResumeMessageIndex = -1;
+    </div>
 
 
 
-    /* ==================================================
-       7. テーマ設定
-    ================================================== */
+    <!-- ==================================================
+         JavaScript
+         アプリの動きを書く場所
+         ・タイマー
+         ・音楽
+         ・画像切り替え
+         ・セリフ表示
+         ・テーマ変更
+    ================================================== -->
+    <script>
 
-    let currentTheme = 0;
+      /* ==================================================
+         1. 基本設定
+      ================================================== */
 
-const themes = [
-{
-  bodyBg: "#ddd2c3",
-  bodyText: "#2f2a24",
-  panelBg: "rgba(255,255,255,0.35)",
-  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-  subText: "#5a4f45",
-  mainText: "#2f2a24",
-  visualizerColor: "#8b6f5a",
-  popupBg: "#e8dfd2",
-  isDark: false
-},
-{
-  bodyBg: "#bfcfda",
-  bodyText: "#24313a",
-  panelBg: "rgba(255,255,255,0.30)",
-  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-  subText: "#4a5c68",
-  mainText: "#24313a",
-  visualizerColor: "#4a90e2",
-  popupBg: "#cfdbe6",
-  isDark: false
-},
-{
-  bodyBg: "#bfcfc3",
-  bodyText: "#2f3d33",
-  panelBg: "rgba(255,255,255,0.30)",
-  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-  subText: "#567a63",
-  mainText: "#2f3d33",
-  visualizerColor: "#5f9e7a",
-  popupBg: "#cfe0d5",
-  isDark: false
-},
-{
-  bodyBg: "#2b2f3a",
-  bodyText: "#f2f2f2",
-  panelBg: "rgba(255,255,255,0.08)",
-  panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
-  subText: "#d6dcff",
-  mainText: "#f2f2f2",
-  visualizerColor: "#d6dcff",
-  popupBg: "#2b2f3a",
-  isDark: true
-}
-];
-
-function applyTheme(theme) {
-
-  /* ページ全体 */
-  document.body.style.background = theme.bodyBg;
-  document.body.style.color = theme.bodyText;
-
-  /* パネル類 */
-  document.querySelectorAll(".panel").forEach(panel => {
-    panel.style.background = theme.panelBg;
-    panel.style.boxShadow = theme.panelShadow;
-  });
-
-  /* セリフ枠 */
-  const messageBox = document.getElementById("messageBox");
-  messageBox.style.background = theme.panelBg;
-  messageBox.style.boxShadow = theme.panelShadow;
-
-  /* 補助色テキスト */
-  document.getElementById("messageName").style.color = theme.subText;
-  document.getElementById("trackName").style.color = theme.subText;
-  document.getElementById("dateText").style.color = theme.subText;
-  document.getElementById("mode").style.color = theme.subText;
-
-  document.querySelectorAll(".panelTitle").forEach(el => {
-    el.style.color = theme.subText;
-  });
-
-  /* 本文色 */
-  document.getElementById("message").style.color = theme.mainText;
-  document.getElementById("timer").style.color = theme.mainText;
-
-  /* ビジュアライザー */
-  document.querySelectorAll("#visualizer span").forEach(bar => {
-    bar.style.background = theme.visualizerColor;
-  });
-
-/* タイマー設定ポップアップ */
-const timerBox = document.getElementById("timerSettingBox");
-if (timerBox) {
-  timerBox.style.background = theme.popupBg;
-  timerBox.style.boxShadow = theme.panelShadow;
-  timerBox.style.color = theme.mainText;
-
-  if (theme.isDark) {
-    document.documentElement.style.setProperty("--popup-button-bg", "#3a4050");
-    timerBox.classList.add("dark-popup");
-  } else {
-    document.documentElement.style.setProperty("--popup-button-bg", theme.panelBg);
-    timerBox.classList.remove("dark-popup");
-  }
-}
-
-  /* 通知ポップアップ */
-  const noticeBox = document.getElementById("noticeBox");
-  const noticeTextEl = document.getElementById("noticeText");
-
-if (noticeBox) {
-  noticeBox.style.background = theme.popupBg;
-  noticeBox.style.boxShadow = theme.panelShadow;
-  noticeBox.style.color = theme.mainText;
-}
-
-  if (noticeTextEl) {
-    noticeTextEl.style.color = theme.mainText;
-  }
-
-document.documentElement.style.setProperty("--button-bg", theme.panelBg);
-document.documentElement.style.setProperty("--button-text", theme.mainText);
-}
-
-/* テーマを次の番号へ切り替える */
-function toggleTheme() {
-  currentTheme = (currentTheme + 1) % themes.length;
-  applyTheme(themes[currentTheme]);
-}
+      /* パスワード機能を使うかどうか
+         true なら使う
+         false なら使わない */
+      const USE_PASSWORD = false;
 
 
 
-    /* ==================================================
-       8. パスワード関連
-    ================================================== */
+      /* ==================================================
+         2. HTML要素を取得
+         HTML側の部品をJavaScriptから使えるようにする
+      ================================================== */
 
-    /* パスワードチェック */
-    function checkPassword() {
-      const input = passwordInput.value;
+      const music = document.getElementById("music");
+      const bell = document.getElementById("bell");
+      const modeDisplay = document.getElementById("mode");
+      const timerDisplay = document.getElementById("timer");
+      const messageDisplay = document.getElementById("message");
+      const trackNameDisplay = document.getElementById("trackName");
+      const passwordInput = document.getElementById("passwordInput");
+      const errorMessage = document.getElementById("errorMessage");
+      const lockScreen = document.getElementById("lockScreen");
+      const appContent = document.getElementById("appContent");
+      const mainImage = document.getElementById("mainImage");
 
-      if (input === APP_PASSWORD) {
+      const noticeOverlay = document.getElementById("noticeOverlay");
+      const noticeText = document.getElementById("noticeText");
+
+
+      /* パスワード機能をオフにしている場合は、
+         最初からロック画面を消してアプリ本体を出す */
+      if (!USE_PASSWORD) {
         lockScreen.style.display = "none";
         appContent.style.display = "block";
-        errorMessage.innerText = "";
-      } else {
-        errorMessage.innerText = "パスワードが違います";
-        passwordInput.value = "";
-        passwordInput.focus();
       }
-    }
-
-    /* Enterキーでもパスワードを送信できるようにする */
-    passwordInput.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        checkPassword();
-      }
-    });
 
 
-    /* ==================================================
-       9. 音量・ベル関連
-    ================================================== */
 
-    /* 音量調整 */
-    function setVolume(v) {
-      const volume = Number(v);
+      /* ==================================================
+         3. 時間・パスワード設定
+      ================================================== */
 
-      /* 通常音量として記録 */
-      normalVolume = volume;
+      /* 時間設定（秒） */
+      let WORK_TIME = 25 * 60;
+      let BREAK_TIME = 5 * 60;
 
-      music.volume = volume;
-      bell.volume = Math.min(volume, 0.6);
-    }
-
-    /* ベル音を鳴らす */
-    function playBell() {
-      bell.currentTime = 0;
-      bell.play().catch(() => {});
-    }
+      /* パスワード */
+      const APP_PASSWORD = "storycat";
 
 
-    /* ==================================================
-       10. タイマー設定ポップアップ関連
-    ================================================== */
 
-    /* タイマー設定ポップアップを開く */
-    function openTimerSettings() {
-      const overlay = document.getElementById("timerSettingOverlay");
-      const title = document.getElementById("timerSettingTitle");
-      const form = document.getElementById("timerSettingForm");
-      const actions = document.getElementById("timerActionButtons");
-      const actionModeText = document.getElementById("timerActionModeText");
-      const actionTime = document.getElementById("timerActionTime");
-      const pauseResumeButton = document.getElementById("pauseResumeButton");
-      const finishModeButton = document.getElementById("finishModeButton");
+      /* ==================================================
+         4. 画像ファイル設定
+      ================================================== */
 
-      overlay.style.display = "flex";
+      /* 作業中・休憩中の画像ファイル */
+      const WORK_IMAGE = "image.png";
+      const BREAK_IMAGE = "image_break.png";
 
-      /* 動作中または一時停止中なら、操作ボタンを表示 */
-      if (isRunning || isPaused) {
-        title.style.display = "none";
-        form.style.display = "none";
-        actions.style.display = "block";
 
-        if (isWorkMode) {
-          actionModeText.innerText = isRunning ? "いまは作業時間中です" : "作業時間を一時停止中です";
-        } else {
-          actionModeText.innerText = isRunning ? "いまは休憩時間中です" : "休憩時間を一時停止中です";
+
+      /* ==================================================
+         5. 音楽・セリフデータ
+      ================================================== */
+
+      /* 再生する曲一覧 */
+      const tracks = [
+        "Epoch.mp3",
+        "Barely.mp3",
+        "Notion.mp3",
+        "Reflection.mp3",
+        "Woozy.mp3",
+        "Cozy.mp3",
+        "Fake.mp3",
+        "Yawn.mp3",
+        "Glass.mp3",
+        "Walk.mp3"
+      ];
+
+/* サイトを開いた直後専用のセリフ */
+const idleMessages = [
+  "今日はどうする？",
+  "継続は力なり……ってね。",
+  "いつでも始められるよ。",
+  "君が来るの、待ってたんだ。",
+  "おっ、やれる感じ？",
+  "頑張り屋さんの登場だね。"
+];
+
+      /* 作業時のセリフ一覧 */
+      const messages = [
+        "集中、集中……。",
+        "飲み物、切れてない？",
+        "あせらなくていいよ。",
+        "ゆっくりやってこうね。",
+        "コツコツと進めてこう。",
+        "あと少しだよ。",
+        "ムリはしないでね。",
+        "休憩も大事だよ。",
+        "いいペースじゃない？",
+        "この曲、好きかも。"
+      ];
+
+      /* 作業終了した時専用のセリフ一覧 */
+      const workEndMessages = [
+        "おつかれさま。どうだった？",
+        "ふう……。けっこう進んだかも。",
+        "えらいえらい。よく頑張りました。",
+        "集中したぶん、ちゃんと休もうね。",
+        "よしよし、休憩タイムっと……。",
+        "ちょっとリラックスしよっと……。"
+      ];
+
+    /* 休憩中専用のセリフ一覧 */
+    const breakMessages = [
+      "ひと休み、ひと休み。",
+      "水分補給、忘れずにね？",
+      "目、ちゃんと休ませてね。",
+      "ぼーっとする時間も大事だよ。",
+      "深呼吸すると、ちょっと楽かも。",
+      "軽くストレッチしようかな。",
+      "ラムネ食べる？",
+      "たまには換気しなくちゃね。",
+      "ムリしすぎないのが一番だよ。",
+      "休憩も作業のうち、だよ。"
+    ];
+
+      /* 作業再開した時専用のセリフ一覧 */
+      const resumeMessages = [
+        "おかえり。ちゃんと休めた？",
+        "それじゃ、また始めようか。",
+        "よーし、やってやりますか。",
+        "よし、ここからまた頑張ろう。",
+        "いい感じ。作業に戻ろうか。",
+        "落ち着いて、また進めていこう。"
+      ];
+
+
+
+      /* ==================================================
+         6. 状態管理用の変数
+         アプリが今どういう状態かを記録する
+      ================================================== */
+
+      /* タイマーや再生状態を管理する変数 */
+      let isRunning = false;
+      let isPaused = false;
+      let isWorkMode = true;
+      let remainingTime = WORK_TIME;
+      let endTime = null;
+
+      let intervalId = null;
+      let messageIntervalId = null;
+
+      let lastMessageIndex = -1;
+      let currentTrackIndex = -1;
+
+      /* 通常時の音量を記録しておく */
+      let normalVolume = 1;
+
+      /* 今日の作業セッション数 */
+      let sessionCount = 0;
+      const SESSION_GOAL = 5;
+
+      /* 前回の作業終了セリフを覚えておく */
+      let lastWorkEndIndex = -1;
+
+      /* 前回の再開セリフを覚えておく */
+      let lastResumeMessageIndex = -1;
+
+
+      /* ==================================================
+         7. テーマ設定
+      ================================================== */
+
+      let currentTheme = 0;
+
+      const themes = [
+        {
+          bodyBg: "#ddd2c3",
+          bodyText: "#2f2a24",
+          panelBg: "rgba(255,255,255,0.35)",
+          panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+          subText: "#5a4f45",
+          mainText: "#2f2a24",
+          visualizerColor: "#8b6f5a",
+          popupBg: "#e8dfd2",
+          isDark: false
+        },
+        {
+          bodyBg: "#bfcfda",
+          bodyText: "#24313a",
+          panelBg: "rgba(255,255,255,0.30)",
+          panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+          subText: "#4a5c68",
+          mainText: "#24313a",
+          visualizerColor: "#4a90e2",
+          popupBg: "#cfdbe6",
+          isDark: false
+        },
+        {
+          bodyBg: "#bfcfc3",
+          bodyText: "#2f3d33",
+          panelBg: "rgba(255,255,255,0.30)",
+          panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+          subText: "#567a63",
+          mainText: "#2f3d33",
+          visualizerColor: "#5f9e7a",
+          popupBg: "#cfe0d5",
+          isDark: false
+        },
+        {
+          bodyBg: "#2b2f3a",
+          bodyText: "#f2f2f2",
+          panelBg: "rgba(255,255,255,0.08)",
+          panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
+          subText: "#d6dcff",
+          mainText: "#f2f2f2",
+          visualizerColor: "#d6dcff",
+          popupBg: "#2b2f3a",
+          isDark: true
+        }
+      ];
+
+      /* テーマの色を画面全体に反映する */
+      function applyTheme(theme) {
+
+        /* ページ全体 */
+        document.body.style.background = theme.bodyBg;
+        document.body.style.color = theme.bodyText;
+
+        /* パネル類 */
+        document.querySelectorAll(".panel").forEach(panel => {
+          panel.style.background = theme.panelBg;
+          panel.style.boxShadow = theme.panelShadow;
+        });
+
+        /* セリフ枠 */
+        const messageBox = document.getElementById("messageBox");
+        messageBox.style.background = theme.panelBg;
+        messageBox.style.boxShadow = theme.panelShadow;
+
+        /* 補助色テキスト */
+        document.getElementById("messageName").style.color = theme.subText;
+        document.getElementById("trackName").style.color = theme.subText;
+        document.getElementById("dateText").style.color = theme.subText;
+        document.getElementById("mode").style.color = theme.subText;
+
+        document.querySelectorAll(".panelTitle").forEach(el => {
+          el.style.color = theme.subText;
+        });
+
+        /* 本文色 */
+        document.getElementById("message").style.color = theme.mainText;
+        document.getElementById("timer").style.color = theme.mainText;
+
+        /* ビジュアライザー */
+        document.querySelectorAll("#visualizer span").forEach(bar => {
+          bar.style.background = theme.visualizerColor;
+        });
+
+        /* タイマー設定ポップアップ */
+        const timerBox = document.getElementById("timerSettingBox");
+        if (timerBox) {
+          timerBox.style.background = theme.popupBg;
+          timerBox.style.boxShadow = theme.panelShadow;
+          timerBox.style.color = theme.mainText;
+
+          if (theme.isDark) {
+            document.documentElement.style.setProperty("--popup-button-bg", "#3a4050");
+            timerBox.classList.add("dark-popup");
+          } else {
+            document.documentElement.style.setProperty("--popup-button-bg", theme.panelBg);
+            timerBox.classList.remove("dark-popup");
+          }
         }
 
-        actionTime.innerText = timerDisplay.innerText;
-        pauseResumeButton.innerText = isRunning ? "一時停止" : "再開";
-        finishModeButton.innerText = isWorkMode ? "作業終了" : "休憩終了";
+        /* 通知ポップアップ */
+        const noticeBox = document.getElementById("noticeBox");
+        const noticeTextEl = document.getElementById("noticeText");
 
-      } else {
-        title.style.display = "block";
-        form.style.display = "block";
-        actions.style.display = "none";
+        if (noticeBox) {
+          noticeBox.style.background = theme.popupBg;
+          noticeBox.style.boxShadow = theme.panelShadow;
+          noticeBox.style.color = theme.mainText;
+        }
+
+        if (noticeTextEl) {
+          noticeTextEl.style.color = theme.mainText;
+        }
+
+        /* CSS変数側にもボタン色を反映 */
+        document.documentElement.style.setProperty("--button-bg", theme.panelBg);
+        document.documentElement.style.setProperty("--button-text", theme.mainText);
       }
-    }
 
-    /* ポップアップ側のタイマー表示を更新する */
-    function updateTimerActionTime() {
-      const actionTime = document.getElementById("timerActionTime");
-      if (actionTime) {
-        actionTime.innerText = timerDisplay.innerText;
+      /* テーマを次の番号へ切り替える */
+      function toggleTheme() {
+        currentTheme = (currentTheme + 1) % themes.length;
+        applyTheme(themes[currentTheme]);
       }
-    }
-
-    /* タイマー設定ポップアップを閉じる */
-    function closeTimerSettings() {
-      document.getElementById("timerSettingOverlay").style.display = "none";
-      document.getElementById("timerSettingTitle").style.display = "block";
-    }
-
-    /* ポップアップから一時停止 / 再開を切り替える */
-function togglePauseFromSettings() {
-  if (isRunning) {
-    pauseTimerOnly();
-    openTimerSettings();
-  } else if (isPaused) {
-    startTimer();
-    closeTimerSettings();
-  }
-}
-
-    /* ポップアップからリセットする */
-    function resetFromSettings() {
-      resetTimer();
-      closeTimerSettings();
-    }
-
-    /* ポップアップから作業終了 / 休憩終了する */
-    function finishFromSettings() {
-      skipCurrentMode();
-      closeTimerSettings();
-    }
-
-    /* 設定した時間でタイマーを開始する */
-function startFromSettings() {
-  const workMinutes = Number(document.getElementById("workMinutesInput").value);
-  const breakMinutes = Number(document.getElementById("breakMinutesInput").value);
-
-  if (workMinutes < 1 || breakMinutes < 1) return;
-
-  /* 入力値を秒に変換 */
-  WORK_TIME = workMinutes * 60;
-  BREAK_TIME = breakMinutes * 60;
-
-  /* 作業モードの初期状態に戻す */
-  isWorkMode = true;
-  isPaused = false;
-  remainingTime = WORK_TIME;
-  endTime = null;
-
-  /* 表示を先に更新 */
-  updateModeDisplay();
-  updateTimerDisplay();
-  updateModeImage();
-
-  /* ポップアップを閉じて開始 */
-  closeTimerSettings();
-  startTimer();
-}
 
 
-    /* ==================================================
-       11. タイマー表示関連
-    ================================================== */
 
-    /* タイマー表示を更新する */
-    function updateTimerDisplay() {
-      const min = Math.floor(remainingTime / 60);
-      const sec = remainingTime % 60;
-      timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
+      /* ==================================================
+         8. パスワード関連
+      ================================================== */
 
-      /* ポップアップ側のタイマー表示も同期する */
-      updateTimerActionTime();
-    }
+      /* パスワードチェック */
+      function checkPassword() {
+        const input = passwordInput.value;
 
-    /* 作業時間 / 休憩時間 の表示を切り替える */
-function updateModeDisplay() {
-  const isInitialState =
-    !isRunning &&
-    !isPaused &&
-    isWorkMode &&
-    remainingTime === WORK_TIME &&
-    currentTrackIndex === -1;
+        if (input === APP_PASSWORD) {
+          lockScreen.style.display = "none";
+          appContent.style.display = "block";
+          errorMessage.innerText = "";
+        } else {
+          errorMessage.innerText = "パスワードが違います";
+          passwordInput.value = "";
+          passwordInput.focus();
+        }
+      }
 
-  if (isInitialState) {
-    modeDisplay.innerText = "タイマー設定";
-  } else {
-    modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
-  }
-}
+      /* Enterキーでもパスワードを送信できるようにする */
+      passwordInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          checkPassword();
+        }
+      });
 
 
-    /* ==================================================
-       12. 画像切り替え関連
-    ================================================== */
 
-    /* 今のモードに合わせて画像を切り替える */
-    function updateModeImage() {
+      /* ==================================================
+         9. 音量・ベル関連
+      ================================================== */
 
-      /* 両方のフェードクラスを一旦外す */
-      mainImage.classList.remove("fade-in-long");
-      mainImage.classList.remove("fade-in-short");
+      /* 音量調整 */
+      function setVolume(v) {
+        const volume = Number(v);
 
-      /* 画像を切り替え */
-      mainImage.src = isWorkMode ? WORK_IMAGE : BREAK_IMAGE;
+        /* 通常音量として記録 */
+        normalVolume = volume;
 
-      /* 強制再描画 */
-      void mainImage.offsetWidth;
+        music.volume = volume;
+        bell.volume = Math.min(volume, 0.6);
+      }
 
-      /* 切り替え時は短いフェード */
-      mainImage.classList.add("fade-in-short");
-    }
-
-
-    /* ==================================================
-       13. 通知表示関連
-    ================================================== */
-
-    /* オーバーレイ通知を表示する */
-    function showNotice(text) {
-      noticeText.innerText = text;
-      noticeOverlay.style.display = "flex";
-    }
-
-    /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
-function closeNoticeAndStartNext() {
-  noticeOverlay.style.display = "none";
-
-  isPaused = false;
-
-  /* 音量を戻す */
-  music.volume = normalVolume;
-
-  /* ビジュアライザーも元に戻す */
-  visualizer.classList.remove("low-volume");
-
-  updateModeImage();
-
-  /* 念のため再開 */
-  startVisualizer();
-
-  startTimer();
-
-  /* 休憩明けで作業に戻るときだけ、再開セリフを出す */
-  if (isWorkMode) {
-    showRandomResumeMessage();
-  }
-}
+      /* ベル音を鳴らす */
+      function playBell() {
+        bell.currentTime = 0;
+        bell.play().catch(() => {});
+      }
 
 
-    /* ==================================================
-       14. セリフ関連
-    ================================================== */
 
-    /* 前回と同じセリフを避けながらランダムに選ぶ */
-    function getRandomMessageIndex() {
-      if (messages.length === 1) return 0;
+      /* ==================================================
+         10. タイマー設定ポップアップ関連
+      ================================================== */
 
-      let randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * messages.length);
-      } while (randomIndex === lastMessageIndex);
+      /* タイマー設定ポップアップを開く */
+      function openTimerSettings() {
+        const overlay = document.getElementById("timerSettingOverlay");
+        const title = document.getElementById("timerSettingTitle");
+        const form = document.getElementById("timerSettingForm");
+        const actions = document.getElementById("timerActionButtons");
+        const actionModeText = document.getElementById("timerActionModeText");
+        const actionTime = document.getElementById("timerActionTime");
+        const pauseResumeButton = document.getElementById("pauseResumeButton");
+        const finishModeButton = document.getElementById("finishModeButton");
 
-      return randomIndex;
-    }
+        overlay.style.display = "flex";
 
-    /* セリフを表示する */
-    function showRandomMessage() {
-      const randomIndex = getRandomMessageIndex();
-      lastMessageIndex = randomIndex;
-      messageDisplay.innerText = messages[randomIndex];
-    }
+        /* 動作中または一時停止中なら、操作ボタンを表示 */
+        if (isRunning || isPaused) {
+          title.style.display = "none";
+          form.style.display = "none";
+          actions.style.display = "block";
 
-    /* 1分ごとにセリフを更新するループ開始 */
-    function startMessageLoop() {
-      if (messageIntervalId) return;
+          if (isWorkMode) {
+            actionModeText.innerText = isRunning ? "いまは作業時間中です" : "作業時間を一時停止中です";
+          } else {
+            actionModeText.innerText = isRunning ? "いまは休憩時間中です" : "休憩時間を一時停止中です";
+          }
 
-      messageIntervalId = setInterval(() => {
-        if (!isRunning) return;
-        showRandomMessage();
-      }, 60000);
-    }
+          actionTime.innerText = timerDisplay.innerText;
+          pauseResumeButton.innerText = isRunning ? "一時停止" : "再開";
+          finishModeButton.innerText = isWorkMode ? "作業終了" : "休憩終了";
 
-    /* セリフ更新ループ停止 */
-    function stopMessageLoop() {
-      clearInterval(messageIntervalId);
-      messageIntervalId = null;
-    }
+        } else {
+          title.style.display = "block";
+          form.style.display = "block";
+          actions.style.display = "none";
+        }
+      }
 
+      /* ポップアップ側のタイマー表示を更新する */
+      function updateTimerActionTime() {
+        const actionTime = document.getElementById("timerActionTime");
+        if (actionTime) {
+          actionTime.innerText = timerDisplay.innerText;
+        }
+      }
 
-    /* ==================================================
-       15. 曲関連
-    ================================================== */
+      /* タイマー設定ポップアップを閉じる */
+      function closeTimerSettings() {
+        document.getElementById("timerSettingOverlay").style.display = "none";
+        document.getElementById("timerSettingTitle").style.display = "block";
+      }
 
-    /* 前回と同じ曲を避けながらランダムに選ぶ */
-    function getRandomTrackIndex() {
-      if (tracks.length === 1) return 0;
+      /* ポップアップから一時停止 / 再開を切り替える */
+      function togglePauseFromSettings() {
+        if (isRunning) {
+          pauseTimerOnly();
+          openTimerSettings();
+        } else if (isPaused) {
+          startTimer();
+          closeTimerSettings();
+        }
+      }
 
-      let randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * tracks.length);
-      } while (randomIndex === currentTrackIndex);
+      /* ポップアップからリセットする
+         ※今は呼び出しボタンがないが、残してある関数 */
+      function resetFromSettings() {
+        resetTimer();
+        closeTimerSettings();
+      }
 
-      return randomIndex;
-    }
+      /* ポップアップから作業終了 / 休憩終了する */
+      function finishFromSettings() {
+        skipCurrentMode();
+        closeTimerSettings();
+      }
 
-    /* 曲名表示を更新する */
-    function updateTrackName(index) {
-      const trackName = tracks[index].replace(".mp3", "");
-      trackNameDisplay.innerText = trackName;
-    }
+      /* 設定した時間でタイマーを開始する */
+      function startFromSettings() {
+        const workMinutes = Number(document.getElementById("workMinutesInput").value);
+        const breakMinutes = Number(document.getElementById("breakMinutesInput").value);
 
-    /* ランダムな曲を再生する */
-    function playRandomTrack() {
-      const randomIndex = getRandomTrackIndex();
-      currentTrackIndex = randomIndex;
-      music.src = tracks[randomIndex];
-      updateTrackName(randomIndex);
-      music.play().catch(() => {});
-      startVisualizer();
-    }
+        if (workMinutes < 1 || breakMinutes < 1) return;
 
-    /* 曲が終わったら次の曲へ */
-music.addEventListener("ended", () => {
-  if (isRunning || isPaused) {
-    playRandomTrack();
-  }
-});
+        /* 入力値を秒に変換 */
+        WORK_TIME = workMinutes * 60;
+        BREAK_TIME = breakMinutes * 60;
 
-
-    /* ==================================================
-       16. 通知時の処理
-    ================================================== */
-
-    /* 通知はオーバーレイだけ使う */
-    function notifyModeChange(text) {
-      showNotice(text);
-      playBell();
-
-      /* 音楽の音量を下げる */
-      music.volume = normalVolume * 0.2;
-
-      /* ビジュアライザーを小さくする */
-      visualizer.classList.add("low-volume");
-    }
-
-
-    /* ==================================================
-       17. 作業終了 / 休憩終了時の処理
-    ================================================== */
-
-    /* 作業終了 / 休憩終了時の処理 */
-    function finishCurrentMode() {
-      stopTimerForNotice();
-      isPaused = false;
-
- if (isWorkMode) {
-  sessionCount++;
-  updateFocusDisplay();
-
-  isWorkMode = false;
-  remainingTime = BREAK_TIME;
-  showRandomWorkEndMessage();
-  lastMessageIndex = -1;
-  notifyModeChange(`作業終了！\n${BREAK_TIME / 60}分休憩です。`);
-} else {
+        /* 作業モードの初期状態に戻す */
         isWorkMode = true;
+        isPaused = false;
         remainingTime = WORK_TIME;
-        messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
-        lastMessageIndex = -1;
-        notifyModeChange("休憩終了！\n作業を再開しましょう。");
+        endTime = null;
+
+        /* 表示を先に更新 */
+        updateModeDisplay();
+        updateTimerDisplay();
+        updateModeImage();
+
+        /* ポップアップを閉じて開始 */
+        closeTimerSettings();
+        startTimer();
       }
 
-      updateModeDisplay();
-      updateTimerDisplay();
-    }
 
 
-    /* ==================================================
-       18. タイマー本体
-    ================================================== */
+      /* ==================================================
+         11. タイマー表示関連
+      ================================================== */
 
-    /* 残り時間を計算して表示する */
-    function tickTimer() {
-      if (!isRunning || endTime === null) return;
+      /* タイマー表示を更新する */
+      function updateTimerDisplay() {
+        const min = Math.floor(remainingTime / 60);
+        const sec = remainingTime % 60;
+        timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
 
-      const now = Date.now();
-      const diffMs = endTime - now;
-      remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+        /* ポップアップ側のタイマー表示も同期する */
+        updateTimerActionTime();
+      }
 
-      updateTimerDisplay();
+      /* 作業時間 / 休憩時間 の表示を切り替える */
+      function updateModeDisplay() {
+        const isInitialState =
+          !isRunning &&
+          !isPaused &&
+          isWorkMode &&
+          remainingTime === WORK_TIME &&
+          currentTrackIndex === -1;
 
-      if (remainingTime <= 0) {
+        if (isInitialState) {
+          modeDisplay.innerText = "タイマー設定";
+        } else {
+          modeDisplay.innerText = isWorkMode ? "作業時間" : "休憩時間";
+        }
+      }
+
+
+
+      /* ==================================================
+         12. 画像切り替え関連
+      ================================================== */
+
+      /* 今のモードに合わせて画像を切り替える */
+      function updateModeImage() {
+
+        /* 両方のフェードクラスを一旦外す */
+        mainImage.classList.remove("fade-in-long");
+        mainImage.classList.remove("fade-in-short");
+
+        /* 画像を切り替え */
+        mainImage.src = isWorkMode ? WORK_IMAGE : BREAK_IMAGE;
+
+        /* 強制再描画 */
+        void mainImage.offsetWidth;
+
+        /* 切り替え時は短いフェード */
+        mainImage.classList.add("fade-in-short");
+      }
+
+
+
+      /* ==================================================
+         13. 通知表示関連
+      ================================================== */
+
+      /* オーバーレイ通知を表示する */
+      function showNotice(text) {
+        noticeText.innerText = text;
+        noticeOverlay.style.display = "flex";
+      }
+
+      /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
+      function closeNoticeAndStartNext() {
+        noticeOverlay.style.display = "none";
+
+        isPaused = false;
+
+        /* 音量を戻す */
+        music.volume = normalVolume;
+
+        /* ビジュアライザーも元に戻す */
+        visualizer.classList.remove("low-volume");
+
+        updateModeImage();
+
+        /* 念のため再開 */
+        startVisualizer();
+        startTimer();
+
+        /* 休憩明けで作業に戻るときだけ、再開セリフを出す */
+        if (isWorkMode) {
+          showRandomResumeMessage();
+        }
+      }
+
+
+
+      /* ==================================================
+         14. セリフ関連
+      ================================================== */
+
+      /* 前回と同じセリフを避けながらランダムに選ぶ */
+function getRandomMessageIndex() {
+  const currentMessages = isWorkMode ? messages : breakMessages;
+
+  if (currentMessages.length === 1) return 0;
+
+  let randomIndex;
+  do {
+    randomIndex = Math.floor(Math.random() * currentMessages.length);
+  } while (randomIndex === lastMessageIndex);
+
+  return randomIndex;
+}
+
+      /* セリフを表示する */
+function showRandomMessage() {
+  const currentMessages = isWorkMode ? messages : breakMessages;
+  const randomIndex = getRandomMessageIndex();
+
+  lastMessageIndex = randomIndex;
+  messageDisplay.innerText = currentMessages[randomIndex];
+}
+
+function showIdleMessage() {
+  const randomIndex = Math.floor(Math.random() * idleMessages.length);
+  messageDisplay.innerText = idleMessages[randomIndex];
+}
+
+      /* 1分ごとにセリフを更新するループ開始 */
+      function startMessageLoop() {
+        if (messageIntervalId) return;
+
+        messageIntervalId = setInterval(() => {
+          if (!isRunning) return;
+          showRandomMessage();
+        }, 60000);
+      }
+
+      /* セリフ更新ループ停止 */
+      function stopMessageLoop() {
+        clearInterval(messageIntervalId);
+        messageIntervalId = null;
+      }
+
+
+      /* ==================================================
+         15. 曲関連
+      ================================================== */
+
+      /* 前回と同じ曲を避けながらランダムに選ぶ */
+      function getRandomTrackIndex() {
+        if (tracks.length === 1) return 0;
+
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * tracks.length);
+        } while (randomIndex === currentTrackIndex);
+
+        return randomIndex;
+      }
+
+      /* 曲名表示を更新する */
+      function updateTrackName(index) {
+        const trackName = tracks[index].replace(".mp3", "");
+        trackNameDisplay.innerText = trackName;
+      }
+
+      /* ランダムな曲を再生する */
+      function playRandomTrack() {
+        const randomIndex = getRandomTrackIndex();
+        currentTrackIndex = randomIndex;
+        music.src = tracks[randomIndex];
+        updateTrackName(randomIndex);
+        music.play().catch(() => {});
+        startVisualizer();
+      }
+
+      /* 曲が終わったら次の曲へ */
+      music.addEventListener("ended", () => {
+        if (isRunning || isPaused) {
+          playRandomTrack();
+        }
+      });
+
+
+
+      /* ==================================================
+         16. 通知時の処理
+      ================================================== */
+
+      /* 通知はオーバーレイだけ使う */
+      function notifyModeChange(text) {
+        showNotice(text);
+        playBell();
+
+        /* 音楽の音量を下げる */
+        music.volume = normalVolume * 0.2;
+
+        /* ビジュアライザーを小さくする */
+        visualizer.classList.add("low-volume");
+      }
+
+
+
+      /* ==================================================
+         17. 作業終了 / 休憩終了時の処理
+      ================================================== */
+
+      /* 作業終了 / 休憩終了時の処理 */
+      function finishCurrentMode() {
+        stopTimerForNotice();
+        isPaused = false;
+
+        if (isWorkMode) {
+          sessionCount++;
+          updateFocusDisplay();
+
+          isWorkMode = false;
+          remainingTime = BREAK_TIME;
+          showRandomWorkEndMessage();
+          lastMessageIndex = -1;
+          notifyModeChange(`作業終了！\n${BREAK_TIME / 60}分休憩です。`);
+        } else {
+          isWorkMode = true;
+          remainingTime = WORK_TIME;
+          messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
+          lastMessageIndex = -1;
+          notifyModeChange("休憩終了！\n作業を再開しましょう。");
+        }
+
+        updateModeDisplay();
+        updateTimerDisplay();
+      }
+
+
+
+      /* ==================================================
+         18. タイマー本体
+      ================================================== */
+
+      /* 残り時間を計算して表示する */
+      function tickTimer() {
+        if (!isRunning || endTime === null) return;
+
+        const now = Date.now();
+        const diffMs = endTime - now;
+        remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+
+        updateTimerDisplay();
+
+        if (remainingTime <= 0) {
+          finishCurrentMode();
+        }
+      }
+
+      /* タイマー開始 */
+      function startTimer() {
+        if (isRunning) return;
+
+        isRunning = true;
+        isPaused = false;
+        endTime = Date.now() + remainingTime * 1000;
+
+        updateModeDisplay();
+
+        showRandomMessage();
+
+        if (music.paused) {
+          if (!music.src) {
+            playRandomTrack();
+          } else {
+            music.play().catch(() => {});
+            startVisualizer();
+          }
+        }
+
+        startMessageLoop();
+
+        tickTimer();
+        intervalId = setInterval(tickTimer, 250);
+      }
+
+      /* タイマー停止 */
+      function stopTimer() {
+        clearInterval(intervalId);
+        intervalId = null;
+
+        if (isRunning && endTime !== null) {
+          const diffMs = endTime - Date.now();
+          remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+        }
+
+        isRunning = false;
+        endTime = null;
+
+        music.pause();
+        stopMessageLoop();
+        stopVisualizer();
+        updateTimerDisplay();
+      }
+
+      /* 時間切れ時専用の停止
+         タイマーは止めるが、音楽は止めない */
+      function stopTimerForNotice() {
+        clearInterval(intervalId);
+        intervalId = null;
+
+        if (isRunning && endTime !== null) {
+          const diffMs = endTime - Date.now();
+          remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+        }
+
+        isRunning = false;
+        endTime = null;
+
+        /* 音楽は止めない */
+        stopMessageLoop();
+        updateTimerDisplay();
+      }
+
+      /* 今のモードを強制終了する */
+      function skipCurrentMode() {
+        remainingTime = 0;
         finishCurrentMode();
       }
-    }
 
-    /* タイマー開始 */
-function startTimer() {
-  if (isRunning) return;
+      /* タイマーと音楽を初期状態に戻す */
+      function resetTimer() {
+        stopTimer();
 
-  isRunning = true;
-  isPaused = false;
-  endTime = Date.now() + remainingTime * 1000;
+        isRunning = false;
+        isPaused = false;
+        isWorkMode = true;
+        remainingTime = WORK_TIME;
+        endTime = null;
 
-  updateModeDisplay();
+        lastMessageIndex = -1;
+        currentTrackIndex = -1;
+        lastWorkEndIndex = -1;
+        sessionCount = 0;
 
-  if (music.paused) {
-    if (!music.src) {
-      playRandomTrack();
-    } else {
-      music.play().catch(() => {});
-      startVisualizer();
-    }
-  }
+        updateModeDisplay();
+        updateTimerDisplay();
+        updateFocusDisplay();
+        showRandomMessage();
+        updateModeImage();
 
-  startMessageLoop();
+        music.pause();
+        music.currentTime = 0;
+        music.removeAttribute("src");
+        music.load();
 
-  tickTimer();
-  intervalId = setInterval(tickTimer, 250);
-}
+        trackNameDisplay.innerText = "No track";
+        noticeOverlay.style.display = "none";
 
-    /* タイマー停止 */
-    function stopTimer() {
-      clearInterval(intervalId);
-      intervalId = null;
-
-      if (isRunning && endTime !== null) {
-        const diffMs = endTime - Date.now();
-        remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+        visualizer.classList.remove("low-volume");
+        music.volume = normalVolume;
       }
 
-      isRunning = false;
-      endTime = null;
-
-      music.pause();
-      stopMessageLoop();
-      stopVisualizer();
-      updateTimerDisplay();
-    }
-
-    /* 時間切れ時専用の停止
-       タイマーは止めるが、音楽は止めない */
-    function stopTimerForNotice() {
-      clearInterval(intervalId);
-      intervalId = null;
-
-      if (isRunning && endTime !== null) {
-        const diffMs = endTime - Date.now();
-        remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-      }
-
-      isRunning = false;
-      endTime = null;
-
-      /* 音楽は止めない */
-      stopMessageLoop();
-      updateTimerDisplay();
-    }
-
-    /* 今のモードを強制終了する */
-    function skipCurrentMode() {
-      remainingTime = 0;
-      finishCurrentMode();
-    }
-
-    /* タイマーと音楽を初期状態に戻す */
-    function resetTimer() {
-      stopTimer();
-
-      isRunning = false;
-      isPaused = false;
-      isWorkMode = true;
-      remainingTime = WORK_TIME;
-      endTime = null;
-
-lastMessageIndex = -1;
-currentTrackIndex = -1;
-lastWorkEndIndex = -1;
-sessionCount = 0;
-
-updateModeDisplay();
-updateTimerDisplay();
-updateFocusDisplay();
-showRandomMessage();
-updateModeImage();
-
-      music.pause();
-      music.currentTime = 0;
-      music.removeAttribute("src");
-      music.load();
-
-      trackNameDisplay.innerText = "No track";
-      noticeOverlay.style.display = "none";
-
-      visualizer.classList.remove("low-volume");
-      music.volume = normalVolume;
-    }
-
-    /* 一時停止
-       タイマーだけ止めて、音楽は止めない */
+/* 一時停止
+   タイマー・音楽・ビジュアライザーを止める */
 function pauseTimerOnly() {
   clearInterval(intervalId);
   intervalId = null;
@@ -1614,139 +1708,157 @@ function pauseTimerOnly() {
   isPaused = true;
   endTime = null;
 
-  /* 音楽は止めない */
+  /* 音楽も止める */
+  music.pause();
+
+  /* セリフ更新も止める */
+  stopMessageLoop();
+
+  /* ビジュアライザーも止める */
+  stopVisualizer();
+
   updateTimerDisplay();
 }
 
-    /* ==================================================
-       19. ページ表示状態の変化
-    ================================================== */
-
-    /* タブに戻ってきた時に時間表示を更新 */
-    document.addEventListener("visibilitychange", () => {
-      if (isRunning) {
-        tickTimer();
-      }
-    });
 
 
-    /* ==================================================
-       20. 初期設定
-    ================================================== */
+      /* ==================================================
+         19. ページ表示状態の変化
+      ================================================== */
 
-bell.volume = 0.5;
-updateModeDisplay();
-updateTimerDisplay();
-updateFocusDisplay();
-showRandomMessage();
-applyTheme(themes[currentTheme]);
+      /* タブに戻ってきた時に時間表示を更新 */
+      document.addEventListener("visibilitychange", () => {
+        if (isRunning) {
+          tickTimer();
+        }
+      });
 
 
-    /* ==================================================
-       21. 作業終了セリフ関連
-    ================================================== */
 
-    /* 作業終了時のセリフをランダム表示する
-       ただし前回と同じセリフはできるだけ避ける */
-    function showRandomWorkEndMessage() {
+      /* ==================================================
+         20. 初期設定
+      ================================================== */
 
-      /* セリフが1個しかないなら、その1個を使う */
-      if (workEndMessages.length === 1) {
-        lastWorkEndIndex = 0;
-        messageDisplay.innerText = workEndMessages[0];
-        return;
-      }
+      bell.volume = 0.5;
+      updateModeDisplay();
+      updateTimerDisplay();
+      updateFocusDisplay();
+      showIdleMessage(); 
+      mainImage.src = BREAK_IMAGE;
+      applyTheme(themes[currentTheme]);
 
-      let randomIndex;
 
-      /* 前回と同じ番号になったら引き直す */
-      do {
-        randomIndex = Math.floor(Math.random() * workEndMessages.length);
-      } while (randomIndex === lastWorkEndIndex);
 
-      /* 今回の番号を覚えておく */
-      lastWorkEndIndex = randomIndex;
+      /* ==================================================
+         21. 作業終了セリフ関連
+      ================================================== */
 
-      /* セリフ表示 */
-      messageDisplay.innerText = workEndMessages[randomIndex];
-    }
+      /* 作業終了時のセリフをランダム表示する
+         ただし前回と同じセリフはできるだけ避ける */
+      function showRandomWorkEndMessage() {
 
-    /* 作業再開時のセリフをランダム表示する
-       ただし前回と同じセリフはできるだけ避ける */
-    function showRandomResumeMessage() {
+        /* セリフが1個しかないなら、その1個を使う */
+        if (workEndMessages.length === 1) {
+          lastWorkEndIndex = 0;
+          messageDisplay.innerText = workEndMessages[0];
+          return;
+        }
 
-      /* セリフが1個しかないなら、その1個を使う */
-      if (resumeMessages.length === 1) {
-        lastResumeMessageIndex = 0;
-        messageDisplay.innerText = resumeMessages[0];
-        return;
+        let randomIndex;
+
+        /* 前回と同じ番号になったら引き直す */
+        do {
+          randomIndex = Math.floor(Math.random() * workEndMessages.length);
+        } while (randomIndex === lastWorkEndIndex);
+
+        /* 今回の番号を覚えておく */
+        lastWorkEndIndex = randomIndex;
+
+        /* セリフ表示 */
+        messageDisplay.innerText = workEndMessages[randomIndex];
       }
 
-      let randomIndex;
+      /* 作業再開時のセリフをランダム表示する
+         ただし前回と同じセリフはできるだけ避ける */
+      function showRandomResumeMessage() {
 
-      /* 前回と同じ番号になったら引き直す */
-      do {
-        randomIndex = Math.floor(Math.random() * resumeMessages.length);
-      } while (randomIndex === lastResumeMessageIndex);
+        /* セリフが1個しかないなら、その1個を使う */
+        if (resumeMessages.length === 1) {
+          lastResumeMessageIndex = 0;
+          messageDisplay.innerText = resumeMessages[0];
+          return;
+        }
 
-      /* 今回の番号を覚えておく */
-      lastResumeMessageIndex = randomIndex;
+        let randomIndex;
 
-      /* セリフ表示 */
-      messageDisplay.innerText = resumeMessages[randomIndex];
-    }
+        /* 前回と同じ番号になったら引き直す */
+        do {
+          randomIndex = Math.floor(Math.random() * resumeMessages.length);
+        } while (randomIndex === lastResumeMessageIndex);
 
-    /* ==================================================
-       22. 日付表示
-    ================================================== */
+        /* 今回の番号を覚えておく */
+        lastResumeMessageIndex = randomIndex;
 
-    /* 今日の日付を表示する */
-    function updateDate() {
-      const now = new Date();
-
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-
-      const week = ["日", "月", "火", "水", "木", "金", "土"];
-      const dayOfWeek = week[now.getDay()];
-
-      const text = `${year}/${month}/${day}（${dayOfWeek}）`;
-
-      document.getElementById("dateText").innerText = text;
-    }
-
-    updateDate();
+        /* セリフ表示 */
+        messageDisplay.innerText = resumeMessages[randomIndex];
+      }
 
 
-    /* ==================================================
-       23. ビジュアライザー関連
-    ================================================== */
 
-    /* ビジュアライザー本体を取得 */
-    const visualizer = document.getElementById("visualizer");
+      /* ==================================================
+         22. 日付表示
+      ================================================== */
 
-    /* ビジュアライザー開始 */
-    function startVisualizer() {
-      visualizer.classList.remove("paused");
-    }
+      /* 今日の日付を表示する */
+      function updateDate() {
+        const now = new Date();
 
-    /* ビジュアライザー停止 */
-    function stopVisualizer() {
-      visualizer.classList.add("paused");
-    }
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
 
-function updateFocusDisplay() {
-  const focusMeter = document.getElementById("focusMeter");
-  if (!focusMeter) return;
+        const week = ["日", "月", "火", "水", "木", "金", "土"];
+        const dayOfWeek = week[now.getDay()];
 
-  const filled = "■".repeat(Math.min(sessionCount, SESSION_GOAL));
-  const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
+        const text = `${year}/${month}/${day}（${dayOfWeek}）`;
 
-  focusMeter.innerText = filled + empty;
-}
+        document.getElementById("dateText").innerText = text;
+      }
 
-  </script>
+      updateDate();
 
+
+
+      /* ==================================================
+         23. ビジュアライザー関連
+      ================================================== */
+
+      /* ビジュアライザー本体を取得 */
+      const visualizer = document.getElementById("visualizer");
+
+      /* ビジュアライザー開始 */
+      function startVisualizer() {
+        visualizer.classList.remove("paused");
+      }
+
+      /* ビジュアライザー停止 */
+      function stopVisualizer() {
+        visualizer.classList.add("paused");
+      }
+
+      /* 今日の集中メーターを更新する */
+      function updateFocusDisplay() {
+        const focusMeter = document.getElementById("focusMeter");
+        if (!focusMeter) return;
+
+        const filled = "■".repeat(Math.min(sessionCount, SESSION_GOAL));
+        const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
+
+        focusMeter.innerText = filled + empty;
+      }
+
+    </script>
+
+  </div>
 </body>
 </html>
