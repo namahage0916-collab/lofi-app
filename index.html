@@ -1031,53 +1031,67 @@
       /* サイトを開いた直後専用のセリフ */
       const idleMessages = [
         [
-          { speaker: "まりん", text: "のんびりやりますかね" },
-          { speaker: "ゆい", text: "ちゃんと集中してよね" }
+          { speaker: "まりん", text: "のんびりやりますか" },
+          { speaker: "ゆい", text: "ちゃんと集中してよ？" }
         ],
         [
-          { speaker: "ゆい", text: "遅刻ギリギリなんですけど？" },
-          { speaker: "まりん", text: "ふーっ。セーフ、セーフ……" }
+          { speaker: "まりん", text: "チルい曲でも流す？" },
+          { speaker: "ゆい", text: "じゃ、いつもので" }
         ],
         [
-          { speaker: "まりん", text: "チルい曲でも流しますか" },
-          { speaker: "ゆい", text: "あなた、選曲はいいのよね" }
+          { speaker: "ゆい", text: "さっさと始めよう" },
+          { speaker: "まりん", text: "へーい" }
         ],
-          { speaker: "ゆい", text: "さっさと始めましょう" },
-          { speaker: "まりん", text: "はいはい……" }
+        [
+          { speaker: "ゆい", text: "遅刻ギリギリ……"},
+          { speaker: "まりん", text: "セーフ、セーフ" }
         ],
       ];
 
       /* 作業時のセリフ一覧 */
-      const messages = [
-        [
-          { speaker: "まりん", text: "あ、この猫かわいい……" },
-          { speaker: "ゆい", text: "すぐスマホ見ない！" }
-        ],
-        [
-          { speaker: "まりん", text: "作業、全然すすまないわー" },
-          { speaker: "ゆい", text: "それなー" }
-        ],
-        [
-          { speaker: "ゆい", text: "飲み物、切れてませんか？" },
-          { speaker: "まりん", text: "まだいけるー" }
-        ],
-        [
-          { speaker: "まりん", text: "あせらなくていいよ。" },
-          { speaker: "ゆい", text: "一歩ずつ進めましょう。" }
-        ],
-        [
-          { speaker: "ゆい", text: "この曲、落ち着きますね。" },
-          { speaker: "まりん", text: "わかる、めっちゃいい。" }
-        ],
-        [
-          { speaker: "まりん", text: "あと少しだよ。" },
-          { speaker: "ゆい", text: "もうひと踏ん張りです。" }
-        ],
-        [
-          { speaker: "まりん", text: "ねむい……" },
-          { speaker: "ゆい", text: "そこを耐えるんです。" }
-        ]
-      ];
+const messages = [
+  [
+    { speaker: "まりん", text: "あ、この猫かわいい" },
+    { speaker: "ゆい", text: "またスマホ見てる" }
+  ],
+  [
+    { speaker: "まりん", text: "この曲、めっちゃいいかも" },
+    { speaker: "ゆい", text: "珍しく同意" }
+  ],
+  [
+    { speaker: "まりん", text: "全然はかどらんわー" },
+    { speaker: "ゆい", text: "私は進んでるけどね" }
+  ],
+  [
+    { speaker: "まりん", text: "飲み物、切れてませんか？" },
+    { speaker: "まりん", text: "まだいけるー" }
+  ],
+  [
+    { speaker: "ゆい", text: "飲み物、切れてませんか？" },
+    { speaker: "まりん", text: "まだいけるー" }
+  ],
+
+  [
+    { speaker: "ゆい", text: "飲み物、切れてませんか？" },
+    { speaker: "まりん", text: "まだいけるー" }
+  ],
+  [
+    { speaker: "ゆい", text: "飲み物、切れてませんか？" },
+    { speaker: "まりん", text: "まだいけるー" }
+  ],
+  [
+    { speaker: "まりん", text: "あせらなくていいよ。" },
+    { speaker: "ゆい", text: "一歩ずつ進めましょう。" }
+  ],
+  [
+    { speaker: "まりん", text: "あと少しだよ。" },
+    { speaker: "ゆい", text: "もうひと踏ん張りです。" }
+  ],
+  [
+    { speaker: "まりん", text: "ねむい……" },
+    { speaker: "ゆい", text: "そこを耐えるんです。" }
+  ]
+];
 
       /* 作業終了した時専用のセリフ一覧 */
       const workEndMessages = [
