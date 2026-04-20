@@ -10,7 +10,6 @@
        ・画面サイズ
        ・タイトル
        ・検索エンジン向け設定
-       ・CSS
   ================================================== -->
 
   <meta charset="UTF-8">
@@ -31,7 +30,7 @@
 
     /* ==================================================
        0. CSS変数
-       テーマによって色を切り替えやすくするための変数
+       テーマ切り替えで使う色の変数
     ================================================== */
     :root {
       --button-bg: rgba(255,255,255,0.30);
@@ -45,7 +44,7 @@
        1. ページ全体
     ================================================== */
 
-    /* body全体の見た目 */
+    /* body全体の基本見た目 */
     body {
       background: #bfcfda;
       color: #fff;
@@ -100,9 +99,20 @@
       background: var(--popup-button-bg);
     }
 
-    /* 音量スライダーの幅 */
+    /* range入力の幅 */
     input[type="range"] {
       width: 200px;
+    }
+
+    /* キーワード入力欄 */
+    #keywordInput {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 18px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
     }
 
 
@@ -111,7 +121,26 @@
        3. レイアウト系
     ================================================== */
 
-    /* ボタン群とビジュアライザーをまとめる横並びエリア */
+    /* 画像とセリフ枠をまとめたエリア */
+    #imageArea {
+      width: 80%;
+      max-width: 600px;
+      margin: 20px auto 0;
+    }
+
+    /* 左パネルと右パネルを並べるエリア */
+    #controlRow {
+      width: 80%;
+      max-width: 600px;
+      margin: 10px auto 0;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+
+    /* テーマボタン・ビジュアライザー・曲名の横並びエリア */
     #buttonRow {
       margin: 10px auto 0;
       width: 80%;
@@ -137,13 +166,6 @@
       white-space: nowrap;
     }
 
-    /* 画像とセリフ枠をまとめたエリア */
-    #imageArea {
-      width: 80%;
-      max-width: 600px;
-      margin: 20px auto 0;
-    }
-
 
 
     /* ==================================================
@@ -162,27 +184,48 @@
     /* セリフ枠 */
     #messageBox {
       margin-top: 10px;
-      padding: 16px;
+      padding: 12px;
       background: rgba(255,255,255,0.08);
       border-radius: 12px;
       box-sizing: border-box;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
 
-    /* セリフの話者名 */
-    #messageName {
-      font-size: 14px;
-      color: #b8c0ff;
+    /* 会話1組ぶん */
+    .dialogLine {
+      margin-bottom: 6px;
+      margin-top: 0;
+    }
+
+    /* 最後の行だけ下余白なし */
+    .dialogLine:last-child {
+      margin-bottom: 0;
+    }
+
+    /* 左側の発言 */
+    .dialogLine.left {
       text-align: left;
-      margin-bottom: 8px;
+    }
+
+    /* 右側の発言 */
+    .dialogLine.right {
+      text-align: right;
+    }
+
+    /* 話者名 */
+    .speaker {
+      font-size: 18px;
+      color: #b8c0ff;
+      margin-bottom: 0px;
     }
 
     /* セリフ本文 */
-    #message {
+    .line {
       font-size: 20px;
       color: #f2f2f2;
-      text-align: left;
-      line-height: 1.6;
+      line-height: 1.4;
+      display: inline-block;
+      max-width: 80%;
       min-height: 32px;
     }
 
@@ -207,22 +250,10 @@
 
     /* ==================================================
        5. パネル表示
-       音量パネル / タイマーパネル
+       左パネル / タイマーパネル
     ================================================== */
 
-    /* 音量エリアとタイマー表示を横並びのパネルにする */
-    #controlRow {
-      width: 80%;
-      max-width: 600px;
-      margin: 10px auto 0;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      align-items: stretch;
-      flex-wrap: wrap;
-    }
-
-    /* パネル共通デザイン（音量パネル、タイマーパネル） */
+    /* パネル共通デザイン */
     .panel {
       flex: 1 1 240px;
       background: rgba(255,255,255,0.08);
@@ -232,29 +263,44 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
 
-/* 左右のパネルの高さをそろえる */
-#focusPanel,
-#timerPanel {
-  height: 146px;
-}
+    /* 左右パネルの高さをそろえる */
+    #focusPanel,
+    #timerPanel {
+      height: 146px;
+    }
 
-    /* パネルの見出し */
+    /* キーワード入力欄を左パネルの中央に置く */
+    #focusPanel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* パネル見出し */
     .panelTitle {
       font-size: 18px;
       margin-bottom: 12px;
       color: #d6dcff;
     }
 
-    /* 「今日の集中」だけ少し大きめ */
+    /* 「今日の集中」用の大きめ見出し（今は未使用だが残しておく） */
     .panelTitle.focusTitle {
       font-size: 24px;
     }
 
-    /* 今日の集中ゲージ */
+    /* 今日の集中ゲージ（今は未使用だが残しておく） */
     #focusMeter {
       font-size: 32px;
       letter-spacing: -3px;
       margin-top: 8px;
+    }
+
+    /* 判定結果表示用（今は未使用だが残しておく） */
+    #keywordResult {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #d6dcff;
+      min-height: 20px;
     }
 
     /* タイマーパネル全体 */
@@ -275,7 +321,7 @@
       transform: scale(0.99);
     }
 
-    /* 「作業時間」「休憩時間」の表示 */
+    /* モード表示 */
     #mode {
       font-size: 24px;
       margin-top: 0;
@@ -453,13 +499,13 @@
       height: 6px;
     }
 
-    /* 棒が伸び縮みする動き */
+    /* 棒が伸び縮みする通常の動き */
     @keyframes bounce {
       0%, 100% { height: 6px; }
       50% { height: 28px; }
     }
 
-    /* 音量が下がっているときは、小さく動かす */
+    /* 音量が下がっているときは小さく動かす */
     #visualizer.low-volume span {
       animation-name: bounce-low;
     }
@@ -583,133 +629,142 @@
 
     /* ==================================================
        11. スマホ向け調整
+       画面幅768px以下で適用される
     ================================================== */
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
 
-  body {
-    padding-top: 20px;
-  }
+      body {
+        padding-top: 20px;
+      }
 
-  h1 {
-    font-size: 22px;
-    margin-bottom: 14px;
-  }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 14px;
+      }
 
-  #dateText {
-    display: inline-block;
-    margin-left: 8px;
-    font-size: 12px;
-  }
+      #dateText {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 12px;
+      }
 
-  #imageArea,
-  #controlRow,
-  #buttonRow {
-    width: 94%;
-    max-width: none;
-  }
+      #imageArea,
+      #controlRow,
+      #buttonRow {
+        width: 94%;
+        max-width: none;
+      }
 
-  #imageArea {
-    margin-top: 14px;
-  }
+      #imageArea {
+        margin-top: 14px;
+      }
 
-  #mainImage {
-    border-radius: 12px;
-  }
+      #mainImage {
+        border-radius: 12px;
+      }
 
-  #messageBox {
-    padding: 14px;
-  }
+      #messageBox {
+        padding: 8px;
+      }
 
-  #message {
-    font-size: 18px;
-  }
+      /* スマホでは本文を少し小さくし、幅も広げる */
+      .line {
+        font-size: 18px;
+        max-width: 92%;
+      }
 
-  #controlRow {
-    width: 94%;
-    max-width: none;
-    margin: 10px auto 0;
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: stretch;
-  }
+      /* スマホでは2つのパネルを無理やり横並びに保つ */
+      #controlRow {
+        width: 94%;
+        max-width: none;
+        margin: 10px auto 0;
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        justify-content: center;
+        align-items: stretch;
+      }
 
-  .panel {
-    flex: 1 1 0;
-    min-width: 0;
-    padding: 14px 10px;
-  }
+      .panel {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 14px 10px;
+      }
 
-  .panelTitle {
-    font-size: 16px;
-  }
+      .panelTitle {
+        font-size: 16px;
+      }
 
-  .panelTitle.focusTitle {
-    font-size: 18px;
-  }
+      .panelTitle.focusTitle {
+        font-size: 18px;
+      }
 
-  #focusMeter {
-    font-size: 28px;
-    letter-spacing: -2px;
-  }
+      #focusMeter {
+        font-size: 28px;
+        letter-spacing: -2px;
+      }
 
-  #mode {
-    font-size: 18px;
-  }
+      #mode {
+        font-size: 18px;
+      }
 
-  #timer {
-    font-size: 34px;
-  }
+      #timer {
+        font-size: 34px;
+      }
 
-  input[type="range"] {
-    width: 100%;
-    max-width: 100%;
-  }
+      input[type="range"] {
+        width: 100%;
+        max-width: 100%;
+      }
 
-  #trackName {
-    font-size: 15px;
-    opacity: 0.85;
-    letter-spacing: 0.03em;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+      #trackName {
+        font-size: 15px;
+        opacity: 0.85;
+        letter-spacing: 0.03em;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-  #buttonRow {
-    gap: 10px;
-    align-items: center;
-  }
+      #buttonRow {
+        gap: 10px;
+        align-items: center;
+      }
 
-  #buttonGroup {
-    flex: 1;
-    gap: 6px;
-  }
+      #buttonGroup {
+        flex: 1;
+        gap: 6px;
+      }
 
-  #buttonGroup button {
-    font-size: 14px;
-    padding: 10px 6px;
-    margin: 0;
-  }
+      #buttonGroup button {
+        font-size: 14px;
+        padding: 10px 6px;
+        margin: 0;
+      }
 
-  #visualizer {
-    margin-right: 0;
-    margin-left: 4px;
-    gap: 3px;
-    height: 24px;
-    flex-shrink: 0;
-  }
+      #visualizer {
+        margin-right: 0;
+        margin-left: 4px;
+        gap: 3px;
+        height: 24px;
+        flex-shrink: 0;
+      }
 
-  #visualizer span {
-    width: 3px;
-  }
+      #visualizer span {
+        width: 3px;
+      }
 
-  #focusPanel,
-  #timerPanel {
-    height: 118px;
-  }
-}
+      #focusPanel,
+      #timerPanel {
+        height: 118px;
+      }
+
+      #keywordInput {
+        font-size: 16px;
+        padding: 8px 10px;
+      }
+    }
   </style>
 </head>
 
@@ -815,8 +870,15 @@
       <img src="image.png" id="mainImage" class="fade-in-long" alt="ドット絵イラスト">
 
       <div id="messageBox" class="fade-in">
-        <div id="messageName">Girl</div>
-        <div id="message"></div>
+        <div id="leftMessageBlock" class="dialogLine left">
+          <div id="leftMessageName" class="speaker">まりん</div>
+          <div id="leftMessage" class="line"></div>
+        </div>
+
+        <div id="rightMessageBlock" class="dialogLine right">
+          <div id="rightMessageName" class="speaker">ゆい</div>
+          <div id="rightMessage" class="line"></div>
+        </div>
       </div>
     </div>
 
@@ -826,15 +888,20 @@
     <!-- ベル音 -->
     <audio id="bell" src="bell.mp3"></audio>
 
-    <!-- 左に今日の集中、右にタイマー表示 -->
+    <!-- 左パネルと右パネル -->
     <div id="controlRow">
 
-<div id="focusPanel" class="panel fade-in">
-  <div class="panelTitle focusTitle">今日の集中</div>
-  <div id="focusMeter">□□□□□</div>
-</div>
+      <!-- 左：キーワード入力パネル -->
+      <div id="focusPanel" class="panel fade-in">
+        <input
+          type="text"
+          id="keywordInput"
+          placeholder="キーワード入力"
+          onkeydown="handleKeywordEnter(event)"
+        >
+      </div>
 
-      <!-- タイマーパネル -->
+      <!-- 右：タイマーパネル -->
       <div id="timerPanel" class="panel fade-in" onclick="openTimerSettings()">
         <div id="mode">タイマー設定</div>
         <div id="timer">25:00</div>
@@ -866,11 +933,6 @@
     <!-- ==================================================
          JavaScript
          アプリの動きを書く場所
-         ・タイマー
-         ・音楽
-         ・画像切り替え
-         ・セリフ表示
-         ・テーマ変更
     ================================================== -->
     <script>
 
@@ -883,6 +945,16 @@
          false なら使わない */
       const USE_PASSWORD = false;
 
+      /* 初期待機画像 */
+      const IDLE_IMAGE = "image_idle.png";
+
+      /* 作業中・休憩中の画像ファイル */
+      const WORK_IMAGE = "image.png";
+      const BREAK_IMAGE = "image_break.png";
+
+      /* パスワード */
+      const APP_PASSWORD = "storycat";
+
 
 
       /* ==================================================
@@ -892,54 +964,48 @@
 
       const music = document.getElementById("music");
       const bell = document.getElementById("bell");
+
       const modeDisplay = document.getElementById("mode");
       const timerDisplay = document.getElementById("timer");
-      const messageDisplay = document.getElementById("message");
       const trackNameDisplay = document.getElementById("trackName");
+
+      const leftMessageBlock = document.getElementById("leftMessageBlock");
+      const rightMessageBlock = document.getElementById("rightMessageBlock");
+
+      const leftMessageName = document.getElementById("leftMessageName");
+      const rightMessageName = document.getElementById("rightMessageName");
+
+      const leftMessage = document.getElementById("leftMessage");
+      const rightMessage = document.getElementById("rightMessage");
+
+      const keywordInput = document.getElementById("keywordInput");
+
       const passwordInput = document.getElementById("passwordInput");
       const errorMessage = document.getElementById("errorMessage");
       const lockScreen = document.getElementById("lockScreen");
       const appContent = document.getElementById("appContent");
+
       const mainImage = document.getElementById("mainImage");
 
       const noticeOverlay = document.getElementById("noticeOverlay");
       const noticeText = document.getElementById("noticeText");
 
-
-      /* パスワード機能をオフにしている場合は、
-         最初からロック画面を消してアプリ本体を出す */
-      if (!USE_PASSWORD) {
-        lockScreen.style.display = "none";
-        appContent.style.display = "block";
-      }
+      const visualizer = document.getElementById("visualizer");
 
 
 
       /* ==================================================
-         3. 時間・パスワード設定
+         3. 初期時間設定
       ================================================== */
 
       /* 時間設定（秒） */
       let WORK_TIME = 25 * 60;
       let BREAK_TIME = 5 * 60;
 
-      /* パスワード */
-      const APP_PASSWORD = "storycat";
-
 
 
       /* ==================================================
-         4. 画像ファイル設定
-      ================================================== */
-
-      /* 作業中・休憩中の画像ファイル */
-      const WORK_IMAGE = "image.png";
-      const BREAK_IMAGE = "image_break.png";
-
-
-
-      /* ==================================================
-         5. 音楽・セリフデータ
+         4. 音楽データ
       ================================================== */
 
       /* 再生する曲一覧 */
@@ -956,63 +1022,145 @@
         "Walk.mp3"
       ];
 
-/* サイトを開いた直後専用のセリフ */
-const idleMessages = [
-  "今日はどうする？",
-  "継続は力なり……ってね。",
-  "いつでも始められるよ。",
-  "君が来るの、待ってたんだ。",
-  "おっ、やれる感じ？",
-  "頑張り屋さんの登場だね。"
-];
+
+
+      /* ==================================================
+         5. セリフデータ
+      ================================================== */
+
+      /* サイトを開いた直後専用のセリフ */
+      const idleMessages = [
+        [
+          { speaker: "まりん", text: "のんびりやりますかね" },
+          { speaker: "ゆい", text: "ちゃんと集中してよね" }
+        ],
+        [
+          { speaker: "ゆい", text: "遅刻ギリギリなんですけど？" },
+          { speaker: "まりん", text: "ふーっ。セーフ、セーフ……" }
+        ],
+        [
+          { speaker: "まりん", text: "チルい曲でも流しますか" },
+          { speaker: "ゆい", text: "あなた、選曲はいいのよね" }
+        ]
+          { speaker: "ゆい", text: "さっさと始めましょう" },
+          { speaker: "まりん", text: "はいはい……" }
+        ],
+      ];
 
       /* 作業時のセリフ一覧 */
       const messages = [
-        "集中、集中……。",
-        "飲み物、切れてない？",
-        "あせらなくていいよ。",
-        "ゆっくりやってこうね。",
-        "コツコツと進めてこう。",
-        "あと少しだよ。",
-        "ムリはしないでね。",
-        "休憩も大事だよ。",
-        "いいペースじゃない？",
-        "この曲、好きかも。"
+        [
+          { speaker: "まりん", text: "あ、この猫かわいい……" },
+          { speaker: "ゆい", text: "すぐスマホ見ない！" }
+        ],
+        [
+          { speaker: "まりん", text: "作業、全然すすまないわー" },
+          { speaker: "ゆい", text: "それなー" }
+        ],
+        [
+          { speaker: "ゆい", text: "飲み物、切れてませんか？" },
+          { speaker: "まりん", text: "まだいけるー" }
+        ],
+        [
+          { speaker: "まりん", text: "あせらなくていいよ。" },
+          { speaker: "ゆい", text: "一歩ずつ進めましょう。" }
+        ],
+        [
+          { speaker: "ゆい", text: "この曲、落ち着きますね。" },
+          { speaker: "まりん", text: "わかる、めっちゃいい。" }
+        ],
+        [
+          { speaker: "まりん", text: "あと少しだよ。" },
+          { speaker: "ゆい", text: "もうひと踏ん張りです。" }
+        ],
+        [
+          { speaker: "まりん", text: "ねむい……" },
+          { speaker: "ゆい", text: "そこを耐えるんです。" }
+        ]
       ];
 
       /* 作業終了した時専用のセリフ一覧 */
       const workEndMessages = [
-        "おつかれさま。どうだった？",
-        "ふう……。けっこう進んだかも。",
-        "えらいえらい。よく頑張りました。",
-        "集中したぶん、ちゃんと休もうね。",
-        "よしよし、休憩タイムっと……。",
-        "ちょっとリラックスしよっと……。"
+        [
+          { speaker: "まりん", text: "おつかれ〜。どうだった？" },
+          { speaker: "ゆい", text: "思ったより進みました。" }
+        ],
+        [
+          { speaker: "ゆい", text: "よく頑張りましたね。" },
+          { speaker: "まりん", text: "ちょっと満足かも。" }
+        ],
+        [
+          { speaker: "まりん", text: "つかれた〜" },
+          { speaker: "ゆい", text: "しっかり休みましょう。" }
+        ]
       ];
 
-    /* 休憩中専用のセリフ一覧 */
-    const breakMessages = [
-      "ひと休み、ひと休み。",
-      "水分補給、忘れずにね？",
-      "目、ちゃんと休ませてね。",
-      "ぼーっとする時間も大事だよ。",
-      "深呼吸すると、ちょっと楽かも。",
-      "軽くストレッチしようかな。",
-      "ラムネ食べる？",
-      "たまには換気しなくちゃね。",
-      "ムリしすぎないのが一番だよ。",
-      "休憩も作業のうち、だよ。"
-    ];
+      /* 休憩中専用のセリフ一覧 */
+      const breakMessages = [
+        [
+          { speaker: "まりん", text: "ひと休み、ひと休み。" },
+          { speaker: "ゆい", text: "大事な時間です。" }
+        ],
+        [
+          { speaker: "ゆい", text: "水分補給、忘れずに。" },
+          { speaker: "まりん", text: "はーい。" }
+        ],
+        [
+          { speaker: "まりん", text: "ぼーっとするの最高……" },
+          { speaker: "ゆい", text: "脳を休ませましょう。" }
+        ],
+        [
+          { speaker: "ゆい", text: "ストレッチしましょうか。" },
+          { speaker: "まりん", text: "だるいけどやる〜" }
+        ],
+        [
+          { speaker: "まりん", text: "ラムネ食べる？" },
+          { speaker: "ゆい", text: "いただきます。" }
+        ]
+      ];
 
       /* 作業再開した時専用のセリフ一覧 */
       const resumeMessages = [
-        "おかえり。ちゃんと休めた？",
-        "それじゃ、また始めようか。",
-        "よーし、やってやりますか。",
-        "よし、ここからまた頑張ろう。",
-        "いい感じ。作業に戻ろうか。",
-        "落ち着いて、また進めていこう。"
+        [
+          { speaker: "まりん", text: "戻ってきた〜" },
+          { speaker: "ゆい", text: "では再開しましょう。" }
+        ],
+        [
+          { speaker: "ゆい", text: "休憩は十分でしたか？" },
+          { speaker: "まりん", text: "まぁまぁかな。" }
+        ],
+        [
+          { speaker: "まりん", text: "よし、やるか〜" },
+          { speaker: "ゆい", text: "いい心構えです。" }
+        ]
       ];
+
+      /* キーワードの別名リスト
+         入力欄にこれらの語が入ると、対応する本来のキーワードに変換される */
+      const keywordMap = {
+        "コーヒー": ["コーヒー", "こーひー", "coffee", "珈琲"],
+        "ねむい": ["ねむい", "眠い", "ねむ", "sleepy"]
+      };
+
+      /* キーワード対応セリフ一覧 */
+      const keywordDialogues = {
+        "コーヒー": [
+          { speaker: "まりん", text: "コーヒー飲みたくなってきた〜" },
+          { speaker: "ゆい", text: "集中したい時にはいいですね。" }
+        ],
+        "ねむい": [
+          { speaker: "まりん", text: "それ今のあたしじゃん……" },
+          { speaker: "ゆい", text: "顔を洗ってきてください。" }
+        ],
+        "やる気": [
+          { speaker: "まりん", text: "やる気ください。" },
+          { speaker: "ゆい", text: "まず手を動かしましょう。" }
+        ],
+        "ラムネ": [
+          { speaker: "まりん", text: "ラムネきた！" },
+          { speaker: "ゆい", text: "補給は大事です。" }
+        ]
+      };
 
 
 
@@ -1021,7 +1169,6 @@ const idleMessages = [
          アプリが今どういう状態かを記録する
       ================================================== */
 
-      /* タイマーや再生状態を管理する変数 */
       let isRunning = false;
       let isPaused = false;
       let isWorkMode = true;
@@ -1034,18 +1181,17 @@ const idleMessages = [
       let lastMessageIndex = -1;
       let currentTrackIndex = -1;
 
-      /* 通常時の音量を記録しておく */
+      /* 通常時の音量 */
       let normalVolume = 1;
 
       /* 今日の作業セッション数 */
       let sessionCount = 0;
       const SESSION_GOAL = 5;
 
-      /* 前回の作業終了セリフを覚えておく */
+      /* 前回のセリフ番号を記録しておく */
       let lastWorkEndIndex = -1;
-
-      /* 前回の再開セリフを覚えておく */
       let lastResumeMessageIndex = -1;
+
 
 
       /* ==================================================
@@ -1120,7 +1266,10 @@ const idleMessages = [
         messageBox.style.boxShadow = theme.panelShadow;
 
         /* 補助色テキスト */
-        document.getElementById("messageName").style.color = theme.subText;
+        document.querySelectorAll(".speaker").forEach(el => {
+          el.style.color = theme.subText;
+        });
+
         document.getElementById("trackName").style.color = theme.subText;
         document.getElementById("dateText").style.color = theme.subText;
         document.getElementById("mode").style.color = theme.subText;
@@ -1130,7 +1279,10 @@ const idleMessages = [
         });
 
         /* 本文色 */
-        document.getElementById("message").style.color = theme.mainText;
+        document.querySelectorAll(".line").forEach(el => {
+          el.style.color = theme.mainText;
+        });
+
         document.getElementById("timer").style.color = theme.mainText;
 
         /* ビジュアライザー */
@@ -1206,6 +1358,13 @@ const idleMessages = [
           checkPassword();
         }
       });
+
+      /* パスワード機能をオフにしている場合は、
+         最初からロック画面を消してアプリ本体を出す */
+      if (!USE_PASSWORD) {
+        lockScreen.style.display = "none";
+        appContent.style.display = "block";
+      }
 
 
 
@@ -1428,39 +1587,76 @@ const idleMessages = [
         }
       }
 
+      /* 通知はオーバーレイだけ使う */
+      function notifyModeChange(text) {
+        showNotice(text);
+        playBell();
+
+        /* 音楽の音量を下げる */
+        music.volume = normalVolume * 0.2;
+
+        /* ビジュアライザーを小さくする */
+        visualizer.classList.add("low-volume");
+      }
+
 
 
       /* ==================================================
-         14. セリフ関連
+         14. セリフ・キーワード関連
       ================================================== */
 
-      /* 前回と同じセリフを避けながらランダムに選ぶ */
-function getRandomMessageIndex() {
-  const currentMessages = isWorkMode ? messages : breakMessages;
+      /* 前回と同じ会話を避けながらランダムに選ぶ */
+      function getRandomMessageIndex() {
+        const currentMessages = isWorkMode ? messages : breakMessages;
 
-  if (currentMessages.length === 1) return 0;
+        if (currentMessages.length === 1) return 0;
 
-  let randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * currentMessages.length);
-  } while (randomIndex === lastMessageIndex);
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * currentMessages.length);
+        } while (randomIndex === lastMessageIndex);
 
-  return randomIndex;
+        return randomIndex;
+      }
+
+      /* 会話を表示する */
+     function showDialogue(dialogue) {
+      messageBox.innerHTML = "";
+
+      dialogue.forEach(item => {
+        const lineBlock = document.createElement("div");
+        lineBlock.className = item.speaker === "まりん"
+          ? "dialogLine left"
+          : "dialogLine right";
+
+    const speakerEl = document.createElement("div");
+    speakerEl.className = "speaker";
+    speakerEl.innerText = item.speaker;
+
+    const textEl = document.createElement("div");
+    textEl.className = "line";
+    textEl.innerText = "「" + item.text + "」";
+
+    lineBlock.appendChild(speakerEl);
+    lineBlock.appendChild(textEl);
+    messageBox.appendChild(lineBlock);
+  });
 }
 
-      /* セリフを表示する */
-function showRandomMessage() {
-  const currentMessages = isWorkMode ? messages : breakMessages;
-  const randomIndex = getRandomMessageIndex();
+      /* 作業中 / 休憩中の会話を表示する */
+      function showRandomMessage() {
+        const currentMessages = isWorkMode ? messages : breakMessages;
+        const randomIndex = getRandomMessageIndex();
 
-  lastMessageIndex = randomIndex;
-  messageDisplay.innerText = currentMessages[randomIndex];
-}
+        lastMessageIndex = randomIndex;
+        showDialogue(currentMessages[randomIndex]);
+      }
 
-function showIdleMessage() {
-  const randomIndex = Math.floor(Math.random() * idleMessages.length);
-  messageDisplay.innerText = idleMessages[randomIndex];
-}
+      /* サイトを開いた直後の会話を表示する */
+      function showIdleMessage() {
+        const randomIndex = Math.floor(Math.random() * idleMessages.length);
+        showDialogue(idleMessages[randomIndex]);
+      }
 
       /* 1分ごとにセリフを更新するループ開始 */
       function startMessageLoop() {
@@ -1477,6 +1673,83 @@ function showIdleMessage() {
         clearInterval(messageIntervalId);
         messageIntervalId = null;
       }
+
+      /* キーワードを比較しやすい形に整える
+         例：前後の空白を消す、英字を小文字化する */
+      function normalizeKeyword(text) {
+        return text.trim().toLowerCase();
+      }
+
+      /* 入力された語が、どの本来のキーワードに属するか探す */
+      function findKeyword(input) {
+        for (const key in keywordMap) {
+          if (keywordMap[key].includes(input)) {
+            return key;
+          }
+        }
+        return null;
+      }
+
+      /* キーワード入力を判定する */
+      function checkKeyword() {
+        const input = normalizeKeyword(keywordInput.value);
+
+        if (!input) return;
+
+        const key = findKeyword(input);
+
+        if (key) {
+          showDialogue(keywordDialogues[key]);
+        }
+
+        /* 入力後は入力欄を空にする */
+        keywordInput.value = "";
+      }
+
+      /* Enterキーでキーワード判定 */
+      function handleKeywordEnter(event) {
+        if (event.key === "Enter") {
+          checkKeyword();
+        }
+      }
+
+      /* 作業終了時のセリフをランダム表示する */
+      function showRandomWorkEndMessage() {
+        if (workEndMessages.length === 1) {
+          lastWorkEndIndex = 0;
+          showDialogue(workEndMessages[0]);
+          return;
+        }
+
+        let randomIndex;
+
+        do {
+          randomIndex = Math.floor(Math.random() * workEndMessages.length);
+        } while (randomIndex === lastWorkEndIndex);
+
+        lastWorkEndIndex = randomIndex;
+        showDialogue(workEndMessages[randomIndex]);
+      }
+
+      /* 作業再開時のセリフをランダム表示する */
+      function showRandomResumeMessage() {
+        if (resumeMessages.length === 1) {
+          lastResumeMessageIndex = 0;
+          showDialogue(resumeMessages[0]);
+          return;
+        }
+
+        let randomIndex;
+
+        do {
+          randomIndex = Math.floor(Math.random() * resumeMessages.length);
+        } while (randomIndex === lastResumeMessageIndex);
+
+        lastResumeMessageIndex = randomIndex;
+        showDialogue(resumeMessages[randomIndex]);
+      }
+
+const messageBox = document.getElementById("messageBox");
 
 
       /* ==================================================
@@ -1521,19 +1794,17 @@ function showIdleMessage() {
 
 
       /* ==================================================
-         16. 通知時の処理
+         16. ビジュアライザー関連
       ================================================== */
 
-      /* 通知はオーバーレイだけ使う */
-      function notifyModeChange(text) {
-        showNotice(text);
-        playBell();
+      /* ビジュアライザー開始 */
+      function startVisualizer() {
+        visualizer.classList.remove("paused");
+      }
 
-        /* 音楽の音量を下げる */
-        music.volume = normalVolume * 0.2;
-
-        /* ビジュアライザーを小さくする */
-        visualizer.classList.add("low-volume");
+      /* ビジュアライザー停止 */
+      function stopVisualizer() {
+        visualizer.classList.add("paused");
       }
 
 
@@ -1559,7 +1830,6 @@ function showIdleMessage() {
         } else {
           isWorkMode = true;
           remainingTime = WORK_TIME;
-          messageDisplay.innerText = "それじゃ、またゆっくり始めよう。";
           lastMessageIndex = -1;
           notifyModeChange("休憩終了！\n作業を再開しましょう。");
         }
@@ -1598,7 +1868,6 @@ function showIdleMessage() {
         endTime = Date.now() + remainingTime * 1000;
 
         updateModeDisplay();
-
         showRandomMessage();
 
         if (music.paused) {
@@ -1693,120 +1962,37 @@ function showIdleMessage() {
         music.volume = normalVolume;
       }
 
-/* 一時停止
-   タイマー・音楽・ビジュアライザーを止める */
-function pauseTimerOnly() {
-  clearInterval(intervalId);
-  intervalId = null;
+      /* 一時停止
+         タイマー・音楽・ビジュアライザーを止める */
+      function pauseTimerOnly() {
+        clearInterval(intervalId);
+        intervalId = null;
 
-  if (isRunning && endTime !== null) {
-    const diffMs = endTime - Date.now();
-    remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-  }
-
-  isRunning = false;
-  isPaused = true;
-  endTime = null;
-
-  /* 音楽も止める */
-  music.pause();
-
-  /* セリフ更新も止める */
-  stopMessageLoop();
-
-  /* ビジュアライザーも止める */
-  stopVisualizer();
-
-  updateTimerDisplay();
-}
-
-
-
-      /* ==================================================
-         19. ページ表示状態の変化
-      ================================================== */
-
-      /* タブに戻ってきた時に時間表示を更新 */
-      document.addEventListener("visibilitychange", () => {
-        if (isRunning) {
-          tickTimer();
-        }
-      });
-
-
-
-      /* ==================================================
-         20. 初期設定
-      ================================================== */
-
-      bell.volume = 0.5;
-      updateModeDisplay();
-      updateTimerDisplay();
-      updateFocusDisplay();
-      showIdleMessage(); 
-      mainImage.src = BREAK_IMAGE;
-      applyTheme(themes[currentTheme]);
-
-
-
-      /* ==================================================
-         21. 作業終了セリフ関連
-      ================================================== */
-
-      /* 作業終了時のセリフをランダム表示する
-         ただし前回と同じセリフはできるだけ避ける */
-      function showRandomWorkEndMessage() {
-
-        /* セリフが1個しかないなら、その1個を使う */
-        if (workEndMessages.length === 1) {
-          lastWorkEndIndex = 0;
-          messageDisplay.innerText = workEndMessages[0];
-          return;
+        if (isRunning && endTime !== null) {
+          const diffMs = endTime - Date.now();
+          remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
         }
 
-        let randomIndex;
+        isRunning = false;
+        isPaused = true;
+        endTime = null;
 
-        /* 前回と同じ番号になったら引き直す */
-        do {
-          randomIndex = Math.floor(Math.random() * workEndMessages.length);
-        } while (randomIndex === lastWorkEndIndex);
+        /* 音楽も止める */
+        music.pause();
 
-        /* 今回の番号を覚えておく */
-        lastWorkEndIndex = randomIndex;
+        /* セリフ更新も止める */
+        stopMessageLoop();
 
-        /* セリフ表示 */
-        messageDisplay.innerText = workEndMessages[randomIndex];
-      }
+        /* ビジュアライザーも止める */
+        stopVisualizer();
 
-      /* 作業再開時のセリフをランダム表示する
-         ただし前回と同じセリフはできるだけ避ける */
-      function showRandomResumeMessage() {
-
-        /* セリフが1個しかないなら、その1個を使う */
-        if (resumeMessages.length === 1) {
-          lastResumeMessageIndex = 0;
-          messageDisplay.innerText = resumeMessages[0];
-          return;
-        }
-
-        let randomIndex;
-
-        /* 前回と同じ番号になったら引き直す */
-        do {
-          randomIndex = Math.floor(Math.random() * resumeMessages.length);
-        } while (randomIndex === lastResumeMessageIndex);
-
-        /* 今回の番号を覚えておく */
-        lastResumeMessageIndex = randomIndex;
-
-        /* セリフ表示 */
-        messageDisplay.innerText = resumeMessages[randomIndex];
+        updateTimerDisplay();
       }
 
 
 
       /* ==================================================
-         22. 日付表示
+         19. 補助表示関連
       ================================================== */
 
       /* 今日の日付を表示する */
@@ -1825,28 +2011,8 @@ function pauseTimerOnly() {
         document.getElementById("dateText").innerText = text;
       }
 
-      updateDate();
-
-
-
-      /* ==================================================
-         23. ビジュアライザー関連
-      ================================================== */
-
-      /* ビジュアライザー本体を取得 */
-      const visualizer = document.getElementById("visualizer");
-
-      /* ビジュアライザー開始 */
-      function startVisualizer() {
-        visualizer.classList.remove("paused");
-      }
-
-      /* ビジュアライザー停止 */
-      function stopVisualizer() {
-        visualizer.classList.add("paused");
-      }
-
-      /* 今日の集中メーターを更新する */
+      /* 今日の集中メーターを更新する
+         今は左パネルを別用途に使っているが、機能自体は残してある */
       function updateFocusDisplay() {
         const focusMeter = document.getElementById("focusMeter");
         if (!focusMeter) return;
@@ -1856,6 +2022,38 @@ function pauseTimerOnly() {
 
         focusMeter.innerText = filled + empty;
       }
+
+
+
+      /* ==================================================
+         20. ページ表示状態の変化
+      ================================================== */
+
+      /* タブに戻ってきた時に時間表示を更新 */
+      document.addEventListener("visibilitychange", () => {
+        if (isRunning) {
+          tickTimer();
+        }
+      });
+
+
+
+      /* ==================================================
+         21. 初期設定
+         ページを開いた直後に一度だけ実行する
+      ================================================== */
+
+      bell.volume = 0.5;
+
+      updateModeDisplay();
+      updateTimerDisplay();
+      updateFocusDisplay();
+      updateDate();
+
+      showIdleMessage();
+      mainImage.src = IDLE_IMAGE;
+
+      applyTheme(themes[currentTheme]);
 
     </script>
 
