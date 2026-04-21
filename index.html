@@ -202,15 +202,15 @@
       margin-bottom: 0;
     }
 
-    /* 左側の発言 */
-    .dialogLine.left {
-      text-align: left;
-    }
+.dialogLine.left {
+  text-align: left;
+  padding-left: 12px;   /* ← 内側に寄せる */
+}
 
-    /* 右側の発言 */
-    .dialogLine.right {
-      text-align: right;
-    }
+.dialogLine.right {
+  text-align: right;
+  padding-right: 12px;  /* ← 内側に寄せる */
+}
 
     /* 話者名 */
     .speaker {
@@ -1040,7 +1040,7 @@
         ],
         [
           { speaker: "ゆい", text: "さっさと始めよう" },
-          { speaker: "まりん", text: "へーい" }
+          { speaker: "まりん", text: "はいはーい" }
         ],
         [
           { speaker: "ゆい", text: "遅刻ギリギリ……"},
@@ -1056,40 +1056,40 @@ const messages = [
   ],
   [
     { speaker: "まりん", text: "この曲、めっちゃいいかも" },
-    { speaker: "ゆい", text: "珍しく同意" }
+    { speaker: "ゆい", text: "それは同意" }
   ],
   [
     { speaker: "まりん", text: "全然はかどらんわー" },
     { speaker: "ゆい", text: "私は進んでるけどね" }
   ],
   [
-    { speaker: "まりん", text: "飲み物、切れてませんか？" },
-    { speaker: "まりん", text: "まだいけるー" }
+    { speaker: "まりん", text: "めっちゃ眠くなってきた……" },
+    { speaker: "ゆい", text: "ほっぺた、つねってあげようか？" }
   ],
   [
-    { speaker: "ゆい", text: "飲み物、切れてませんか？" },
-    { speaker: "まりん", text: "まだいけるー" }
+    { speaker: "まりん", text: "" },
+    { speaker: "ゆい", text: "" }
   ],
 
   [
-    { speaker: "ゆい", text: "飲み物、切れてませんか？" },
-    { speaker: "まりん", text: "まだいけるー" }
+    { speaker: "ゆい", text: "糖分が足りなくなってきた……" },
+    { speaker: "まりん", text: "ラムネ食べる？" }
   ],
   [
-    { speaker: "ゆい", text: "飲み物、切れてませんか？" },
-    { speaker: "まりん", text: "まだいけるー" }
+    { speaker: "ゆい", text: "" },
+    { speaker: "まりん", text: "" }
   ],
   [
-    { speaker: "まりん", text: "あせらなくていいよ。" },
-    { speaker: "ゆい", text: "一歩ずつ進めましょう。" }
+    { speaker: "ゆい", text: "" },
+    { speaker: "まりん", text: "" }
   ],
   [
-    { speaker: "まりん", text: "あと少しだよ。" },
-    { speaker: "ゆい", text: "もうひと踏ん張りです。" }
+    { speaker: "ゆい", text: "" },
+    { speaker: "まりん", text: "" }
   ],
   [
-    { speaker: "まりん", text: "ねむい……" },
-    { speaker: "ゆい", text: "そこを耐えるんです。" }
+    { speaker: "ゆい", text: "ねむい……" },
+    { speaker: "まりん", text: "そこを耐えるんです。" }
   ]
 ];
 
@@ -1113,23 +1113,28 @@ const messages = [
       const breakMessages = [
         [
           { speaker: "まりん", text: "ひと休み、ひと休み。" },
-          { speaker: "ゆい", text: "大事な時間です。" }
+          { speaker: "ゆい", text: "" }
+        ],
+        [
+          { speaker: "まりん", text: "あ、またドーナッツ食べてる" },
+          { speaker: "ゆい", text: "糖分は必要だから" }
         ],
         [
           { speaker: "ゆい", text: "水分補給、忘れずに。" },
           { speaker: "まりん", text: "はーい。" }
         ],
+
         [
-          { speaker: "まりん", text: "ぼーっとするの最高……" },
-          { speaker: "ゆい", text: "脳を休ませましょう。" }
+          { speaker: "ゆい", text: "ストレッチしましょうか。" },
+          { speaker: "まりん", text: "だるいけどやる〜" }
         ],
         [
           { speaker: "ゆい", text: "ストレッチしましょうか。" },
           { speaker: "まりん", text: "だるいけどやる〜" }
         ],
         [
-          { speaker: "まりん", text: "ラムネ食べる？" },
-          { speaker: "ゆい", text: "いただきます。" }
+          { speaker: "ゆい", text: "" },
+          { speaker: "まりん", text: "" }
         ]
       ];
 
@@ -1153,6 +1158,8 @@ const messages = [
          入力欄にこれらの語が入ると、対応する本来のキーワードに変換される */
       const keywordMap = {
         "コーヒー": ["コーヒー", "こーひー", "coffee", "珈琲"],
+        "宿題": ["宿題", "しゅくだい"],
+
         "ねむい": ["ねむい", "眠い", "ねむ", "sleepy"]
       };
 
@@ -1162,6 +1169,14 @@ const messages = [
           { speaker: "まりん", text: "コーヒー飲みたくなってきた〜" },
           { speaker: "ゆい", text: "集中したい時にはいいですね。" }
         ],
+        "宿題": [
+          { speaker: "まりん", text: "やば。宿題やるの忘れてた" },
+          { speaker: "ゆい", text: "今やりなよ、今……" }
+        ],
+
+
+
+
         "ねむい": [
           { speaker: "まりん", text: "それ今のあたしじゃん……" },
           { speaker: "ゆい", text: "顔を洗ってきてください。" }
@@ -1634,14 +1649,14 @@ const messages = [
       }
 
       /* 会話を表示する */
-     function showDialogue(dialogue) {
-      messageBox.innerHTML = "";
+function showDialogue(dialogue) {
+  messageBox.innerHTML = "";
 
-      dialogue.forEach(item => {
-        const lineBlock = document.createElement("div");
-        lineBlock.className = item.speaker === "まりん"
-          ? "dialogLine left"
-          : "dialogLine right";
+  dialogue.forEach(item => {
+    const lineBlock = document.createElement("div");
+    lineBlock.className = item.speaker === "まりん"
+      ? "dialogLine left"
+      : "dialogLine right";
 
     const speakerEl = document.createElement("div");
     speakerEl.className = "speaker";
@@ -1655,6 +1670,9 @@ const messages = [
     lineBlock.appendChild(textEl);
     messageBox.appendChild(lineBlock);
   });
+
+  /* 新しく作った話者名とセリフにも、現在のテーマ色を反映する */
+  applyTheme(themes[currentTheme]);
 }
 
       /* 作業中 / 休憩中の会話を表示する */
