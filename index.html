@@ -32,11 +32,14 @@
        0. CSS変数
        テーマ切り替えで使う色の変数
     ================================================== */
-    :root {
-      --button-bg: rgba(255,255,255,0.30);
-      --button-text: #24313a;
-      --popup-button-bg: rgba(255,255,255,0.30);
-    }
+:root {
+  --button-bg: rgba(255,255,255,0.30);
+  --button-text: #24313a;
+  --popup-button-bg: rgba(255,255,255,0.30);
+
+  --space-lg: 16px;   /* 大きなブロック同士の間隔 */
+  --space-sm: 10px;   /* 小さな区切りの間隔 */
+}
 
 
 
@@ -122,35 +125,35 @@
     ================================================== */
 
     /* 画像とセリフ枠をまとめたエリア */
-    #imageArea {
-      width: 80%;
-      max-width: 600px;
-      margin: 20px auto 0;
-    }
+#imageArea {
+  width: 80%;
+  max-width: 600px;
+  margin: var(--space-lg) auto 0;
+}
 
     /* 左パネルと右パネルを並べるエリア */
-    #controlRow {
-      width: 80%;
-      max-width: 600px;
-      margin: 10px auto 0;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      align-items: stretch;
-      flex-wrap: wrap;
-    }
+#controlRow {
+  width: 80%;
+  max-width: 600px;
+  margin: var(--space-lg) auto 0;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
 
     /* テーマボタン・ビジュアライザー・曲名の横並びエリア */
-    #buttonRow {
-      margin: 10px auto 0;
-      width: 80%;
-      max-width: 600px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 12px;
-      padding: 0 8px;
-    }
+#buttonRow {
+  margin: var(--space-lg) auto 0;
+  width: 80%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 0 8px;
+}
 
     /* ボタンを横並びにする */
     #buttonGroup {
@@ -182,14 +185,14 @@
     }
 
     /* セリフ枠 */
-    #messageBox {
-      margin-top: 10px;
-      padding: 12px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 12px;
-      box-sizing: border-box;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-    }
+#messageBox {
+  margin-top: var(--space-sm);
+  padding: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
 
     /* 会話1組ぶん */
     .dialogLine {
@@ -655,9 +658,17 @@
         max-width: none;
       }
 
-      #imageArea {
-        margin-top: 14px;
-      }
+  #imageArea {
+    margin-top: var(--space-lg);
+  }
+
+  #controlRow {
+    margin: var(--space-lg) auto 0;
+  }
+
+  #buttonRow {
+    margin: var(--space-lg) auto 0;
+  }
 
       #mainImage {
         border-radius: 12px;
@@ -674,16 +685,14 @@
       }
 
       /* スマホでは2つのパネルを無理やり横並びに保つ */
-      #controlRow {
-        width: 94%;
-        max-width: none;
-        margin: 10px auto 0;
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 10px;
-        justify-content: center;
-        align-items: stretch;
-      }
+#controlRow {
+  width: 94%;
+  max-width: none;
+  margin: var(--space-lg) auto 0;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
 
       .panel {
         flex: 1 1 0;
@@ -1055,8 +1064,8 @@ const messages = [
     { speaker: "ゆい", text: "またスマホ見てる" }
   ],
   [
-    { speaker: "まりん", text: "この曲、めっちゃいいかも" },
-    { speaker: "ゆい", text: "それは同意" }
+    { speaker: "まりん", text: "この曲、【勉強】が進みますな" },
+    { speaker: "ゆい", text: "それ、あんたが言う？" }
   ],
   [
     { speaker: "まりん", text: "全然はかどらんわー" },
@@ -1177,14 +1186,17 @@ const messages = [
 
 
 
-        "ねむい": [
-          { speaker: "まりん", text: "それ今のあたしじゃん……" },
-          { speaker: "ゆい", text: "顔を洗ってきてください。" }
+        "": [
+          { speaker: "まりん", text: "" },
+          { speaker: "ゆい", text: "" }
         ],
-        "やる気": [
-          { speaker: "まりん", text: "やる気ください。" },
-          { speaker: "ゆい", text: "まず手を動かしましょう。" }
+        "": [
+          { speaker: "ゆい", text: "" },
+          { speaker: "まりん", text: "" }
         ],
+
+
+
         "ラムネ": [
           { speaker: "まりん", text: "ラムネきた！" },
           { speaker: "ゆい", text: "補給は大事です。" }
