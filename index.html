@@ -1090,8 +1090,8 @@ const messages = [
     { speaker: "まりん", text: "ラムネ食べる？" }
   ],
   [
-    { speaker: "ゆい", text: "" },
-    { speaker: "まりん", text: "" }
+    { speaker: "ゆい", text: "ホント毎日、私の部屋に来るよね" },
+    { speaker: "まりん", text: "だって、居心地いいじゃん" }
   ],
   [
     { speaker: "ゆい", text: "" },
@@ -1173,6 +1173,9 @@ const messages = [
       const keywordMap = {
         "コーヒー": ["コーヒー", "こーひー", "coffee", "珈琲"],
         "宿題": ["宿題", "しゅくだい"],
+        "勉強": ["勉強", "べんきょう"],
+
+
 
         "ねむい": ["ねむい", "眠い", "ねむ", "sleepy"]
       };
@@ -1181,13 +1184,16 @@ const messages = [
       const keywordDialogues = {
         "コーヒー": [
           { speaker: "まりん", text: "コーヒー飲みたくなってきた〜" },
-          { speaker: "ゆい", text: "集中したい時にはいいですね。" }
+          { speaker: "ゆい", text: "" }
         ],
         "宿題": [
           { speaker: "まりん", text: "やば。宿題やるの忘れてた" },
           { speaker: "ゆい", text: "今やりなよ、今……" }
         ],
-
+        "": [
+          { speaker: "まりん", text: "私と同じ学校に入るのに頑張ったもんね" },
+          { speaker: "ゆい", text: "" }
+        ],
 
 
 
@@ -1747,12 +1753,15 @@ function showDialogue(dialogue) {
 
         const key = findKeyword(input);
 
-        if (key) {
-          showDialogue(keywordDialogues[key]);
-        }
+if (key) {
+  showDialogue(keywordDialogues[key]);
 
-        /* 入力後は入力欄を空にする */
-        keywordInput.value = "";
+  /* 正解のときだけキーボードを閉じる */
+  keywordInput.blur();
+}
+
+/* 入力欄は常に空にする */
+keywordInput.value = "";
       }
 
       /* Enterキーでキーワード判定 */
