@@ -37,8 +37,7 @@
   --button-text: #24313a;
   --popup-button-bg: rgba(255,255,255,0.30);
 
-  --space-lg: 16px;   /* 大きなブロック同士の間隔 */
-  --space-sm: 10px;   /* 小さな区切りの間隔 */
+  --space: 8px;   /* ← すべての上隔を統一 */
 }
 
 
@@ -128,14 +127,14 @@
 #imageArea {
   width: 80%;
   max-width: 600px;
-  margin: var(--space-lg) auto 0;
+  margin: var(--space) auto 0;
 }
 
     /* 左パネルと右パネルを並べるエリア */
 #controlRow {
   width: 80%;
   max-width: 600px;
-  margin: var(--space-lg) auto 0;
+  margin: var(--space) auto 0;
   display: flex;
   gap: 20px;
   justify-content: center;
@@ -145,7 +144,7 @@
 
     /* テーマボタン・ビジュアライザー・曲名の横並びエリア */
 #buttonRow {
-  margin: var(--space-lg) auto 0;
+  margin: var(--space) auto 0;
   width: 80%;
   max-width: 600px;
   display: flex;
@@ -186,7 +185,7 @@
 
     /* セリフ枠 */
 #messageBox {
-  margin-top: var(--space-sm);
+  margin-top: var(--space);
   padding: 12px;
   background: rgba(255,255,255,0.08);
   border-radius: 12px;
@@ -651,23 +650,29 @@
         font-size: 12px;
       }
 
-      #imageArea,
-      #controlRow,
-      #buttonRow {
-        width: 94%;
-        max-width: none;
-      }
+  #imageArea,
+  #controlRow,
+  #buttonRow {
+    width: 94%;
+    max-width: none;
+  }
 
   #imageArea {
-    margin-top: var(--space-lg);
+    margin-top: var(--space);
   }
 
   #controlRow {
-    margin: var(--space-lg) auto 0;
+    margin: var(--space) auto 0;
   }
 
   #buttonRow {
-    margin: var(--space-lg) auto 0;
+    margin: var(--space) auto 0;
+  }
+
+  #controlRow {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
   }
 
       #mainImage {
@@ -688,7 +693,7 @@
 #controlRow {
   width: 94%;
   max-width: none;
-  margin: var(--space-lg) auto 0;
+  margin: var(--space) auto 0;
   display: flex;
   flex-wrap: nowrap;
   gap: 10px;
