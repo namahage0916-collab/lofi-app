@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nook: Quiet Talk</title>
     <meta name="robots" content="noindex">
+<meta name="theme-color" content="#ddd2c3" id="themeColorMeta">
 
     <!-- ==================================================
     CSS
@@ -166,31 +167,38 @@ body.dark-theme button:active {
   }
 
   /* テーマボタン・ビジュアライザー・曲名の横並びエリア */
-  #buttonRow {
-    margin: var(--space) auto 0;
-    width: 80%;
-    max-width: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 0 8px;
-  }
+#buttonRow {
+  margin: var(--space) auto 0;
+  width: 80%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  /* ボタンを横並びにする */
-  #buttonGroup {
-    display: flex;
-    gap: 6px;
-  }
+#buttonGroup {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
 
-  /* buttonGroup内のボタンだけ個別調整 */
-  #buttonGroup button {
-    flex: 1;
-    font-size: 16px;
-    padding: 8px 10px;
-    white-space: nowrap;
-  }
+#buttonGroup button {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  padding: 12px 0;
+  white-space: nowrap;
+}
 
+#visualizer {
+  flex-shrink: 0;
+}
+
+#trackName {
+  flex-shrink: 0;
+}
   /* ==================================================
   4. 画像・セリフ表示
   ================================================== */
@@ -557,7 +565,7 @@ body.dark-theme button:active {
 
   /* ビジュアライザー本体 */
   #visualizer {
-    margin-right: 10px;
+    margin-right: 0;
     display: flex;
     align-items: flex-end;
     gap: 4px;
@@ -864,6 +872,13 @@ body.dark-theme button:active {
     }
   }
 
+@media (max-width: 380px) {
+  .line {
+    font-size: 16px;
+  }
+}
+
+
   /* ==================================================
   12. エンディング演出
   ================================================== */
@@ -1015,7 +1030,7 @@ body.dark-theme button:active {
 
     <!-- 画像＋セリフ枠 -->
     <div id="imageArea">
-      <img src="image.png" id="mainImage" class="fade-in-long" alt="ドット絵イラスト">
+      <img src="image_idle.png" id="mainImage" class="fade-in-long" alt="ドット絵イラスト">
 
       <div id="messageBox" class="fade-in">
         <div id="leftMessageBlock" class="dialogLine left">
@@ -1129,6 +1144,8 @@ body.dark-theme button:active {
       const ENDING_BGM = "Nothing.mp3";
 
       const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
+
+const themeColorMeta = document.getElementById("themeColorMeta");
 
       /* ==================================================
       2. HTML要素を取得
@@ -1673,8 +1690,13 @@ function startEnding() {
         /* 入力欄を閉じる */
         keywordInput.blur();
 
-        /* 白くする */
-        endingWhiteout.classList.add("active");
+/* 白くする */
+if (themeColorMeta) {
+  themeColorMeta.setAttribute("content", "#ffffff");
+}
+
+document.body.style.background = "#ffffff";
+endingWhiteout.classList.add("active");
 
         /* 完全に白くなってから、見えない裏側で画像とセリフを切り替える */
         setTimeout(() => {
@@ -1683,19 +1705,30 @@ function startEnding() {
           }, WHITEOUT_DURATION + 300);
 
           /* 白い画面を少し保ってから戻す */
-          setTimeout(() => {
-              endingWhiteout.classList.remove("active");
-            }, WHITEOUT_DURATION + 1300);
+setTimeout(() => {
+  endingWhiteout.classList.remove("active");
 
-            /* 白が戻り始めるタイミングでBGM開始 */
-            setTimeout(() => {
-                music.src = ENDING_BGM;
-                music.volume = normalVolume;
-                music.loop = true;
-                trackNameDisplay.innerText = "Nothing";
-                music.play().catch(() => {});
-                startVisualizer();
-              }, WHITEOUT_DURATION + 1300);
+  setTimeout(() => {
+    applyTheme(themes[currentTheme]);
+  }, 300);
+}, WHITEOUT_DURATION + 1300);
+
+/* 白が戻り始めるタイミングでBGM開始 */
+setTimeout(() => {
+  music.src = ENDING_BGM;
+  music.currentTime = 0;
+  music.volume = normalVolume;
+  music.muted = false;
+  music.loop = true;
+
+  trackNameDisplay.innerText = "Nothing";
+
+  music.play().then(() => {
+    startVisualizer();
+  }).catch(() => {
+    stopVisualizer();
+  });
+}, WHITEOUT_DURATION + 1300);
             }
 
             /* ==================================================
@@ -1895,6 +1928,11 @@ if (theme.isDark) {
 } else {
   document.body.classList.remove("dark-theme");
 }
+
+if (themeColorMeta) {
+  themeColorMeta.setAttribute("content", theme.bodyBg);
+}
+
                     }
 
                     /* テーマを次の番号へ切り替える */
