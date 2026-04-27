@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nook: Quiet Talk</title>
     <meta name="robots" content="noindex">
+<meta name="theme-color" content="#ddd2c3" id="themeColorMeta">
 
     <!-- ==================================================
     CSS
@@ -1144,6 +1145,7 @@ body.dark-theme button:active {
 
       const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
 
+const themeColorMeta = document.getElementById("themeColorMeta");
 
       /* ==================================================
       2. HTML要素を取得
@@ -1689,6 +1691,11 @@ function startEnding() {
         keywordInput.blur();
 
 /* 白くする */
+if (themeColorMeta) {
+  themeColorMeta.setAttribute("content", "#ffffff");
+}
+
+document.body.style.background = "#ffffff";
 endingWhiteout.classList.add("active");
 
         /* 完全に白くなってから、見えない裏側で画像とセリフを切り替える */
@@ -1920,6 +1927,10 @@ if (theme.isDark) {
   document.body.classList.add("dark-theme");
 } else {
   document.body.classList.remove("dark-theme");
+}
+
+if (themeColorMeta) {
+  themeColorMeta.setAttribute("content", theme.bodyBg);
 }
 
                     }
