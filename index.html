@@ -1145,7 +1145,6 @@ body.dark-theme button:active {
 
       const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
 
-const themeColorMeta = document.getElementById("themeColorMeta");
 
       /* ==================================================
       2. HTML要素を取得
@@ -1671,6 +1670,9 @@ function startEnding() {
         timerPanel.style.cursor = "default";
         timerPanel.style.pointerEvents = "none";
 
+const themeColorMeta = document.getElementById("themeColorMeta");
+
+
         /* タイマーとセリフ更新を止める */
         clearInterval(intervalId);
         intervalId = null;
@@ -1911,6 +1913,12 @@ if (creditBox) {
   }
 }
 
+const themeColorMeta = document.getElementById("themeColorMeta");
+
+if (themeColorMeta) {
+  themeColorMeta.setAttribute("content", theme.bodyBg);
+}
+
 if (creditText) {
   creditText.style.color = theme.mainText;
 }
@@ -1927,10 +1935,6 @@ if (theme.isDark) {
   document.body.classList.add("dark-theme");
 } else {
   document.body.classList.remove("dark-theme");
-}
-
-if (themeColorMeta) {
-  themeColorMeta.setAttribute("content", theme.bodyBg);
 }
 
                     }
