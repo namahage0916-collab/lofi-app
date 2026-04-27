@@ -16,7 +16,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nook: Quiet Talk</title>
     <meta name="robots" content="noindex">
-<meta name="theme-color" content="#ddd2c3" id="themeColorMeta">
 
     <!-- ==================================================
     CSS
@@ -1670,9 +1669,6 @@ function startEnding() {
         timerPanel.style.cursor = "default";
         timerPanel.style.pointerEvents = "none";
 
-const themeColorMeta = document.getElementById("themeColorMeta");
-
-
         /* タイマーとセリフ更新を止める */
         clearInterval(intervalId);
         intervalId = null;
@@ -1693,11 +1689,6 @@ const themeColorMeta = document.getElementById("themeColorMeta");
         keywordInput.blur();
 
 /* 白くする */
-if (themeColorMeta) {
-  themeColorMeta.setAttribute("content", "#ffffff");
-}
-
-document.body.style.background = "#ffffff";
 endingWhiteout.classList.add("active");
 
         /* 完全に白くなってから、見えない裏側で画像とセリフを切り替える */
@@ -1911,12 +1902,6 @@ if (creditBox) {
   } else {
     creditBox.classList.remove("dark-popup");
   }
-}
-
-const themeColorMeta = document.getElementById("themeColorMeta");
-
-if (themeColorMeta) {
-  themeColorMeta.setAttribute("content", theme.bodyBg);
 }
 
 if (creditText) {
