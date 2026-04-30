@@ -4,12 +4,7 @@
   <head>
 
     <!-- ==================================================
-    head
-    ページ全体の基本設定を書く場所
-    ・文字コード
-    ・画面サイズ
-    ・タイトル
-    ・検索エンジン向け設定
+    head：ページの基本設定
     ================================================== -->
 
     <meta charset="UTF-8">
@@ -19,32 +14,23 @@
 
 
     <!-- ==================================================
-    CSS
-    見た目を決める場所
-    ・色
-    ・余白
-    ・文字サイズ
-    ・配置
-    ・アニメーション
+    CSS：見た目の設定
     ================================================== -->
   <style>
   /* ==================================================
   0. CSS変数
-  テーマ切り替えで使う色の変数
   ================================================== */
   :root {
     --button-bg: rgba(255,255,255,0.30);
     --button-text: #24313a;
     --popup-button-bg: rgba(255,255,255,0.30);
-
-    --space: 8px;   /* ← すべての上隔を統一 */
+    --space: 8px; 
   }
 
   /* ==================================================
   1. ページ全体
   ================================================== */
 
-  /* body全体の基本見た目 */
   body {
     background: #bfcfda;
     color: #fff;
@@ -54,22 +40,21 @@
     margin: 0;
   }
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
-}
+  h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
 
-h1 span {
-  font-size: 18px;
-  letter-spacing: 0.15em;
-  opacity: 0.8;
+  h1 span {
+    font-size: 18px;
+    letter-spacing: 0.15em;
+    opacity: 0.8;
 }
 
   /* ==================================================
   2. ボタン・入力系
   ================================================== */
 
-  /* すべてのbutton要素の共通デザイン */
   button {
     font-size: 20px;
     padding: 10px 20px;
@@ -86,19 +71,17 @@ h1 span {
 #clearBox button {
   font-size: 18px;
   white-space: nowrap;
-
+  text-align: center;
   display: block;
   width: 100%;
   max-width: 320px;
   margin: 10px auto;
 }
 
-  /* 通常ボタンにマウスを乗せたとき */
   button:hover {
     filter: brightness(0.92);
   }
 
-  /* 通常ボタンを押したとき */
   button:active {
     filter: brightness(0.85);
   }
@@ -127,7 +110,6 @@ body.dark-theme button:active {
     background: var(--popup-button-bg);
   }
 
-  /* range入力の幅 */
   input[type="range"] {
     width: 200px;
   }
@@ -222,6 +204,62 @@ body.dark-theme button:active {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   }
 
+#messageBox {
+  position: relative;
+  cursor: default;
+}
+
+#messageBox.has-next {
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+#messageBox.has-next:hover {
+  background: rgba(255,255,255,0.18) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+#messageBox.has-next:active {
+  background: rgba(255,255,255,0.24) !important;
+  transform: scale(0.99);
+}
+
+#messageBox.has-next::after {
+  content: "▶";
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  font-size: 14px;
+  opacity: 0.75;
+  animation: nextArrowBlink 1.2s ease-in-out infinite;
+}
+
+#messageBox.has-end {
+  cursor: pointer;
+}
+
+#messageBox.has-end::after {
+  content: "↺";
+  position: absolute;
+  right: 14px;
+  bottom: 4px;
+  font-size: 20px;
+  opacity: 0.75;
+  animation: nextArrowBlink 1.2s ease-in-out infinite;
+}
+
+@keyframes nextArrowBlink {
+  0%, 100% {
+    opacity: 0.35;
+    transform: translateX(0);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: translateX(3px);
+  }
+}
+
   /* 会話1組ぶん */
   .dialogLine {
     margin-bottom: 4px;
@@ -263,6 +301,22 @@ body.dark-theme button:active {
     max-width: 80%;
     min-height: 32px;
   }
+
+.dialogLine {
+  animation: dialogueFadeIn 0.8s ease forwards;
+}
+
+@keyframes dialogueFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
   /* 曲名表示 */
   #trackName {
@@ -369,8 +423,7 @@ body.dark-theme button:active {
   }
 
   /* ==================================================
-  6. 通知オーバーレイ
-  作業終了・休憩終了時に全面表示される
+  6. 通知・ポップアップ
   ================================================== */
 
   /* オーバーレイ通知全体 */
@@ -723,7 +776,6 @@ body.dark-theme button:active {
 
   /* ==================================================
   11. スマホ向け調整
-  画面幅768px以下で適用される
   ================================================== */
   @media (max-width: 768px) {
 
@@ -896,6 +948,90 @@ body.dark-theme button:active {
   #endingWhiteout.active {
     opacity: 1;
   }
+
+
+#keywordFoundEffect {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+
+  opacity: 0;
+  z-index: 9999;
+}
+
+#keywordFoundEffect img {
+  max-width: 90%;
+  width: 480px;
+}
+
+#keywordFoundEffect.show {
+  animation: keywordFoundBackground 2.0s ease forwards;
+}
+
+#keywordFoundEffect.show img {
+  animation: keywordFoundImage 2.0s ease forwards;
+}
+
+@keyframes keywordFoundBackground {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes keywordFoundImage {
+  0% {
+    transform: scale(0.85) translateY(10px);
+  }
+
+  20% {
+    transform: scale(1.05) translateY(0);
+  }
+
+  70% {
+    transform: scale(1) translateY(0);
+  }
+
+  100% {
+    transform: scale(1) translateY(-18px);
+  }
+}
+
+.headphone {
+  display: inline-block;
+  animation: floatHeadphone 3.2s ease-in-out infinite;
+}
+
+@keyframes floatHeadphone {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
   </style>
 </head>
 
@@ -914,6 +1050,11 @@ body.dark-theme button:active {
   ================================================== -->
 
   <div id="endingWhiteout"></div>
+
+<div id="keywordFoundEffect">
+  <img src="keyword.png" alt="Keyword Found">
+</div>
+
 
   <!-- ==================================================
   1. ロック画面
@@ -1027,9 +1168,9 @@ body.dark-theme button:active {
 
     <!-- タイトルと日付 -->
 <h1 class="logo">
-  🎧nook: Quiet Talk
-      <span id="dateText"></span>
-    </h1>
+  <span class="headphone">🎧</span>nook: Quiet Talk
+  <span id="dateText"></span>
+</h1>
 
     <!-- 画像＋セリフ枠 -->
     <div id="imageArea">
@@ -1183,6 +1324,25 @@ body.dark-theme button:active {
       const leftMessageBlock = document.getElementById("leftMessageBlock");
       const rightMessageBlock = document.getElementById("rightMessageBlock");
 
+const messageBox = document.getElementById("messageBox");
+
+messageBox.addEventListener("click", () => {
+  if (!currentDialoguePages) return;
+
+  const hasMultiplePages = currentDialoguePages.length > 1;
+  const hasNextPage = currentDialoguePageIndex < currentDialoguePages.length - 1;
+
+  if (!hasMultiplePages) return;
+
+  if (hasNextPage) {
+    currentDialoguePageIndex++;
+  } else {
+    currentDialoguePageIndex = 0;
+  }
+
+  showDialoguePage();
+});
+
       const leftMessageName = document.getElementById("leftMessageName");
       const rightMessageName = document.getElementById("rightMessageName");
 
@@ -1248,32 +1408,34 @@ const seFail = document.getElementById("seFail");
       ================================================== */
 
       /* サイトを開いた直後専用のセリフ */
-      const idleMessages = [
-        [
-          { speaker: "まりん", text: "のんびりやりますか" },
-          { speaker: "はじめ", text: "集中してやるよ" }
-          ],
+const idleMessages = [
+    [
+      { speaker: "まりん", text: "のんびりやりますか" },
+      { speaker: "はじめ", text: "集中、集中……" }
+    ],
 
-        [
-          { speaker: "まりん", text: "チルい曲でも流す？" },
-          { speaker: "はじめ", text: "じゃ、いつもので" }
-          ],
+    [
+      { speaker: "まりん", text: "チルい曲でも流す？" },
+      { speaker: "はじめ", text: "じゃ、いつもので" }
+    ],
 
-        [
-          { speaker: "はじめ", text: "じゃ、始めようか" },
-          { speaker: "まりん", text: "はいはーい" }
-          ],
+    [
+      { speaker: "はじめ", text: "じゃ、始めようか" },
+      { speaker: "まりん", text: "はいはーい" }
+    ],
 
-        [
-          { speaker: "はじめ", text: "また、あくびしてる"},
-          { speaker: "まりん", text: "お昼寝日和すぎて……" }
-          ],
-      ];
+    [
+      { speaker: "はじめ", text: "また、あくびしてる" },
+      { speaker: "まりん", text: "お昼寝日和すぎて……" }
+    ],
+];
+
+
 
       /* 作業時のセリフ一覧 */
       const messages = [
         [
-          { speaker: "まりん", text: "この曲、【勉強】がはかどるね" },
+          { speaker: "まりん", text: "この曲、【勉強】がはかどりますな" },
           { speaker: "はじめ", text: "完全に同意" }
           ],
 
@@ -1298,8 +1460,8 @@ const seFail = document.getElementById("seFail");
           ],
 
         [
-          { speaker: "まりん", text: "昨日、ＵＦＯ見た" },
-          { speaker: "はじめ", text: "マジ？　私も見たい" }
+          { speaker: "まりん", text: "落とし物、交番に届けてきた" },
+          { speaker: "はじめ", text: "偉いじゃん" }
           ],
 
         [
@@ -1371,7 +1533,7 @@ const seFail = document.getElementById("seFail");
 
         [
           { speaker: "まりん", text: "【学級委員長】にも休息は必要でしょ" },
-          { speaker: "はじめ", text: "そこ、廊下を走らない！　なんてね" }
+          { speaker: "はじめ", text: "どこかのギャルが騒がしいから……" }
           ],
 
         [
@@ -1424,13 +1586,14 @@ const seFail = document.getElementById("seFail");
         "期末試験": ["期末試験", "きまつしけん","期末テスト","きまつてすと"],
         "全国模試": ["全国模試", "ぜんこくもし"],
         "色々": ["色々", "いろいろ"],
-        "獣医": ["獣医", "じゅうい", "獣医師", "じゅういし"],
-        "古生物学者": ["古生物学者", "こせいぶつがくしゃ", "古生物学", "こせいぶつがく"],
+        "獣医": ["獣医", "じゅうい", "獣医師", "じゅういし", "獣医学", "じゅういがく", "獣医学部", "じゅういがくぶ"],
+        "古生物学者": ["古生物学者", "こせいぶつがくしゃ", "古生物学", "こせいぶつがく", "古生物学部", "こせいぶつがくぶ"],
+        "化石": ["化石", "かせき"],
         "ハーバード大学": ["ハーバード大学", "はーばーどだいがく", "ハーバード", "はーばーど"],
-        "気のせい": ["気のせい", "きのせい"],
-        "さくらんぼ餅": ["さくらんぼ餅", "さくらんぼもち"],
-        "駄菓子屋さん": ["駄菓子屋さん","だがしやさん"],
-        "孔雀商店": ["孔雀商店","くじゃくしょうてん"],
+        "さくらんぼ餅": ["さくらんぼ餅", "さくらんぼもち", "サクランボ餅", "サクランボもち"],
+        "駄菓子屋さん": ["駄菓子屋さん","だがしやさん", "駄菓子屋", "だがしや"],
+        "恒温動物": ["恒温動物", "こうおんどうぶつ"],
+        "ねじまき鳥商店": ["ねじまき鳥商店","ネジまきどり商店", "ねじまきどり商店", "ねじまきどりしょうてん", "ねじまき鳥", "ネジまきどり", "ねじまきどり"],
         "まりん": ["まりん"],
         "はじめ": ["はじめ"],
         "一": ["一"],
@@ -1449,10 +1612,6 @@ const seFail = document.getElementById("seFail");
           "万里杏音はもう死んでいる", "万里杏音はもうしんでいる",
           "まりあんぬはもう死んでいる", "まりあんぬはもうしんでいる"
           ],
-        "子猫": ["子猫", "こねこ"],
-        "天国": ["天国", "てんごく"],
-        "バカ幽霊": ["バカ幽霊", "バカゆうれい","ばか幽霊","ばかゆうれい","馬鹿幽霊","馬鹿ゆうれい","ばか幽霊"],
-        "私の友達": ["私の友達", "私のともだち", "わたしの友達", "わたしのともだち"],
         "また会う日まで": [
           "また会う日まで",
           "また会うひまで",
@@ -1493,149 +1652,470 @@ const seFail = document.getElementById("seFail");
       const keywordDialogues = {
 
         "コーヒー": [
+        [
           { speaker: "まりん", text: "はじめはコーヒー苦手だもんね" },
           { speaker: "はじめ", text: "さ、砂糖入れたらいけるし……" }
           ],
+          [
+          { speaker: "まりん", text: "じゃあ、私のひとくち飲む？" },
+          { speaker: "はじめ", text: "…………（苦々しい顔）" }
+          ]
+        ],
 
         "宿題": [
           { speaker: "まりん", text: "やば。宿題やるの忘れてた" },
           { speaker: "はじめ", text: "今やりなよ、今……" }
           ],
 
+
         "勉強": [
-          { speaker: "まりん", text: "【高校受験】並に頑張ってるじゃん" },
-          { speaker: "まりん", text: "【期末試験】はまだ先でしょ？" }
+        [
+          { speaker: "まりん", text: "最近、勉強頑張ってるよね" },
+          { speaker: "はじめ", text: "うーん……まあね" }
           ],
+          [
+          { speaker: "まりん", text: "こんなの【高校受験】以来じゃない？" },
+          { speaker: "まりん", text: "【期末試験】は、まだ先でしょ？" }
+          ]
+        ],
 
         "高校受験": [
+        [
           { speaker: "まりん", text: "私と同じ高校入るのに頑張ったもんね" },
           { speaker: "はじめ", text: "う、うるさいなぁ……" }
           ],
+          [
+          { speaker: "はじめ", text: "まりんの偏差値が高すぎるせいで……" },
+          { speaker: "はじめ", text: "ホントあの時、苦労したんだから" }
+          ],
+          [
+          { speaker: "まりん", text: "そんなに私といっしょがよかった？" },
+          { speaker: "はじめ", text: "あー、もう。勉強に戻るよ！" }
+          ]
+        ],
 
         "期末試験": [
-          { speaker: "はじめ", text: "週末に【全国模試】があるから……" },
-          { speaker: "まりん", text: "模試？　やけに力を入れてるね" }
+        [
+          { speaker: "はじめ", text: "週末に【全国模試】があるからさ" },
+          { speaker: "まりん", text: "模試？　やけに力を入れてるじゃん" }
           ],
+          [
+          { speaker: "はじめ", text: "うちらだって、もう高２だよ" },
+          { speaker: "はじめ", text: "そろそろ将来を考える時期でしょ" }
+          ],
+          [
+          { speaker: "まりん", text: "はじめ、立派になったな" },
+          { speaker: "はじめ", text: "誰視点のコメント？" }
+          ]
+        ],
 
         "全国模試": [
+        [
+          { speaker: "まりん", text: "じゃあ、いい大学狙うことにしたんだ" },
+          { speaker: "はじめ", text: "まあね……" }
+          ],
+          [
+          { speaker: "まりん", text: "大学は高望みしないって言ってたのに" },
+          { speaker: "まりん", text: "それって、どういう心境の変化？" }
+          ],
+          [
           { speaker: "はじめ", text: "【色々】あって、私にも夢できたから" },
           { speaker: "まりん", text: "【はじめの夢】？　教えて教えて！" }
-          ],
+          ]
+        ],
 
         "色々": [
-          { speaker: "はじめ", text: "怪我した動物を引き取ったの……" },
-          { speaker: "まりん", text: "やさしーっ！　控えめに言って神！" }
+        [
+          { speaker: "はじめ", text: "怪我した動物を引き取ったの" },
+          { speaker: "はじめ", text: "で、自分でも治してあげられたらって" }
           ],
+          [
+          { speaker: "まりん", text: "やさしーっ！　控えめに言って神！" },
+          { speaker: "はじめ", text: "どこどこ？　見たい見たい！" }
+          ],
+          [
+          { speaker: "はじめ", text: "…………そのうちにね" },
+          { speaker: "まりん", text: "っしゃー！　吸いまくるぞー！" }
+          ]
+        ],
 
         "獣医": [
-          { speaker: "まりん", text: "めっちゃ素敵じゃん！　最高！" },
-          { speaker: "はじめ", text: "【まりんの夢】にも負けないでしょ？" }
+        [
+          { speaker: "まりん", text: "動物のお医者さん、ステキじゃん！" },
+          { speaker: "はじめ", text: "でもヤバいよ、獣医学部は……" }
           ],
+          [
+          { speaker: "まりん", text: "まあ、医学部よりは簡単なはずだから" },
+          { speaker: "はじめ", text: "私にとっては同じだって！" }
+          ],
+          [
+          { speaker: "はじめ", text: "まあ、【まりんの夢】に比べたら" },
+          { speaker: "はじめ", text: "現実的な夢ではあるけど……" }
+          ]
+        ],
 
         "古生物学者": [
-          { speaker: "はじめ", text: "化石を掘りに留学するんだよね？" },
-          { speaker: "まりん", text: "狙うは【古生物学の最高学府】！" }
+        [
+          { speaker: "はじめ", text: "【化石】を掘りに留学するんだよね？" },
+          { speaker: "まりん", text: "そのために生きてますから" }
           ],
+          [
+          { speaker: "はじめ", text: "去年の夏なんて、びっくりだよ" },
+          { speaker: "はじめ", text: "ずっとカナダに行ってたでしょ？" }
+          ],
+          [
+          { speaker: "まりん", text: "私の論文を読んでくれた偉い人が" },
+          { speaker: "まりん", text: "発掘調査の見学をさせてくれてさー" }
+          ],
+          [
+          { speaker: "はじめ", text: "行動力ありすぎ" },
+          { speaker: "まりん", text: "狙うは【古生物学の最高学府】だぜ！" }
+          ]
+        ],
+
+        "化石": [
+        [
+          { speaker: "はじめ", text: "あのときは驚いたよね" },
+          { speaker: "はじめ", text: "まりんが恐竜の頭蓋骨を発見したの" }
+          ],
+          [
+          { speaker: "まりん", text: "野外学習で、はぐれちゃったときね" },
+          { speaker: "まりん", text: "あれで完全にハマっちゃったな" }
+          ],
+          [
+          { speaker: "まりん", text: "あぁ、化石……。" },
+          { speaker: "まりん", text: "どうして、そんなに美しいの？" }
+          ],
+          [
+          { speaker: "まりん", text: "時を超えたロマン、ラララ～♪" },
+          { speaker: "はじめ", text: "ミュージカル始まっちゃったよ" }
+          ]
+        ],
 
         "ハーバード大学": [
-          { speaker: "まりん", text: "なに悲しそうな顔してんの？" },
-          { speaker: "はじめ", text: "し、してない。【気のせい】だよ" }
+        [
+          { speaker: "まりん", text: "ハバ大、いいよね……" },
+          { speaker: "はじめ", text: "そんな略し方、初めて聞いた" }
           ],
-
-        "気のせい": [
-          { speaker: "まりん", text: "私と離れるのが、さびしいんでしょ？" },
-          { speaker: "はじめ", text: "【さくらんぼ餅】で元気出して♪" }
+          [
+          { speaker: "はじめ", text: "………………" },
+          { speaker: "まりん", text: "どうしたの？　悲しげな顔して" }
           ],
+          [
+          { speaker: "まりん", text: "わかった。さびしいんでしょ？" },
+          { speaker: "まりん", text: "私と離ればなれになっちゃうから" }
+          ],
+          [
+          { speaker: "はじめ", text: "ち、違うって……！" },
+          { speaker: "まりん", text: "私の前では強がらなくてよろしい" }
+          ],
+          [
+          { speaker: "まりん", text: "そんなはじめに、はいこれ" },
+          { speaker: "まりん", text: "【さくらんぼ餅】で元気出して♪" }
+          ]
+        ],
 
         "さくらんぼ餅": [
-          { speaker: "はじめ", text: "これ、遠足のおやつによく買ったな" },
-          { speaker: "まりん", text: "そうそう。【駄菓子屋さん】で！" }
+        [
+          { speaker: "はじめ", text: "それ……！" },
+          { speaker: "まりん", text: "え、どしたの？" }
           ],
+          [
+          { speaker: "はじめ", text: "あ、いや……その……" },
+          { speaker: "はじめ", text: "遠足のおやつによく買ったなって……" }
+          ],
+          [
+          { speaker: "まりん", text: "そうそう。【駄菓子屋さん】でね" },
+          { speaker: "まりん", text: "……あ、そうだ" }
+          ],
+          [
+          { speaker: "まりん", text: "あ～んしてあげようか？" },
+          { speaker: "はじめ", text: "いや、自分で食べるけど……" }
+          ]
+        ],
 
         "駄菓子屋さん": [
-          { speaker: "まりん", text: "そういえば……" },
-          { speaker: "まりん", text: "【孔雀商店】のお店の角――" }
+        [
+          { speaker: "まりん", text: "そういえば、あの駄菓子屋さん……" },
+          { speaker: "まりん", text: "【ナントカ商店】……だよね？" }
           ],
+          [
+          { speaker: "まりん", text: "まだ、ちゃんとやってるんだっけ？" },
+          { speaker: "まりん", text: "なんか、店名が上手く思い出せない" }
+          ],
+          [
+          { speaker: "はじめ", text: "ムリに思い出さなくてもよくない？" },
+          { speaker: "まりん", text: "いや、はじめが教えてよ" }
+          ],
+          [
+          { speaker: "はじめ", text: "まりんが苦しんでるの、ここで見てる" },
+          { speaker: "まりん", text: "鬼畜眼鏡！　糖分中毒！" }
+          ],
+          [
+          { speaker: "まりん", text: "たぶん【恒温動物】なんだけどな" },
+          { speaker: "はじめ", text: "範囲、広くない？" }
+          ]
+        ],
 
-        "孔雀商店": [
-          { speaker: "まりん", text: "あそこに【献花】があったけど" },
-          { speaker: "まりん", text: "【誰】か事故に遭ったのかな……？" }
+        "恒温動物": [
+        [
+          { speaker: "まりん", text: "恒温動物だったような……" },
+          { speaker: "はじめ", text: "うんうん" }
           ],
+          [
+          { speaker: "まりん", text: "ドラクエに出てきて……" },
+          { speaker: "はじめ", text: "はいはい" }
+          ],
+          [
+          { speaker: "まりん", text: "村上春樹の小説にも出てた……" },
+          { speaker: "はじめ", text: "ほうほう" }
+          ],
+          [
+          { speaker: "はじめ", text: "それで逆によく思い出せないね" },
+          { speaker: "まりん", text: "喉元まで出かかってるのにー！" }
+          ]
+        ],
+
+        "ねじまき鳥商店": [
+        [
+          { speaker: "まりん", text: "……思い出した！" },
+          { speaker: "まりん", text: "ねじまき鳥商店だよっ！" }
+          ],
+          [
+          { speaker: "まりん", text: "それで……そうそう……" },
+          { speaker: "まりん", text: "お店の角に【献花】があってさ" }
+          ],
+          [
+          { speaker: "まりん", text: "交通事故……なのかな？" },
+          { speaker: "はじめ", text: "まりん、それは……" }
+          ],
+          [
+          { speaker: "まりん", text: "【誰】が亡くなっちゃったんだろ……" },
+          { speaker: "はじめ", text: "……………………" }
+          ],
+          [
+          { speaker: "まりん", text: "お願い、はじめ" },
+          { speaker: "まりん", text: "ちゃんとフルネームで答えて" }
+          ]
+        ],
 
         "まりん": [
+        [
           { speaker: "まりん", text: "ん？　呼んだ？" },
           { speaker: "はじめ", text: "呼んだだけ" }
           ],
+          [
+          { speaker: "まりん", text: "えー、なにそれ？" },
+          { speaker: "まりん", text: "ホントに呼んだだけ？" }
+          ],
+          [
+          { speaker: "はじめ", text: "呼びたかっただけじゃダメなの？" },
+          { speaker: "まりん", text: "なにそれメロい" }
+          ]
+        ],
+
 
         "はじめ": [
+        [
           { speaker: "まりん", text: "【はじめの名前】、書きやすすぎる" },
           { speaker: "はじめ", text: "画数１しかないからね" }
           ],
+          [
+          { speaker: "まりん", text: "色紙にサインするのも楽そうだね" },
+          { speaker: "はじめ", text: "私、有名人になるの？" }
+          ]
+        ],
 
         "一": [
+        [
           { speaker: "まりん", text: "それに比べて【私の名前】の長さ！" },
-          { speaker: "まりん", text: "万里か杏音のどっちかでいいもん" }
+          { speaker: "まりん", text: "テストのとき、毎回大変すぎる" }
           ],
+          [
+          { speaker: "まりん", text: "万里か杏音のどっちかでいいもん" },
+          { speaker: "はじめ", text: "私はカワイイと思うけどな" }
+          ]
+        ],
 
         "万里杏音": [
-          { speaker: "まりん", text: "だから、すっごく嬉しかったの" },
-          { speaker: "まりん", text: "はじめが、あだ名をつけてくれて" }
+        [
+          { speaker: "まりん", text: "すっごく嬉しかったんだよ" },
+          { speaker: "まりん", text: "はじめが、あだ名をつけてくれたとき" }
           ],
+          [
+          { speaker: "はじめ", text: "思えば、私たちが仲良くなったのって" },
+          { speaker: "はじめ", text: "まりんにあだ名をつけてからだよね" }
+          ],
+          [
+          { speaker: "まりん", text: "いやまー、実は【逆】なんだよね" },
+          { speaker: "はじめ", text: "逆って……？" }
+          ],
+          [
+          { speaker: "まりん", text: "はじめと友達になりたかったから" },
+          { speaker: "まりん", text: "あだ名つけてって言ったんだよね" }
+          ],
+          [
+          { speaker: "はじめ", text: "え、そうだったの！？" },
+          { speaker: "まりん", text: "そうなんだよね……あはは" }
+          ]
+        ],
 
         "献花": [
-          { speaker: "まりん", text: "【はじめの名字の花】もあったな" },
+        [
+          { speaker: "まりん", text: "【はじめの名字の花】も置かれてたな" },
           { speaker: "まりん", text: "花言葉は、悲しみに寄り添うだっけ？" }
           ],
+          [
+          { speaker: "はじめ", text: "うん……" },
+          { speaker: "まりん", text: "キレイな花だよね。私は好き" }
+          ]
+        ],
 
         "竜胆": [
+        [
           { speaker: "まりん", text: "【私の名字】も、お花ならよかったな" },
-          { speaker: "まりん", text: "だって、完全に第六天魔王じゃん" }
+          { speaker: "はじめ", text: "だって、完全に第六天魔王じゃん" }
           ],
-
-        "織田": [
-          { speaker: "はじめ", text: "かっこいいけどな。よっ、天下人！" },
+          [
+          { speaker: "はじめ", text: "ちょっ……なに言ってんの？" },
+          { speaker: "まりん", text: "いや、だってホントにそうじゃん" }
+          ],
+          [
+          { speaker: "はじめ", text: "かっこいいと思うよ。よっ、天下人" },
           { speaker: "まりん", text: "ふふふ。くるしゅうない……" }
           ],
+          [
+          { speaker: "まりあ", text: "まあ、子孫とかじゃないらしいけど" },
+          { speaker: "はじめ", text: "あ、そうなんだ" }
+          ]
+        ],
+
+        "織田": [
+        [
+          { speaker: "まりん", text: "色々と言われたもんだよ" },
+          { speaker: "まりん", text: "比叡山、焼き討ちするなとか" }
+          ],
+          [
+          { speaker: "まりん", text: "何回も裏切られてやんのとか" },
+          { speaker: "はじめ", text: "からかい方が歴史的すぎる" }
+          ],
+          [
+          { speaker: "まりん", text: "おかげで信ちゃんに詳しくなったよ" },
+          { speaker: "はじめ", text: "いや、馴れ馴れしい呼び方" }
+          ]
+        ],
 
         "織田万里杏音": [
-          { speaker: "はじめ", text: "まりんは孔雀商店の角で……もう……" },
-          { speaker: "まりん", text: "【私の好きな漫画っぽく言ってよ】" }
+        [
+          { speaker: "はじめ", text: "まりんは……" },
+          { speaker: "はじめ", text: "織田万里杏音は、お店の角で……" }
           ],
+          [
+          { speaker: "はじめ", text: "………………" },
+          { speaker: "まりん", text: "ねえ、はじめ" }
+          ],
+          [
+          { speaker: "まりん", text: "【私の好きな漫画っぽく言ってよ】" },
+          { speaker: "はじめ", text: "え、なにそれ……！？" }
+          ],
+          [
+          { speaker: "まりん", text: "１回、言われてみたかったんだよね" },
+          { speaker: "まりん", text: "今がベストのタイミングじゃん" }
+          ],
+          [
+          { speaker: "はじめ", text: "ふ、ふざけないでよ！" },
+          { speaker: "まりん", text: "ないない。ふざけてない" }
+          ],
+          [
+          { speaker: "まりん", text: "だって、湿っぽいのイヤじゃん" },
+          { speaker: "はじめ", text: "まりん……。わかったよ" }
+          ]
+        ],
 
         "北斗の拳": [
           { speaker: "はじめ", text: "前から好きだよね。何きっかけ？" },
-          { speaker: "まりん", text: "お父さん。電子書籍でも買っちゃった" }
+          { speaker: "まりん", text: "パパ。電子書籍でも買っちゃった" }
           ],
 
         "お前はもう死んでいる": [
-          { speaker: "まりん", text: "ああ、やっぱりそうなんだ" },
-          { speaker: "はじめ", text: "うん、怪我した【子猫】を助けて……" }
+        [
+          { speaker: "まりん", text: "うん、やっぱりそうなんだね" },
+          { speaker: "はじめ", text: "納得してくれた？" }
           ],
-
-        "子猫": [
-          { speaker: "はじめ", text: "私に託して、まりんは【天国】に……" },
-          { speaker: "まりん", text: "だから、はじめは獣医さんを……" }
+          [
+          { speaker: "はじめ", text: "あの日、私から誘ったんだよ" },
+          { speaker: "はじめ", text: "久しぶりに駄菓子屋に行こうって……" }
           ],
-
-        "天国": [
+          [
+          { speaker: "はじめ", text: "そうしたら、道路のちょうど真ん中に" },
+          { speaker: "はじめ", text: "怪我した子猫がうずくまってて……" }
+          ],
+          [
+          { speaker: "まりん", text: "私は子猫を助けて、死んじゃったと" },
+          { speaker: "はじめ", text: "うん、私に子猫を預けて……" }
+          ],
+          [
           { speaker: "まりん", text: "化石を掘る前に、自分が骨になるとは" },
-          { speaker: "はじめ", text: "バカ！　【バカ幽霊】！" }
+          { speaker: "はじめ", text: "バカ！　バカ幽霊！" }
           ],
+          [
+          { speaker: "はじめ", text: "私が駄菓子屋に誘ったから……" },
+          { speaker: "はじめ", text: "まりんは……まりんは……" }
+          ],
+          [
+          { speaker: "まりん", text: "はじめが友達でよかったって" },
+          { speaker: "まりん", text: "私は心の底から、そう思ってるよ" }
+          ],
+          [
+          { speaker: "はじめ", text: "私だって……そう思ってる" },
+          { speaker: "まりん", text: "だったら、笑顔でお別れしようよ" }
+          ],
+          [
+          { speaker: "はじめ", text: "……………………" },
+          { speaker: "はじめ", text: "そうか……そうだよね……" }
+          ],
+          [
+          { speaker: "はじめ", text: "もう死んでるって、言えなかった" },
+          { speaker: "はじめ", text: "毎日、自分をごまかしてた" }
+          ],
+          [
+          { speaker: "はじめ", text: "でも、ちゃんとお別れできないと" },
+          { speaker: "はじめ", text: "まりんも次に進めないよね" }
+          ],
+          [
+          { speaker: "まりん", text: "はじめ……！" },
+          { speaker: "はじめ", text: "わかった。笑顔でお別れしよう" }
+          ],
+          [
+          { speaker: "まりん", text: "ありがとう" },
+          { speaker: "はじめ", text: "うん……" }
+          ],
+          [
+          { speaker: "まりん", text: "じゃあね、はじめ" },
+          { speaker: "まりん", text: "【また会う日まで】" }
+          ]
+        ],
 
-        "バカ幽霊": [
-          { speaker: "まりん", text: "ありがとう、はじめ" },
-          { speaker: "まりん", text: "あなたが【私の友達】でよかった" }
-          ],
-
-        "私の友達": [
-          { speaker: "はじめ", text: "私も、まりんが友達でよかった……" },
-          { speaker: "まりん", text: "はじめ、【また会う日まで】" }
-          ],
 
   "幼なじみ": [
-    { speaker: "はじめ", text: "腐れ縁の間違いじゃない？" },
-    { speaker: "まりん", text: "幼稚園からいっしょじゃん！" }
-  ],
+        [
+          { speaker: "はじめ", text: "腐れ縁の間違いじゃない？" },
+          { speaker: "まりん", text: "私たち幼稚園からいっしょじゃん！" }
+          ],
+          [
+          { speaker: "まりん", text: "ちゅーの練習した仲でしょ！？" },
+          { speaker: "はじめ", text: "……ちょっ！？" }
+          ],
+          [
+          { speaker: "はじめ", text: "そんなの５歳ぐらいの話じゃん！" },
+          { speaker: "はじめ", text: "忘れて！　早く忘れて！" }
+          ],
+          [
+          { speaker: "まりん", text: "いーや、死ぬまで忘れないね" },
+          { speaker: "まりん", text: "老人ホームでも話すね" }
+          ]
+        ],
+
 
   "ドーナッツ": [
     { speaker: "はじめ", text: "まりんもひとつ食べる？" },
@@ -1648,18 +2128,35 @@ const seFail = document.getElementById("seFail");
   ],
 
   "秘孔": [
-    { speaker: "はじめ", text: "やだ。絶対、全身バラバラになる" },
-    { speaker: "まりん", text: "へーきへーき。私、天才だから" }
-  ],
+       [
+          { speaker: "はじめ", text: "やだ。絶対、全身バラバラになる" },
+          { speaker: "まりん", text: "へーきへーき。私、天才だから" }
+          ],
+          [
+          { speaker: "はじめ", text: "そういうやつが一番ヤバい！" },
+          { speaker: "まりん", text: "ふふふ、痛いのは一瞬だから……" }
+          ]
+        ],
 
   "眼鏡": [
-    { speaker: "はじめ", text: "私は永遠の眼鏡派だからね" },
-    { speaker: "まりん", text: "とか言ってコンタクト怖いんでしょ？" }
-  ],
+        [
+          { speaker: "はじめ", text: "私は永遠の眼鏡派だからね" },
+          { speaker: "まりん", text: "本当はコンタクトが怖いんでしょ？" }
+          ],
+          [
+          { speaker: "はじめ", text: "こ、怖くないし！　それに……" },
+          { speaker: "はじめ", text: "まりんが似合うって言ってくれたから" }
+          ],
+          [
+          { speaker: "まりん", text: "ほほーう、流石は私" },
+          { speaker: "まりん", text: "人の自己肯定感を上げるのが上手い！" }
+          ]
+        ],
+
 
   "スリジャヤワルダナプラコッテ": [
     { speaker: "まりん", text: "思い出せてスッキリした？" },
-    { speaker: "はじめ", text: "これで勉強に集中できる" }
+    { speaker: "はじめ", text: "うん、これで勉強に集中できる" }
   ],
 
         "ラムネ": [
@@ -1696,6 +2193,9 @@ const seFail = document.getElementById("seFail");
 
             let lastMessageIndex = -1;
             let currentTrackIndex = -1;
+
+let currentDialoguePages = null;
+let currentDialoguePageIndex = 0;
 
             /* 通常時の音量 */
             let normalVolume = 1;
@@ -1777,7 +2277,6 @@ const seFail = document.getElementById("seFail");
                 });
 
                 /* セリフ枠 */
-                const messageBox = document.getElementById("messageBox");
                 messageBox.style.background = theme.panelBg;
                 messageBox.style.boxShadow = theme.panelShadow;
 
@@ -2013,7 +2512,7 @@ if (theme.isDark) {
                     pauseTimerOnly();
                     openTimerSettings();
                   } else if (timerState.isPaused) {
-                    startTimer();
+                    startTimer(false);
                     closeTimerSettings();
                   }
                 }
@@ -2208,36 +2707,61 @@ function closeCreditPopup() {
             }
 
             /* 会話を表示する */
-            function showDialogue(dialogue) {
-              messageBox.innerHTML = "";
+function showDialogue(dialogue) {
+  currentDialoguePages = Array.isArray(dialogue[0]) ? dialogue : [dialogue];
+  currentDialoguePageIndex = 0;
 
-              dialogue.forEach(item => {
-                  const lineBlock = document.createElement("div");
-                  if (item.speaker.trim() === "") {
-                    lineBlock.className = "dialogLine center";
-                  } else {
-                  lineBlock.className = item.speaker === "まりん"
-                  ? "dialogLine left"
-                  : "dialogLine right";
-                }
-                if (item.speaker) {
-                  const speakerEl = document.createElement("div");
-                  speakerEl.className = "speaker";
-                  speakerEl.innerText = item.speaker;
-                  lineBlock.appendChild(speakerEl);
-                }
+  showDialoguePage();
+}
 
-                const textEl = document.createElement("div");
-                textEl.className = "line";
-                textEl.innerText = "「" + item.text + "」";
+function showDialoguePage() {
+  const dialogue = currentDialoguePages[currentDialoguePageIndex];
 
-                lineBlock.appendChild(textEl);
-                messageBox.appendChild(lineBlock);
-              });
+  messageBox.innerHTML = "";
 
-              /* 新しく作った話者名とセリフにも、現在のテーマ色を反映する */
-              applyTheme(themes[currentTheme]);
-            }
+  dialogue.forEach(item => {
+    const lineBlock = document.createElement("div");
+
+    if (item.speaker.trim() === "") {
+      lineBlock.className = "dialogLine center";
+    } else {
+      lineBlock.className = item.speaker === "まりん"
+        ? "dialogLine left"
+        : "dialogLine right";
+    }
+
+    if (item.speaker) {
+      const speakerEl = document.createElement("div");
+      speakerEl.className = "speaker";
+      speakerEl.innerText = item.speaker;
+      lineBlock.appendChild(speakerEl);
+    }
+
+    const textEl = document.createElement("div");
+    textEl.className = "line";
+    textEl.innerText = "「" + item.text + "」";
+
+    lineBlock.appendChild(textEl);
+    messageBox.appendChild(lineBlock);
+  });
+
+  applyTheme(themes[currentTheme]);
+
+  // ★ここが重要
+const hasMultiplePages = currentDialoguePages.length > 1;
+const hasNextPage = currentDialoguePageIndex < currentDialoguePages.length - 1;
+
+if (!hasMultiplePages) {
+  messageBox.classList.remove("has-next");
+  messageBox.classList.remove("has-end");
+} else if (hasNextPage) {
+  messageBox.classList.add("has-next");
+  messageBox.classList.remove("has-end");
+} else {
+  messageBox.classList.remove("has-next");
+  messageBox.classList.add("has-end");
+}
+}
 
             /* 作業中 / 休憩中の会話を表示する */
             function showRandomMessage() {
@@ -2321,9 +2845,20 @@ if (key === "また会う日まで") {
               } else if (key === "始まりの物語" && isEnding) {
  localStorage.removeItem("endingReached");
 location.reload();
+
+
 } else if (key && keywordDialogues[key]) {
   playSuccessSE();
-  showDialogue(keywordDialogues[key]);
+  showKeywordFoundEffect();
+
+  // ❌ すぐ表示しない
+  // showDialogue(keywordDialogues[key]);
+
+  // ✅ 画像が消え始めるタイミングで表示
+  setTimeout(() => {
+    showDialogue(keywordDialogues[key]);
+  }, 1400);
+
   resetMessageLoop();
 } else {
   playFailSE();
@@ -2379,7 +2914,6 @@ location.reload();
           showDialogue(resumeMessages[randomIndex]);
         }
 
-        const messageBox = document.getElementById("messageBox");
 
         /* ==================================================
         15. 曲関連
@@ -2569,7 +3103,7 @@ function tickTimer() {
 タイマーを開始・再開する。
 終了予定時刻 endTime を作って、tickTimer() を定期実行する。
 */
-function startTimer() {
+function startTimer(showMessage = true) {
   if (timerState.isRunning) return;
 
   timerState.isRunning = true;
@@ -2577,7 +3111,9 @@ function startTimer() {
   timerState.endTime = Date.now() + timerState.remainingTime * 1000;
 
   updateModeDisplay();
+if (showMessage) {
   showRandomMessage();
+}
 
   if (music.paused) {
     if (!music.src) {
@@ -2786,6 +3322,24 @@ if (localStorage.getItem("endingReached") === "true") {
 
   stopVisualizer();
 }
+
+
+function showKeywordFoundEffect() {
+  const effect = document.getElementById("keywordFoundEffect");
+
+  if (!effect) return;
+
+  effect.classList.remove("show");
+
+  void effect.offsetWidth;
+
+  effect.classList.add("show");
+
+  setTimeout(() => {
+    effect.classList.remove("show");
+  }, 2000);
+}
+
     </script>
 </div>
 </body>
