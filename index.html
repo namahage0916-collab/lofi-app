@@ -1,1046 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-
   <head>
-
     <!-- ==================================================
     head：ページの基本設定
     ================================================== -->
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nook: Quiet Talk</title>
-    <meta name="robots" content="noindex">
-
+    <meta name="robots" content="noindex" />
 
     <!-- ==================================================
     CSS：見た目の設定
     ================================================== -->
-  <style>
-  /* ==================================================
-  0. CSS変数
-  ================================================== */
-  :root {
-    --button-bg: rgba(255,255,255,0.30);
-    --button-text: #24313a;
-    --popup-button-bg: rgba(255,255,255,0.30);
-    --space: 8px; 
-  }
 
-  /* ==================================================
-  1. ページ全体
-  ================================================== */
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  body {
-    background: #bfcfda;
-    color: #fff;
-    text-align: center;
-    font-family: sans-serif;
-    padding-top: 50px;
-    margin: 0;
-  }
+  <body>
+    <div id="keywordToastArea"></div>
 
-  h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-  }
-
-  h1 span {
-    font-size: 18px;
-    letter-spacing: 0.15em;
-    opacity: 0.8;
-}
-
-  /* ==================================================
-  2. ボタン・入力系
-  ================================================== */
-
-  button {
-    font-size: 20px;
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 10px;
-    border: none;
-    background: var(--button-bg);
-    color: var(--button-text);
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: filter 0.2s ease, transform 0.1s ease;
-  }
-
-#clearBox button {
-  font-size: 18px;
-  white-space: nowrap;
-  text-align: center;
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  margin: 10px auto;
-}
-
-  button:hover {
-    filter: brightness(0.92);
-  }
-
-  button:active {
-    filter: brightness(0.85);
-  }
-
-  /* 黒テーマのポップアップ内だけ、hover時に明るくする */
-  .dark-popup button:hover {
-    filter: brightness(1.25);
-  }
-
-  /* 黒テーマのポップアップ内だけ、押したときも少し明るくする */
-  .dark-popup button:active {
-    filter: brightness(1.1);
-  }
-
-/* 黒テーマのときだけ、ボタンを白っぽくする */
-body.dark-theme button:hover {
-  background: rgba(255,255,255,0.18) !important;
-}
-
-body.dark-theme button:active {
-  background: rgba(255,255,255,0.24) !important;
-}
-
-  /* タイマー設定ポップアップ内のボタン背景 */
-  #timerSettingBox.dark-popup button {
-    background: var(--popup-button-bg);
-  }
-
-  input[type="range"] {
-    width: 200px;
-  }
-
-  /* キーワード入力欄 */
-  #keywordInput {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 18px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-  }
-
-  /* ==================================================
-  3. レイアウト系
-  ================================================== */
-
-  /* 画像とセリフ枠をまとめたエリア */
-  #imageArea {
-    width: 80%;
-    max-width: 600px;
-    margin: var(--space) auto 0;
-  }
-
-  /* 左パネルと右パネルを並べるエリア */
-  #controlRow {
-    width: 80%;
-    max-width: 600px;
-    margin: var(--space) auto 0;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    align-items: stretch;
-    flex-wrap: wrap;
-  }
-
-  /* テーマボタン・ビジュアライザー・曲名の横並びエリア */
-#buttonRow {
-  margin: var(--space) auto 0;
-  width: 80%;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-#buttonGroup {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-}
-
-#buttonGroup button {
-  flex: 1;
-  margin: 0;
-  font-size: 16px;
-  padding: 12px 0;
-  white-space: nowrap;
-}
-
-#visualizer {
-  flex-shrink: 0;
-}
-
-#trackName {
-  flex-shrink: 0;
-}
-  /* ==================================================
-  4. 画像・セリフ表示
-  ================================================== */
-
-  /* メイン画像 */
-  #mainImage {
-    width: 100%;
-    display: block;
-    border-radius: 10px;
-    opacity: 1;
-    filter: none;
-  }
-
-  /* セリフ枠 */
-  #messageBox {
-    margin-top: var(--space);
-    padding: 12px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 12px;
-    box-sizing: border-box;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  }
-
-#messageBox {
-  position: relative;
-  cursor: default;
-}
-
-#messageBox.has-next {
-  cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-}
-
-#messageBox.has-next:hover {
-  background: rgba(255,255,255,0.18) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
-}
-
-#messageBox.has-next:active {
-  background: rgba(255,255,255,0.24) !important;
-  transform: scale(0.99);
-}
-
-#messageBox.has-next::after {
-  content: "▶";
-  position: absolute;
-  right: 14px;
-  bottom: 8px;
-  font-size: 14px;
-  opacity: 0.75;
-  animation: nextArrowBlink 1.2s ease-in-out infinite;
-}
-
-#messageBox.has-end {
-  cursor: pointer;
-}
-
-#messageBox.has-end::after {
-  content: "↺";
-  position: absolute;
-  right: 14px;
-  bottom: 4px;
-  font-size: 20px;
-  opacity: 0.75;
-  animation: nextArrowBlink 1.2s ease-in-out infinite;
-}
-
-@keyframes nextArrowBlink {
-  0%, 100% {
-    opacity: 0.35;
-    transform: translateX(0);
-  }
-
-  50% {
-    opacity: 0.9;
-    transform: translateX(3px);
-  }
-}
-
-  /* 会話1組ぶん */
-  .dialogLine {
-    margin-bottom: 4px;
-    margin-top: 0;
-  }
-
-  /* 最後の行だけ下余白なし */
-  .dialogLine:last-child {
-    margin-bottom: 0;
-  }
-
-  .dialogLine.center {
-    text-align: center;
-  }
-
-  .dialogLine.left {
-    text-align: left;
-    padding-left: 12px;   /* ← 内側に寄せる */
-  }
-
-  .dialogLine.right {
-    text-align: right;
-    padding-right: 12px;  /* ← 内側に寄せる */
-  }
-
-  /* 話者名 */
-  .speaker {
-    font-size: 18px;
-    color: #b8c0ff;
-    margin-bottom: 0px;
-  }
-
-  /* セリフ本文 */
-  .line {
-    font-size: 20px;
-    color: #f2f2f2;
-    line-height: 1.4;
-    display: inline-block;
-    max-width: 80%;
-    min-height: 32px;
-  }
-
-.dialogLine {
-  animation: dialogueFadeIn 0.8s ease forwards;
-}
-
-@keyframes dialogueFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-  /* 曲名表示 */
-  #trackName {
-    font-size: 16px;
-    margin-top: 0;
-    color: #d6dcff;
-    white-space: nowrap;
-  }
-
-  /* タイトル横の日付表示 */
-  #dateText {
-    font-size: 14px;
-    margin-left: 12px;
-    color: #d6dcff;
-    opacity: 0.7;
-    letter-spacing: 0.5px;
-  }
-
-  /* ==================================================
-  5. パネル表示
-  左パネル / タイマーパネル
-  ================================================== */
-
-  /* パネル共通デザイン */
-  .panel {
-    flex: 1 1 240px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 18px 20px;
-    box-sizing: border-box;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  }
-
-  /* 左右パネルの高さをそろえる */
-  #focusPanel,
-  #timerPanel {
-    height: 146px;
-  }
-
-  /* キーワード入力欄を左パネルの中央に置く */
-  #focusPanel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* パネル見出し */
-  .panelTitle {
-    font-size: 18px;
-    margin-bottom: 12px;
-    color: #d6dcff;
-  }
-
-  /* 「今日の集中」用の大きめ見出し（今は未使用だが残しておく） */
-  .panelTitle.focusTitle {
-    font-size: 24px;
-  }
-
-  /* 今日の集中ゲージ（今は未使用だが残しておく） */
-  #focusMeter {
-    font-size: 32px;
-    letter-spacing: -3px;
-    margin-top: 8px;
-  }
-
-  /* 判定結果表示用（今は未使用だが残しておく） */
-  #keywordResult {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #d6dcff;
-    min-height: 20px;
-  }
-
-  /* タイマーパネル全体 */
-  #timerPanel {
-    cursor: pointer;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-  }
-
-  /* タイマーパネルにマウスを乗せたとき */
-  #timerPanel:hover {
-    background: rgba(255,255,255,0.18) !important;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
-  }
-
-  /* タイマーパネルを押したとき */
-  #timerPanel:active {
-    background: rgba(255,255,255,0.24) !important;
-    transform: scale(0.99);
-  }
-
-  /* モード表示 */
-  #mode {
-    font-size: 24px;
-    margin-top: 0;
-    color: #d6dcff;
-  }
-
-  /* タイマー本体の数字 */
-  #timer {
-    font-size: 48px;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  /* ==================================================
-  6. 通知・ポップアップ
-  ================================================== */
-
-  /* オーバーレイ通知全体 */
-  #noticeOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.72);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  #clearOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.72);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10002;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  #clearBox {
-    background: #2b2b44;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 28px 24px;
-    width: 90%;
-    max-width: 460px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    box-sizing: border-box;
-  }
-
-  #clearText {
-    font-size: 16px;
-    line-height: 1.7;
-    margin-bottom: 20px;
-    color: #ffffff;
-  }
-
-  /* オーバーレイの中の箱 */
-  #noticeBox {
-    background: #2b2b44;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 28px 24px;
-    width: 90%;
-    max-width: 460px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    box-sizing: border-box;
-  }
-
-  /* オーバーレイに出る文字 */
-  #noticeText {
-    font-size: 20px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    white-space: pre-line;
-    color: #ffffff;
-  }
-
-#creditOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 10003;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-#creditBox {
-  background: #2b2b44;
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 28px 24px;
-  width: 90%;
-  max-width: 460px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  box-sizing: border-box;
-}
-
-#creditTitle {
-  font-size: 24px;
-  margin-bottom: 18px;
-}
-
-#creditText {
-  font-size: 15px;
-  line-height: 1.8;
-  text-align: left;
-  margin-bottom: 20px;
-}
-
-#creditBox button {
-  display: block;
-  width: 100%;
-  max-width: 260px;
-  margin: 10px auto 0;
-}
-
-
-  /* ==================================================
-  7. ロック画面
-  ================================================== */
-
-  /* ロック画面全体 */
-  #lockScreen {
-    position: fixed;
-    inset: 0;
-    background: #1e1e2f;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  /* ロック画面の見出し */
-  #lockScreen h2 {
-    margin-bottom: 20px;
-    font-size: 28px;
-  }
-
-  /* パスワード入力欄 */
-  #passwordInput {
-    font-size: 18px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: none;
-    width: 260px;
-    max-width: 80%;
-    box-sizing: border-box;
-  }
-
-  /* パスワードエラー表示 */
-  #errorMessage {
-    color: #ff9b9b;
-    margin-top: 12px;
-    min-height: 24px;
-  }
-
-  /* アプリ本体。最初は非表示 */
-  #appContent {
-    display: none;
-  }
-
-  /* ==================================================
-  8. フェードインアニメーション
-  ================================================== */
-
-  /* フェードイン用クラス */
-  .fade-in {
-    animation: fadeIn 1.5s ease-in;
-  }
-
-  /* 初回表示用（ゆっくり） */
-  .fade-in-long {
-    animation: fadeIn 1.5s ease-in;
-  }
-
-  /* 切り替え用（少し速い） */
-  .fade-in-short {
-    animation: fadeIn 0.6s ease-in;
-  }
-
-  /* フェードインの動き */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* ==================================================
-  9. ビジュアライザー関連
-  ================================================== */
-
-  /* ビジュアライザー本体 */
-  #visualizer {
-    margin-right: 0;
-    display: flex;
-    align-items: flex-end;
-    gap: 4px;
-    height: 30px;
-  }
-
-  /* 棒1本ごとの見た目 */
-  #visualizer span {
-    width: 4px;
-    height: 6px;
-    background: #d6dcff;
-    border-radius: 2px;
-    animation-name: bounce;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-  }
-
-  /* 棒ごとに開始タイミングを少しずらす */
-  #visualizer span:nth-child(1) { animation-delay: 0.2s; }
-  #visualizer span:nth-child(2) { animation-delay: 0s; }
-  #visualizer span:nth-child(3) { animation-delay: 0.5s; }
-  #visualizer span:nth-child(4) { animation-delay: 0.6s; }
-  #visualizer span:nth-child(5) { animation-delay: 0.3s; }
-
-  /* 停止中は棒を動かさない */
-  #visualizer.paused span {
-    animation: none;
-    height: 6px;
-  }
-
-  /* 棒が伸び縮みする通常の動き */
-  @keyframes bounce {
-    0%, 100% { height: 6px; }
-    50% { height: 28px; }
-  }
-
-  /* 音量が下がっているときは小さく動かす */
-  #visualizer.low-volume span {
-    animation-name: bounce-low;
-  }
-
-  /* 通知中の小さい動き */
-  @keyframes bounce-low {
-    0%, 100% { height: 6px; }
-    50% { height: 14px; }
-  }
-
-  /* ==================================================
-  10. タイマー設定ポップアップ
-  ================================================== */
-
-  /* ポップアップ全体 */
-  #timerSettingOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.72);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10001;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  /* ポップアップの箱 */
-  #timerSettingBox {
-    background: #2b2b44;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 28px 24px;
-    width: 90%;
-    max-width: 460px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    box-sizing: border-box;
-  }
-
-  /* ポップアップタイトル */
-  #timerSettingTitle {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  /* 1行ごとの入力エリア */
-  .settingRow {
-    margin-bottom: 16px;
-    text-align: left;
-  }
-
-  /* ラベル */
-  .settingRow label {
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  /* 入力欄 */
-  .settingRow input {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 18px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: none;
-  }
-
-  /* ポップアップ内のボタン群 */
-  .timerSettingButtons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .timerSettingButtons button {
-    flex: 1;
-    text-align: center;
-  }
-
-  /* 作業中・休憩中の操作エリア全体 */
-  #timerActionButtons {
-    width: 100%;
-  }
-
-  /* 作業中・休憩中の3ボタンを並べる専用エリア */
-  .timerActionButtonList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-
-  /* 3ボタン本体 */
-  .timerActionButtonList button {
-    display: block;
-    width: 100%;
-    margin: 0;
-    min-width: 0;
-    box-sizing: border-box;
-    white-space: nowrap;
-  }
-
-  /* 閉じるボタンの行 */
-  .timerCloseRow {
-    width: 100%;
-    margin-top: 14px;
-  }
-
-  /* 閉じるボタン */
-  .timerCloseRow button {
-    display: block;
-    width: 100%;
-    margin: 0;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-
-  /* ==================================================
-  11. スマホ向け調整
-  ================================================== */
-  @media (max-width: 768px) {
-
-    body {
-      padding-top: 20px;
-    }
-
-    h1 {
-      font-size: 22px;
-      margin-bottom: 14px;
-    }
-
-    #dateText {
-      display: inline-block;
-      margin-left: 8px;
-      font-size: 12px;
-    }
-
-    #imageArea,
-    #controlRow,
-    #buttonRow {
-      width: 94%;
-      max-width: none;
-    }
-
-    #imageArea {
-      margin-top: var(--space);
-    }
-
-    #controlRow {
-      margin: var(--space) auto 0;
-    }
-
-    #buttonRow {
-      margin: var(--space) auto 0;
-    }
-
-    #controlRow {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 10px;
-    }
-
-    #mainImage {
-      border-radius: 12px;
-    }
-
-    #messageBox {
-      padding: 8px;
-    }
-
-    /* スマホでは本文を少し小さくし、幅も広げる */
-    .line {
-      font-size: 18px;
-      max-width: 96%;
-    }
-
-    /* スマホでは2つのパネルを無理やり横並びに保つ */
-    #controlRow {
-      width: 94%;
-      max-width: none;
-      margin: var(--space) auto 0;
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 10px;
-    }
-
-    .panel {
-      flex: 1 1 0;
-      min-width: 0;
-      padding: 14px 10px;
-    }
-
-    .panelTitle {
-      font-size: 16px;
-    }
-
-    .panelTitle.focusTitle {
-      font-size: 18px;
-    }
-
-    #focusMeter {
-      font-size: 28px;
-      letter-spacing: -2px;
-    }
-
-    #mode {
-      font-size: 18px;
-    }
-
-    #timer {
-      font-size: 34px;
-    }
-
-    input[type="range"] {
-      width: 100%;
-      max-width: 100%;
-    }
-
-    #trackName {
-      font-size: 15px;
-      opacity: 0.85;
-      letter-spacing: 0.03em;
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    #buttonRow {
-      gap: 10px;
-      align-items: center;
-    }
-
-    #buttonGroup {
-      flex: 1;
-      gap: 6px;
-    }
-
-    #buttonGroup button {
-      font-size: 14px;
-      padding: 10px 6px;
-      margin: 0;
-    }
-
-    #visualizer {
-      margin-right: 0;
-      margin-left: 4px;
-      gap: 3px;
-      height: 24px;
-      flex-shrink: 0;
-    }
-
-    #visualizer span {
-      width: 3px;
-    }
-
-    #focusPanel,
-    #timerPanel {
-      height: 118px;
-    }
-
-    #keywordInput {
-      font-size: 16px;
-      padding: 8px 10px;
-    }
-  }
-
-@media (max-width: 380px) {
-  .line {
-    font-size: 16px;
-  }
-}
-
-
-  /* ==================================================
-  12. エンディング演出
-  ================================================== */
-
-  #endingWhiteout {
-    position: fixed;
-    inset: 0;
-    background: #ffffff;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 20000;
-    transition: opacity 4s ease;
-  }
-
-  #endingWhiteout.active {
-    opacity: 1;
-  }
-
-
-#keywordFoundEffect {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-
-  opacity: 0;
-  z-index: 9999;
-}
-
-#keywordFoundEffect img {
-  max-width: 90%;
-  width: 480px;
-}
-
-#keywordFoundEffect.show {
-  animation: keywordFoundBackground 2.0s ease forwards;
-}
-
-#keywordFoundEffect.show img {
-  animation: keywordFoundImage 2.0s ease forwards;
-}
-
-@keyframes keywordFoundBackground {
-  0% {
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  70% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes keywordFoundImage {
-  0% {
-    transform: scale(0.85) translateY(10px);
-  }
-
-  20% {
-    transform: scale(1.05) translateY(0);
-  }
-
-  70% {
-    transform: scale(1) translateY(0);
-  }
-
-  100% {
-    transform: scale(1) translateY(-18px);
-  }
-}
-
-.headphone {
-  display: inline-block;
-  animation: floatHeadphone 3.2s ease-in-out infinite;
-}
-
-@keyframes floatHeadphone {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-  </style>
-</head>
-
-<body>
-
-
-
-
-  <!-- ==================================================
+    <!-- ==================================================
   HTML
   実際に画面に表示する部品を書く場所
   ・ロック画面
@@ -1049,197 +29,242 @@ body.dark-theme button:active {
   ・アプリ本体
   ================================================== -->
 
-  <div id="endingWhiteout"></div>
+    <div id="endingWhiteout"></div>
 
-<div id="keywordFoundEffect">
-  <img src="keyword.png" alt="Keyword Found">
-</div>
+    <div id="keywordFoundEffect">
+      <img src="keyword.png" alt="Keyword Found" />
+    </div>
 
-
-  <!-- ==================================================
+    <!-- ==================================================
   1. ロック画面
   ================================================== -->
-  <div id="lockScreen">
-    <h2>🔒 パスワードを入力</h2>
-    <input type="password" id="passwordInput" placeholder="Password">
-    <br><br>
-    <button onclick="checkPassword()">入る</button>
-    <div id="errorMessage"></div>
-  </div>
+    <div id="lockScreen">
+      <h2>🔒 パスワードを入力</h2>
+      <input type="password" id="passwordInput" placeholder="Password" />
+      <br /><br />
+      <button onclick="checkPassword()">入る</button>
+      <div id="errorMessage"></div>
+    </div>
 
-  <!-- ==================================================
+    <!-- ==================================================
   2. 作業終了・休憩終了の通知オーバーレイ
   ================================================== -->
-  <div id="noticeOverlay">
-    <div id="noticeBox">
-      <div id="noticeText"></div>
-      <button onclick="closeNoticeAndStartNext()">閉じる</button>
-    </div>
-  </div>
-
-  <div id="clearOverlay">
-    <div id="clearBox">
-      <div id="clearText">
-        二人の物語を見届けていただき<br>ありがとうございました。<br><br>
-        同じ場所にはいられなくても<br>はじめとまりんの時間は<br>確かにここにありました。<br><br><br>
-        物語を最初から読むキーワード<br>【始まりの物語】
+    <div id="noticeOverlay">
+      <div id="noticeBox">
+        <div id="noticeText"></div>
+        <button onclick="closeNoticeAndStartNext()">閉じる</button>
       </div>
-<button onclick="shareOnX()">クリア報告をXにシェアする</button>
-      <button onclick="closeClearPopup()">閉じる</button>
-    </div>
-  </div>
-
-<div id="creditOverlay">
-  <div id="creditBox">
-    <div id="creditTitle">クレジット</div>
-
-    <div id="creditText">
-      <strong>制作</strong><br>
-      兎月竜之介<br>
-      X：@usaginabe<br><br>
-
-      <strong>音楽</strong><br>
-      RYU ITO<br>
-      https://ryu110.com/<br><br>
-
-      <strong>効果音</strong><br>
-      OtoLogic<br>
-      https://otologic.jp/<br><br>
-
-      <strong>イラスト</strong><br>
-      使用イラスト：ここに作者名を記載
     </div>
 
-    <button onclick="closeCreditPopup()">閉じる</button>
-  </div>
-</div>
+    <div id="clearOverlay">
+      <div id="clearBox">
+        <div id="clearText">
+          二人の物語を見届けていただき<br />ありがとうございました。<br /><br />
+          同じ場所にはいられなくても<br />はじめとまりんの時間は<br />確かにここにありました。<br /><br /><br />
+          物語を最初から読むキーワード<br />【始まりの物語】
+        </div>
+        <button onclick="shareOnX()">クリア報告をXにシェアする</button>
+        <button onclick="closeClearPopup()">閉じる</button>
+      </div>
+    </div>
 
-  <!-- ==================================================
+    <div id="creditOverlay">
+      <div id="creditBox">
+        <div id="creditTitle">クレジット</div>
+
+        <div id="creditText">
+          <strong>制作</strong><br />
+          兎月竜之介<br />
+          X：@usaginabe<br /><br />
+
+          <strong>音楽</strong><br />
+          RYU ITO<br />
+          https://ryu110.com/<br /><br />
+
+          <strong>効果音</strong><br />
+          OtoLogic<br />
+          https://otologic.jp/<br /><br />
+
+          <strong>イラスト</strong><br />
+          使用イラスト：ここに作者名を記載
+        </div>
+
+        <button onclick="closeCreditPopup()">閉じる</button>
+      </div>
+    </div>
+
+    <div id="keywordListOverlay">
+      <div id="keywordListBox">
+        <div id="keywordListTitle">キーワードリスト</div>
+
+        <div id="keywordListContent"></div>
+
+        <button onclick="closeKeywordListPopup()">閉じる</button>
+      </div>
+    </div>
+
+    <!-- ==================================================
   3. タイマー設定ポップアップ
   ================================================== -->
-  <div id="timerSettingOverlay">
-    <div id="timerSettingBox">
+    <div id="timerSettingOverlay">
+      <div id="timerSettingBox">
+        <div id="timerSettingTitle">タイマー設定</div>
 
-      <div id="timerSettingTitle">タイマー設定</div>
+        <!-- 停止中に出す：時間設定エリア -->
+        <div id="timerSettingForm">
+          <div class="settingRow">
+            <label for="workMinutesInput">作業時間（分）</label>
+            <input
+              type="number"
+              id="workMinutesInput"
+              min="1"
+              max="180"
+              value="25"
+            />
+          </div>
 
-      <!-- 停止中に出す：時間設定エリア -->
-      <div id="timerSettingForm">
-        <div class="settingRow">
-          <label for="workMinutesInput">作業時間（分）</label>
-          <input type="number" id="workMinutesInput" min="1" max="180" value="25">
+          <div class="settingRow">
+            <label for="breakMinutesInput">休憩時間（分）</label>
+            <input
+              type="number"
+              id="breakMinutesInput"
+              min="1"
+              max="60"
+              value="5"
+            />
+          </div>
+
+          <div class="timerSettingButtons">
+            <button onclick="startFromSettings()">開始</button>
+            <button onclick="closeTimerSettings()">閉じる</button>
+          </div>
         </div>
 
-        <div class="settingRow">
-          <label for="breakMinutesInput">休憩時間（分）</label>
-          <input type="number" id="breakMinutesInput" min="1" max="60" value="5">
-        </div>
+        <!-- 作業中・休憩中・一時停止中に出す：操作エリア -->
+        <div id="timerActionButtons" style="display: none">
+          <div
+            id="timerActionModeText"
+            style="margin-bottom: 10px; font-size: 18px"
+          ></div>
 
-        <div class="timerSettingButtons">
-          <button onclick="startFromSettings()">開始</button>
-          <button onclick="closeTimerSettings()">閉じる</button>
+          <div
+            id="timerActionTime"
+            style="font-size: 42px; font-weight: bold; margin-bottom: 18px"
+          >
+            25:00
+          </div>
+
+          <div class="timerActionButtonList">
+            <button id="pauseResumeButton" onclick="togglePauseFromSettings()">
+              一時停止
+            </button>
+            <button id="finishModeButton" onclick="finishFromSettings()">
+              作業終了
+            </button>
+          </div>
+
+          <div class="timerCloseRow">
+            <button onclick="closeTimerSettings()">閉じる</button>
+          </div>
         </div>
       </div>
-
-      <!-- 作業中・休憩中・一時停止中に出す：操作エリア -->
-      <div id="timerActionButtons" style="display: none;">
-        <div id="timerActionModeText" style="margin-bottom: 10px; font-size: 18px;"></div>
-
-        <div id="timerActionTime" style="font-size: 42px; font-weight: bold; margin-bottom: 18px;">
-          25:00
-        </div>
-
-        <div class="timerActionButtonList">
-          <button id="pauseResumeButton" onclick="togglePauseFromSettings()">一時停止</button>
-          <button id="finishModeButton" onclick="finishFromSettings()">作業終了</button>
-        </div>
-
-        <div class="timerCloseRow">
-          <button onclick="closeTimerSettings()">閉じる</button>
-        </div>
-      </div>
-
     </div>
-  </div>
 
-  <!-- ==================================================
+    <!-- ==================================================
   4. アプリ本体
   ================================================== -->
-  <div id="appContent">
+    <div id="appContent">
+      <!-- タイトルと日付 -->
+      <h1 class="logo">
+        🎧nook: Quiet Talk
+        <span id="dateText"></span>
+      </h1>
 
-    <!-- タイトルと日付 -->
-<h1 class="logo">
-  <span class="headphone">🎧</span>nook: Quiet Talk
-  <span id="dateText"></span>
-</h1>
+      <!-- 画像＋セリフ枠 -->
+      <div id="imageArea">
+        <img
+          src="image_idle.png"
+          id="mainImage"
+          class="fade-in-long"
+          alt="ドット絵イラスト"
+        />
 
-    <!-- 画像＋セリフ枠 -->
-    <div id="imageArea">
-      <img src="image_idle.png" id="mainImage" class="fade-in-long" alt="ドット絵イラスト">
+        <div id="messageBox" class="fade-in">
+          <div id="leftMessageBlock" class="dialogLine left">
+            <div id="leftMessageName" class="speaker">まりん</div>
+            <div id="leftMessage" class="line"></div>
+          </div>
 
-      <div id="messageBox" class="fade-in">
-        <div id="leftMessageBlock" class="dialogLine left">
-          <div id="leftMessageName" class="speaker">まりん</div>
-          <div id="leftMessage" class="line"></div>
-        </div>
-
-        <div id="rightMessageBlock" class="dialogLine right">
-          <div id="rightMessageName" class="speaker">はじめ</div>
-          <div id="rightMessage" class="line"></div>
+          <div id="rightMessageBlock" class="dialogLine right">
+            <div id="rightMessageName" class="speaker">はじめ</div>
+            <div id="rightMessage" class="line"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 音楽本体。srcはJavaScriptで切り替える -->
-    <audio id="music"></audio>
+      <!-- 音楽本体。srcはJavaScriptで切り替える -->
+      <audio id="music"></audio>
 
-    <!-- ベル音 -->
-    <audio id="bell" src="bell.mp3"></audio>
+      <!-- ベル音 -->
+      <audio id="bell" src="bell.mp3"></audio>
+      <audio id="seTransform" src="Onoma-Sparkle13-1(Slow-Short).mp3"></audio>
+      <audio id="seSuccess" src="Multi_Accent05-1(Low).mp3"></audio>
+      <audio id="seFail" src="Short_Accent10-1(Low).mp3"></audio>
 
-<audio id="seSuccess" src="Multi_Accent05-1(Low).mp3"></audio>
-<audio id="seFail" src="Short_Accent10-1(Low).mp3"></audio>
+      <!-- 左パネルと右パネル -->
+      <div id="controlRow">
+        <!-- 左：キーワード入力パネル -->
+        <div id="focusPanel" class="panel fade-in">
+          <input
+            type="text"
+            id="keywordInput"
+            placeholder="キーワード入力"
+            onkeydown="handleKeywordEnter(event)"
+          />
+        </div>
 
-    <!-- 左パネルと右パネル -->
-    <div id="controlRow">
-
-      <!-- 左：キーワード入力パネル -->
-      <div id="focusPanel" class="panel fade-in">
-        <input
-        type="text"
-        id="keywordInput"
-        placeholder="キーワード入力"
-        onkeydown="handleKeywordEnter(event)"
+        <!-- 右：タイマーパネル -->
+        <div
+          id="timerPanel"
+          class="panel fade-in"
+          onclick="openTimerSettings()"
         >
+          <div id="mode">タイマー設定</div>
+          <div id="timer">25:00</div>
+        </div>
       </div>
 
-      <!-- 右：タイマーパネル -->
-      <div id="timerPanel" class="panel fade-in" onclick="openTimerSettings()">
-        <div id="mode">タイマー設定</div>
-        <div id="timer">25:00</div>
+      <!-- テーマボタンとビジュアライザー -->
+      <div id="buttonRow">
+        <div id="buttonGroup">
+          <button
+            id="keywordButton"
+            class="fade-in keyword-button"
+            onclick="showKeywordListPopup()"
+          >
+            🔑
+            <span
+              id="keywordDot"
+              class="keyword-dot"
+              style="display: none"
+            ></span>
+          </button>
+          <button class="fade-in" onclick="toggleTheme()">🎨</button>
+          <button class="fade-in" onclick="showCreditPopup()">ⓘ</button>
+        </div>
+
+        <div id="visualizer" class="paused">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div id="trackName">No track</div>
       </div>
 
-    </div>
-
-    <!-- テーマボタンとビジュアライザー -->
-    <div id="buttonRow">
-
-<div id="buttonGroup">
-  <button class="fade-in" onclick="toggleTheme()">🎨</button>
-  <button class="fade-in" onclick="showCreditPopup()">ⓘ</button>
-</div>
-
-      <div id="visualizer" class="paused">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
-      <div id="trackName">No track</div>
-
-    </div>
-
-<!-- ==================================================
+      <!-- ==================================================
 ⚠ 注意：ここから先を読む人へ
 ==================================================
 
@@ -1260,1609 +285,1168 @@ body.dark-theme button:active {
 
 ================================================== -->
 
-    <!-- ==================================================
+      <!-- ==================================================
     JavaScript
     アプリの動きを書く場所
     ================================================== -->
-    <script>
-      /* ==================================================
-      JavaScript 全体の読み方
-      ==================================================
+      <script>
+        /* ==================================================
+                                                                 JavaScript 全体の読み方
+                                                                 ==================================================
 
-      このスクリプトは、ざっくり次の順番で読めます。
+                                                                 このスクリプトは、ざっくり次の順番で読めます。
 
-      1. 基本設定・HTML要素の取得
-      2. データ定義（音楽・セリフ・キーワード）
-      3. 状態管理（timerState）
-      4. 画面表示（テーマ・タイマー表示・画像・通知）
-      5. 入力処理（キーワード・ボタン）
-      6. 音楽・ビジュアライザー
-      7. タイマー本体
-      8. 初期設定
+                                                                 1. 基本設定・HTML要素の取得
+                                                                 2. データ定義（音楽・セリフ・キーワード）
+                                                                 3. 状態管理（timerState）
+                                                                 4. 画面表示（テーマ・タイマー表示・画像・通知）
+                                                                 5. 入力処理（キーワード・ボタン）
+                                                                 6. 音楽・ビジュアライザー
+                                                                 7. タイマー本体
+                                                                 8. 初期設定
 
-      重要：
-      タイマーの状態は timerState だけを見ます。
-      旧変数（isRunning / isWorkMode など）は使っていません。
-      ================================================== */
+                                                                 重要：
+                                                                 タイマーの状態は timerState だけを見ます。
+                                                                 旧変数（isRunning / isWorkMode など）は使っていません。
+                                                                 ================================================== */
 
-/* ==================================================
-      1. 基本設定
-      ================================================== */
+        /* ==================================================
+                                                                 1. 基本設定
+                                                                 ================================================== */
 
-      /* パスワード機能を使うかどうか
-      true なら使う
-      false なら使わない */
-      const USE_PASSWORD = false;
+        /* パスワード機能を使うかどうか
+                                                                 true なら使う
+                                                                 false なら使わない */
+        const USE_PASSWORD = false;
 
-      /* 初期待機画像 */
-      const IDLE_IMAGE = "image_idle.png";
+        /* 初期待機画像 */
+        const IDLE_IMAGE = "image_idle.png";
 
-      /* 作業中・休憩中の画像ファイル */
-      const WORK_IMAGE = "image.png";
-      const BREAK_IMAGE = "image_break.png";
+        /* 作業中・休憩中の画像ファイル */
+        const WORK_IMAGE = "image.png";
+        const BREAK_IMAGE = "image_break.png";
 
-      /* パスワード */
-      const APP_PASSWORD = "storycat";
+        /* パスワード */
+        const APP_PASSWORD = "storycat";
 
-      const ENDING_IMAGE = "image_ending.png";
-      const ENDING_BGM = "Nothing.mp3";
+        const ENDING_IMAGE = "image_ending.png";
+        const ENDING_BGM = "Nothing.mp3";
 
-      const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
+        const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
 
-      /* ==================================================
-      2. HTML要素を取得
-      HTML側の部品をJavaScriptから使えるようにする
-      ================================================== */
-
-      const music = document.getElementById("music");
-      const bell = document.getElementById("bell");
+        /* ==================================================
+                                                                 2. HTML要素を取得
+                                                                 HTML側の部品をJavaScriptから使えるようにする
+                                                                 ================================================== */
 
-      const modeDisplay = document.getElementById("mode");
-      const timerDisplay = document.getElementById("timer");
-      const trackNameDisplay = document.getElementById("trackName");
+        const music = document.getElementById("music");
+        const bell = document.getElementById("bell");
 
-      const leftMessageBlock = document.getElementById("leftMessageBlock");
-      const rightMessageBlock = document.getElementById("rightMessageBlock");
-
-const messageBox = document.getElementById("messageBox");
-
-messageBox.addEventListener("click", () => {
-  if (!currentDialoguePages) return;
-
-  const hasMultiplePages = currentDialoguePages.length > 1;
-  const hasNextPage = currentDialoguePageIndex < currentDialoguePages.length - 1;
+        const modeDisplay = document.getElementById("mode");
+        const timerDisplay = document.getElementById("timer");
+        const trackNameDisplay = document.getElementById("trackName");
 
-  if (!hasMultiplePages) return;
+        const leftMessageBlock = document.getElementById("leftMessageBlock");
+        const rightMessageBlock = document.getElementById("rightMessageBlock");
+
+        const messageBox = document.getElementById("messageBox");
+
+        messageBox.addEventListener("click", () => {
+          if (!currentDialoguePages) return;
 
-  if (hasNextPage) {
-    currentDialoguePageIndex++;
-  } else {
-    currentDialoguePageIndex = 0;
-  }
+          const hasMultiplePages = currentDialoguePages.length > 1;
+          const hasNextPage =
+            currentDialoguePageIndex < currentDialoguePages.length - 1;
 
-  showDialoguePage();
-});
-
-      const leftMessageName = document.getElementById("leftMessageName");
-      const rightMessageName = document.getElementById("rightMessageName");
-
-      const leftMessage = document.getElementById("leftMessage");
-      const rightMessage = document.getElementById("rightMessage");
-
-      const keywordInput = document.getElementById("keywordInput");
-
-      const passwordInput = document.getElementById("passwordInput");
-      const errorMessage = document.getElementById("errorMessage");
-      const lockScreen = document.getElementById("lockScreen");
-      const appContent = document.getElementById("appContent");
-
-      const mainImage = document.getElementById("mainImage");
-
-      const noticeOverlay = document.getElementById("noticeOverlay");
-      const noticeText = document.getElementById("noticeText");
-
-      const visualizer = document.getElementById("visualizer");
-
-      const endingWhiteout = document.getElementById("endingWhiteout");
-
-      const clearOverlay = document.getElementById("clearOverlay");
-      const clearBox = document.getElementById("clearBox");
-      const clearText = document.getElementById("clearText");
-
-const creditOverlay = document.getElementById("creditOverlay");
-const creditBox = document.getElementById("creditBox");
-const creditText = document.getElementById("creditText");
-const creditTitle = document.getElementById("creditTitle");
-
-const seSuccess = document.getElementById("seSuccess");
-const seFail = document.getElementById("seFail");
-
-      /* ==================================================
-      3. 初期時間設定
-      ================================================== */
-
-      /* 時間設定（秒） */
-      let WORK_TIME = 25 * 60;
-      let BREAK_TIME = 5 * 60;
-
-      /* ==================================================
-      4. 音楽データ
-      ================================================== */
-
-      /* 再生する曲一覧 */
-      const tracks = [
-        "Epoch.mp3",
-        "Barely.mp3",
-        "Notion.mp3",
-        "Reflection.mp3",
-        "Woozy.mp3",
-        "Cozy.mp3",
-        "Fake.mp3",
-        "Yawn.mp3",
-        "Glass.mp3",
-        "Walk.mp3"
-      ];
-
-      /* ==================================================
-      5. セリフデータ
-      ================================================== */
-
-      /* サイトを開いた直後専用のセリフ */
-const idleMessages = [
-    [
-      { speaker: "まりん", text: "のんびりやりますか" },
-      { speaker: "はじめ", text: "集中、集中……" }
-    ],
-
-    [
-      { speaker: "まりん", text: "チルい曲でも流す？" },
-      { speaker: "はじめ", text: "じゃ、いつもので" }
-    ],
-
-    [
-      { speaker: "はじめ", text: "じゃ、始めようか" },
-      { speaker: "まりん", text: "はいはーい" }
-    ],
-
-    [
-      { speaker: "はじめ", text: "また、あくびしてる" },
-      { speaker: "まりん", text: "お昼寝日和すぎて……" }
-    ],
-];
-
-
-
-      /* 作業時のセリフ一覧 */
-      const messages = [
-        [
-          { speaker: "まりん", text: "この曲、【勉強】がはかどりますな" },
-          { speaker: "はじめ", text: "完全に同意" }
-          ],
-
-        [
-          { speaker: "まりん", text: "あ！　新しい論文、出てるじゃん" },
-          { speaker: "はじめ", text: "なにそのコンビニの新商品的なノリ" }
-          ],
-
-        [
-          { speaker: "まりん", text: "最近、猫に好かれるんだよね" },
-          { speaker: "はじめ", text: "おいしそうな匂いしてるんじゃない？" }
-          ],
-
-        [
-          { speaker: "まりん", text: "ブロントサウルスよ、よみがえれ……" },
-          { speaker: "はじめ", text: "どういう復活の儀式？" }
-          ],
-
-        [
-          { speaker: "まりん", text: "三葉虫、飼いたくない？" },
-          { speaker: "はじめ", text: "いや、キモいって……" }
-          ],
-
-        [
-          { speaker: "まりん", text: "落とし物、交番に届けてきた" },
-          { speaker: "はじめ", text: "偉いじゃん" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "なに読んでるの？" },
-          { speaker: "まりん", text: "【北斗の拳】。ゆーあーしょっく" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "糖分が足りなくなってきた……" },
-          { speaker: "まりん", text: "【ラムネ】食べる？" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "ホント毎日、私の部屋に来るよね" },
-          { speaker: "まりん", text: "だって、居心地いいじゃん" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "まりん、ちょっと黙って" },
-          { speaker: "まりん", text: "【幼なじみ】に冷たくない……？" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "肩こってきた……" },
-          { speaker: "まりん", text: "【秘孔】、突いてあげようか？" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "【スリランカの首都】ってなんだっけ" },
-          { speaker: "まりん", text: "待って、今スマホで調べる" }
-          ]
-      ];
-
-      /* 作業終了した時専用のセリフ一覧 */
-      const workEndMessages = [
-        [
-          { speaker: "まりん", text: "おつ～♪　どうだった？" },
-          { speaker: "はじめ", text: "かなり集中できたかな" }
-          ],
-
-        [
-          { speaker: "まりん", text: "ほめて進ぜよう。よしよし" },
-          { speaker: "はじめ", text: "ちょ、うざ……" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "さてと……休憩、休憩" },
-          { speaker: "まりん", text: "インターバルは大事よね" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "ふぅ……ひと息つこう" },
-          { speaker: "まりん", text: "私も休憩しよっと！" }
-          ]
-      ];
-
-      /* 休憩中専用のセリフ一覧 */
-      const breakMessages = [
-
-        [
-          { speaker: "まりん", text: "なぜ人は【勉強】するのか……" },
-          { speaker: "はじめ", text: "え、急に哲学者になった？" }
-          ],
-
-        [
-          { speaker: "まりん", text: "また【ドーナッツ】食べてる" },
-          { speaker: "はじめ", text: "糖分は必要だから。仕方ないから" }
-          ],
-
-        [
-          { speaker: "まりん", text: "【学級委員長】にも休息は必要でしょ" },
-          { speaker: "はじめ", text: "どこかのギャルが騒がしいから……" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "ホントに好きだよね、【コーヒー】" },
-          { speaker: "まりん", text: "この苦みが私を高めてくれる……" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "【眼鏡】にゴミが……" },
-          { speaker: "まりん", text: "コンタクトにしないの？" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "ストレッチしようかな" },
-          { speaker: "まりん", text: "はじめ、身体カチカチだもんね" }
-          ]
-      ];
-
-      /* 作業再開した時専用のセリフ一覧 */
-      const resumeMessages = [
-
-        [
-          { speaker: "まりん", text: "じゃ、再開しますか" },
-          { speaker: "はじめ", text: "もうひと頑張りっと……" }
-          ],
-
-        [
-          { speaker: "まりん", text: "おっ、やる気あるね" },
-          { speaker: "はじめ", text: "うん、ちゃんと休憩できた" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "まりん、休憩終わり" },
-          { speaker: "まりん", text: "ほいほ～い！" }
-          ],
-
-        [
-          { speaker: "はじめ", text: "タイマー再スタートね" },
-          { speaker: "まりん", text: "保ってくれ、私の集中力！" }
-          ]
-      ];
-
-      /* キーワードの別名リスト
-      入力欄にこれらの語が入ると、対応する本来のキーワードに変換される */
-      const keywordMap = {
-        "コーヒー": ["コーヒー", "こーひー", "珈琲"],
-        "宿題": ["宿題", "しゅくだい"],
-        "勉強": ["勉強", "べんきょう"],
-        "高校受験": ["高校受験", "こうこうじゅけん"],
-        "期末試験": ["期末試験", "きまつしけん","期末テスト","きまつてすと"],
-        "全国模試": ["全国模試", "ぜんこくもし"],
-        "色々": ["色々", "いろいろ"],
-        "獣医": ["獣医", "じゅうい", "獣医師", "じゅういし", "獣医学", "じゅういがく", "獣医学部", "じゅういがくぶ"],
-        "古生物学者": ["古生物学者", "こせいぶつがくしゃ", "古生物学", "こせいぶつがく", "古生物学部", "こせいぶつがくぶ"],
-        "化石": ["化石", "かせき"],
-        "ハーバード大学": ["ハーバード大学", "はーばーどだいがく", "ハーバード", "はーばーど"],
-        "さくらんぼ餅": ["さくらんぼ餅", "さくらんぼもち", "サクランボ餅", "サクランボもち"],
-        "駄菓子屋さん": ["駄菓子屋さん","だがしやさん", "駄菓子屋", "だがしや"],
-        "恒温動物": ["恒温動物", "こうおんどうぶつ"],
-        "ねじまき鳥商店": ["ねじまき鳥商店","ネジまきどり商店", "ねじまきどり商店", "ねじまきどりしょうてん", "ねじまき鳥", "ネジまきどり", "ねじまきどり"],
-        "まりん": ["まりん"],
-        "はじめ": ["はじめ"],
-        "一": ["一"],
-        "万里杏音": ["万里杏音","まりあんぬ"],
-        "献花": ["献花", "けんか"],
-        "竜胆": ["竜胆", "りんどう", "竜胆一", "りんどうはじめ"],
-        "織田": ["織田", "おだ", "織田信長", "おだのぶなが", "信長", "のぶなが"],
-        "織田万里杏音": ["織田万里杏音", "おだまりあんぬ","織田まりあんぬ","おだ万里杏音"],
-        "北斗の拳": ["北斗の拳", "北斗のけん", "ほくとの拳", "ほくとのけん"],
-        "お前はもう死んでいる": [
-          "お前はもう死んでいる", "お前はもうしんでいる",
-          "おまえはもう死んでいる", "おまえはもうしんでいる",
-          "まりんはもう死んでいる", "まりんはもうしんでいる",
-          "織田万里杏音はもう死んでいる", "織田万里杏音はもうしんでいる",
-          "おだまりあんぬはもう死んでいる", "おだまりあんぬはもうしんでいる",
-          "万里杏音はもう死んでいる", "万里杏音はもうしんでいる",
-          "まりあんぬはもう死んでいる", "まりあんぬはもうしんでいる"
-          ],
-        "また会う日まで": [
-          "また会う日まで",
-          "また会うひまで",
-          "またあう日まで",
-          "またあうひまで",
-          "また逢う日まで",
-          "また逢うひまで",
-          "またあうひまで"
-          ],
-        "お別れは笑顔で": ["お別れは笑顔で", "おわかれは笑顔で", "お別れはえがおで", "おわかれはえがおで"],
-        "始まりの物語": ["始まりの物語", "始まりのものがたり", "はじまりの物語" ,"はじまりのものがたり"],
-  "幼なじみ": ["幼なじみ", "おさななじみ"],
-  "ドーナッツ": [
-    "ドーナッツ",
-    "どーなっつ",
-    "ドーナツ",
-    "どーなつ"
-  ],
-  "学級委員長": [
-    "学級委員長",
-    "がっきゅういいんちょう",
-    "委員長",
-    "いいんちょう"
-  ],
-  "秘孔": ["秘孔", "ひこう"],
-  "眼鏡": ["眼鏡" ,"めがね"],
-  "スリジャヤワルダナプラコッテ": [
-    "スリジャヤワルダナプラコッテ",
-    "すりじゃやわるだなぷらこって",
-    "スリ・ジャヤワルダナプラ・コッテ",
-    "すり・じゃやわるだなぷら・こって"
-  ],
-
-        "ラムネ": ["ラムネ", "らむね", "ラムネ菓子", "ラムネがし", "らむね菓子"]
-      };
-
-      /* キーワード対応セリフ一覧 */
-      const keywordDialogues = {
-
-        "コーヒー": [
-        [
-          { speaker: "まりん", text: "はじめはコーヒー苦手だもんね" },
-          { speaker: "はじめ", text: "さ、砂糖入れたらいけるし……" }
-          ],
-          [
-          { speaker: "まりん", text: "じゃあ、私のひとくち飲む？" },
-          { speaker: "はじめ", text: "…………（苦々しい顔）" }
-          ]
-        ],
-
-        "宿題": [
-          { speaker: "まりん", text: "やば。宿題やるの忘れてた" },
-          { speaker: "はじめ", text: "今やりなよ、今……" }
-          ],
-
-
-        "勉強": [
-        [
-          { speaker: "まりん", text: "最近、勉強頑張ってるよね" },
-          { speaker: "はじめ", text: "うーん……まあね" }
-          ],
-          [
-          { speaker: "まりん", text: "こんなの【高校受験】以来じゃない？" },
-          { speaker: "まりん", text: "【期末試験】は、まだ先でしょ？" }
-          ]
-        ],
-
-        "高校受験": [
-        [
-          { speaker: "まりん", text: "私と同じ高校入るのに頑張ったもんね" },
-          { speaker: "はじめ", text: "う、うるさいなぁ……" }
-          ],
-          [
-          { speaker: "はじめ", text: "まりんの偏差値が高すぎるせいで……" },
-          { speaker: "はじめ", text: "ホントあの時、苦労したんだから" }
-          ],
-          [
-          { speaker: "まりん", text: "そんなに私といっしょがよかった？" },
-          { speaker: "はじめ", text: "あー、もう。勉強に戻るよ！" }
-          ]
-        ],
-
-        "期末試験": [
-        [
-          { speaker: "はじめ", text: "週末に【全国模試】があるからさ" },
-          { speaker: "まりん", text: "模試？　やけに力を入れてるじゃん" }
-          ],
-          [
-          { speaker: "はじめ", text: "うちらだって、もう高２だよ" },
-          { speaker: "はじめ", text: "そろそろ将来を考える時期でしょ" }
-          ],
-          [
-          { speaker: "まりん", text: "はじめ、立派になったな" },
-          { speaker: "はじめ", text: "誰視点のコメント？" }
-          ]
-        ],
-
-        "全国模試": [
-        [
-          { speaker: "まりん", text: "じゃあ、いい大学狙うことにしたんだ" },
-          { speaker: "はじめ", text: "まあね……" }
-          ],
-          [
-          { speaker: "まりん", text: "大学は高望みしないって言ってたのに" },
-          { speaker: "まりん", text: "それって、どういう心境の変化？" }
-          ],
-          [
-          { speaker: "はじめ", text: "【色々】あって、私にも夢できたから" },
-          { speaker: "まりん", text: "【はじめの夢】？　教えて教えて！" }
-          ]
-        ],
-
-        "色々": [
-        [
-          { speaker: "はじめ", text: "怪我した動物を引き取ったの" },
-          { speaker: "はじめ", text: "で、自分でも治してあげられたらって" }
-          ],
-          [
-          { speaker: "まりん", text: "やさしーっ！　控えめに言って神！" },
-          { speaker: "はじめ", text: "どこどこ？　見たい見たい！" }
-          ],
-          [
-          { speaker: "はじめ", text: "…………そのうちにね" },
-          { speaker: "まりん", text: "っしゃー！　吸いまくるぞー！" }
-          ]
-        ],
-
-        "獣医": [
-        [
-          { speaker: "まりん", text: "動物のお医者さん、ステキじゃん！" },
-          { speaker: "はじめ", text: "でもヤバいよ、獣医学部は……" }
-          ],
-          [
-          { speaker: "まりん", text: "まあ、医学部よりは簡単なはずだから" },
-          { speaker: "はじめ", text: "私にとっては同じだって！" }
-          ],
-          [
-          { speaker: "はじめ", text: "まあ、【まりんの夢】に比べたら" },
-          { speaker: "はじめ", text: "現実的な夢ではあるけど……" }
-          ]
-        ],
-
-        "古生物学者": [
-        [
-          { speaker: "はじめ", text: "【化石】を掘りに留学するんだよね？" },
-          { speaker: "まりん", text: "そのために生きてますから" }
-          ],
-          [
-          { speaker: "はじめ", text: "去年の夏なんて、びっくりだよ" },
-          { speaker: "はじめ", text: "ずっとカナダに行ってたでしょ？" }
-          ],
-          [
-          { speaker: "まりん", text: "私の論文を読んでくれた偉い人が" },
-          { speaker: "まりん", text: "発掘調査の見学をさせてくれてさー" }
-          ],
-          [
-          { speaker: "はじめ", text: "行動力ありすぎ" },
-          { speaker: "まりん", text: "狙うは【古生物学の最高学府】だぜ！" }
-          ]
-        ],
-
-        "化石": [
-        [
-          { speaker: "はじめ", text: "あのときは驚いたよね" },
-          { speaker: "はじめ", text: "まりんが恐竜の頭蓋骨を発見したの" }
-          ],
-          [
-          { speaker: "まりん", text: "野外学習で、はぐれちゃったときね" },
-          { speaker: "まりん", text: "あれで完全にハマっちゃったな" }
-          ],
-          [
-          { speaker: "まりん", text: "あぁ、化石……。" },
-          { speaker: "まりん", text: "どうして、そんなに美しいの？" }
-          ],
-          [
-          { speaker: "まりん", text: "時を超えたロマン、ラララ～♪" },
-          { speaker: "はじめ", text: "ミュージカル始まっちゃったよ" }
-          ]
-        ],
-
-        "ハーバード大学": [
-        [
-          { speaker: "まりん", text: "ハバ大、いいよね……" },
-          { speaker: "はじめ", text: "そんな略し方、初めて聞いた" }
-          ],
-          [
-          { speaker: "はじめ", text: "………………" },
-          { speaker: "まりん", text: "どうしたの？　悲しげな顔して" }
-          ],
-          [
-          { speaker: "まりん", text: "わかった。さびしいんでしょ？" },
-          { speaker: "まりん", text: "私と離ればなれになっちゃうから" }
-          ],
-          [
-          { speaker: "はじめ", text: "ち、違うって……！" },
-          { speaker: "まりん", text: "私の前では強がらなくてよろしい" }
-          ],
-          [
-          { speaker: "まりん", text: "そんなはじめに、はいこれ" },
-          { speaker: "まりん", text: "【さくらんぼ餅】で元気出して♪" }
-          ]
-        ],
-
-        "さくらんぼ餅": [
-        [
-          { speaker: "はじめ", text: "それ……！" },
-          { speaker: "まりん", text: "え、どしたの？" }
-          ],
-          [
-          { speaker: "はじめ", text: "あ、いや……その……" },
-          { speaker: "はじめ", text: "遠足のおやつによく買ったなって……" }
-          ],
-          [
-          { speaker: "まりん", text: "そうそう。【駄菓子屋さん】でね" },
-          { speaker: "まりん", text: "……あ、そうだ" }
-          ],
-          [
-          { speaker: "まりん", text: "あ～んしてあげようか？" },
-          { speaker: "はじめ", text: "いや、自分で食べるけど……" }
-          ]
-        ],
-
-        "駄菓子屋さん": [
-        [
-          { speaker: "まりん", text: "そういえば、あの駄菓子屋さん……" },
-          { speaker: "まりん", text: "【ナントカ商店】……だよね？" }
-          ],
-          [
-          { speaker: "まりん", text: "まだ、ちゃんとやってるんだっけ？" },
-          { speaker: "まりん", text: "なんか、店名が上手く思い出せない" }
-          ],
-          [
-          { speaker: "はじめ", text: "ムリに思い出さなくてもよくない？" },
-          { speaker: "まりん", text: "いや、はじめが教えてよ" }
-          ],
-          [
-          { speaker: "はじめ", text: "まりんが苦しんでるの、ここで見てる" },
-          { speaker: "まりん", text: "鬼畜眼鏡！　糖分中毒！" }
-          ],
-          [
-          { speaker: "まりん", text: "たぶん【恒温動物】なんだけどな" },
-          { speaker: "はじめ", text: "範囲、広くない？" }
-          ]
-        ],
-
-        "恒温動物": [
-        [
-          { speaker: "まりん", text: "恒温動物だったような……" },
-          { speaker: "はじめ", text: "うんうん" }
-          ],
-          [
-          { speaker: "まりん", text: "ドラクエに出てきて……" },
-          { speaker: "はじめ", text: "はいはい" }
-          ],
-          [
-          { speaker: "まりん", text: "村上春樹の小説にも出てた……" },
-          { speaker: "はじめ", text: "ほうほう" }
-          ],
-          [
-          { speaker: "はじめ", text: "それで逆によく思い出せないね" },
-          { speaker: "まりん", text: "喉元まで出かかってるのにー！" }
-          ]
-        ],
-
-        "ねじまき鳥商店": [
-        [
-          { speaker: "まりん", text: "……思い出した！" },
-          { speaker: "まりん", text: "ねじまき鳥商店だよっ！" }
-          ],
-          [
-          { speaker: "まりん", text: "それで……そうそう……" },
-          { speaker: "まりん", text: "お店の角に【献花】があってさ" }
-          ],
-          [
-          { speaker: "まりん", text: "交通事故……なのかな？" },
-          { speaker: "はじめ", text: "まりん、それは……" }
-          ],
-          [
-          { speaker: "まりん", text: "【誰】が亡くなっちゃったんだろ……" },
-          { speaker: "はじめ", text: "……………………" }
-          ],
-          [
-          { speaker: "まりん", text: "お願い、はじめ" },
-          { speaker: "まりん", text: "ちゃんとフルネームで答えて" }
-          ]
-        ],
-
-        "まりん": [
-        [
-          { speaker: "まりん", text: "ん？　呼んだ？" },
-          { speaker: "はじめ", text: "呼んだだけ" }
-          ],
-          [
-          { speaker: "まりん", text: "えー、なにそれ？" },
-          { speaker: "まりん", text: "ホントに呼んだだけ？" }
-          ],
-          [
-          { speaker: "はじめ", text: "呼びたかっただけじゃダメなの？" },
-          { speaker: "まりん", text: "なにそれメロい" }
-          ]
-        ],
-
-
-        "はじめ": [
-        [
-          { speaker: "まりん", text: "【はじめの名前】、書きやすすぎる" },
-          { speaker: "はじめ", text: "画数１しかないからね" }
-          ],
-          [
-          { speaker: "まりん", text: "色紙にサインするのも楽そうだね" },
-          { speaker: "はじめ", text: "私、有名人になるの？" }
-          ]
-        ],
-
-        "一": [
-        [
-          { speaker: "まりん", text: "それに比べて【私の名前】の長さ！" },
-          { speaker: "まりん", text: "テストのとき、毎回大変すぎる" }
-          ],
-          [
-          { speaker: "まりん", text: "万里か杏音のどっちかでいいもん" },
-          { speaker: "はじめ", text: "私はカワイイと思うけどな" }
-          ]
-        ],
-
-        "万里杏音": [
-        [
-          { speaker: "まりん", text: "すっごく嬉しかったんだよ" },
-          { speaker: "まりん", text: "はじめが、あだ名をつけてくれたとき" }
-          ],
-          [
-          { speaker: "はじめ", text: "思えば、私たちが仲良くなったのって" },
-          { speaker: "はじめ", text: "まりんにあだ名をつけてからだよね" }
-          ],
-          [
-          { speaker: "まりん", text: "いやまー、実は【逆】なんだよね" },
-          { speaker: "はじめ", text: "逆って……？" }
-          ],
-          [
-          { speaker: "まりん", text: "はじめと友達になりたかったから" },
-          { speaker: "まりん", text: "あだ名つけてって言ったんだよね" }
-          ],
-          [
-          { speaker: "はじめ", text: "え、そうだったの！？" },
-          { speaker: "まりん", text: "そうなんだよね……あはは" }
-          ]
-        ],
-
-        "献花": [
-        [
-          { speaker: "まりん", text: "【はじめの名字の花】も置かれてたな" },
-          { speaker: "まりん", text: "花言葉は、悲しみに寄り添うだっけ？" }
-          ],
-          [
-          { speaker: "はじめ", text: "うん……" },
-          { speaker: "まりん", text: "キレイな花だよね。私は好き" }
-          ]
-        ],
-
-        "竜胆": [
-        [
-          { speaker: "まりん", text: "【私の名字】も、お花ならよかったな" },
-          { speaker: "はじめ", text: "だって、完全に第六天魔王じゃん" }
-          ],
-          [
-          { speaker: "はじめ", text: "ちょっ……なに言ってんの？" },
-          { speaker: "まりん", text: "いや、だってホントにそうじゃん" }
-          ],
-          [
-          { speaker: "はじめ", text: "かっこいいと思うよ。よっ、天下人" },
-          { speaker: "まりん", text: "ふふふ。くるしゅうない……" }
-          ],
-          [
-          { speaker: "まりあ", text: "まあ、子孫とかじゃないらしいけど" },
-          { speaker: "はじめ", text: "あ、そうなんだ" }
-          ]
-        ],
-
-        "織田": [
-        [
-          { speaker: "まりん", text: "色々と言われたもんだよ" },
-          { speaker: "まりん", text: "比叡山、焼き討ちするなとか" }
-          ],
-          [
-          { speaker: "まりん", text: "何回も裏切られてやんのとか" },
-          { speaker: "はじめ", text: "からかい方が歴史的すぎる" }
-          ],
-          [
-          { speaker: "まりん", text: "おかげで信ちゃんに詳しくなったよ" },
-          { speaker: "はじめ", text: "いや、馴れ馴れしい呼び方" }
-          ]
-        ],
-
-        "織田万里杏音": [
-        [
-          { speaker: "はじめ", text: "まりんは……" },
-          { speaker: "はじめ", text: "織田万里杏音は、お店の角で……" }
-          ],
-          [
-          { speaker: "はじめ", text: "………………" },
-          { speaker: "まりん", text: "ねえ、はじめ" }
-          ],
-          [
-          { speaker: "まりん", text: "【私の好きな漫画っぽく言ってよ】" },
-          { speaker: "はじめ", text: "え、なにそれ……！？" }
-          ],
-          [
-          { speaker: "まりん", text: "１回、言われてみたかったんだよね" },
-          { speaker: "まりん", text: "今がベストのタイミングじゃん" }
-          ],
-          [
-          { speaker: "はじめ", text: "ふ、ふざけないでよ！" },
-          { speaker: "まりん", text: "ないない。ふざけてない" }
-          ],
-          [
-          { speaker: "まりん", text: "だって、湿っぽいのイヤじゃん" },
-          { speaker: "はじめ", text: "まりん……。わかったよ" }
-          ]
-        ],
-
-        "北斗の拳": [
-          { speaker: "はじめ", text: "前から好きだよね。何きっかけ？" },
-          { speaker: "まりん", text: "パパ。電子書籍でも買っちゃった" }
-          ],
-
-        "お前はもう死んでいる": [
-        [
-          { speaker: "まりん", text: "うん、やっぱりそうなんだね" },
-          { speaker: "はじめ", text: "納得してくれた？" }
-          ],
-          [
-          { speaker: "はじめ", text: "あの日、私から誘ったんだよ" },
-          { speaker: "はじめ", text: "久しぶりに駄菓子屋に行こうって……" }
-          ],
-          [
-          { speaker: "はじめ", text: "そうしたら、道路のちょうど真ん中に" },
-          { speaker: "はじめ", text: "怪我した子猫がうずくまってて……" }
-          ],
-          [
-          { speaker: "まりん", text: "私は子猫を助けて、死んじゃったと" },
-          { speaker: "はじめ", text: "うん、私に子猫を預けて……" }
-          ],
-          [
-          { speaker: "まりん", text: "化石を掘る前に、自分が骨になるとは" },
-          { speaker: "はじめ", text: "バカ！　バカ幽霊！" }
-          ],
-          [
-          { speaker: "はじめ", text: "私が駄菓子屋に誘ったから……" },
-          { speaker: "はじめ", text: "まりんは……まりんは……" }
-          ],
-          [
-          { speaker: "まりん", text: "はじめが友達でよかったって" },
-          { speaker: "まりん", text: "私は心の底から、そう思ってるよ" }
-          ],
-          [
-          { speaker: "はじめ", text: "私だって……そう思ってる" },
-          { speaker: "まりん", text: "だったら、笑顔でお別れしようよ" }
-          ],
-          [
-          { speaker: "はじめ", text: "……………………" },
-          { speaker: "はじめ", text: "そうか……そうだよね……" }
-          ],
-          [
-          { speaker: "はじめ", text: "もう死んでるって、言えなかった" },
-          { speaker: "はじめ", text: "毎日、自分をごまかしてた" }
-          ],
-          [
-          { speaker: "はじめ", text: "でも、ちゃんとお別れできないと" },
-          { speaker: "はじめ", text: "まりんも次に進めないよね" }
-          ],
-          [
-          { speaker: "まりん", text: "はじめ……！" },
-          { speaker: "はじめ", text: "わかった。笑顔でお別れしよう" }
-          ],
-          [
-          { speaker: "まりん", text: "ありがとう" },
-          { speaker: "はじめ", text: "うん……" }
-          ],
-          [
-          { speaker: "まりん", text: "じゃあね、はじめ" },
-          { speaker: "まりん", text: "【また会う日まで】" }
-          ]
-        ],
-
-
-  "幼なじみ": [
-        [
-          { speaker: "はじめ", text: "腐れ縁の間違いじゃない？" },
-          { speaker: "まりん", text: "私たち幼稚園からいっしょじゃん！" }
-          ],
-          [
-          { speaker: "まりん", text: "ちゅーの練習した仲でしょ！？" },
-          { speaker: "はじめ", text: "……ちょっ！？" }
-          ],
-          [
-          { speaker: "はじめ", text: "そんなの５歳ぐらいの話じゃん！" },
-          { speaker: "はじめ", text: "忘れて！　早く忘れて！" }
-          ],
-          [
-          { speaker: "まりん", text: "いーや、死ぬまで忘れないね" },
-          { speaker: "まりん", text: "老人ホームでも話すね" }
-          ]
-        ],
-
-
-  "ドーナッツ": [
-    { speaker: "はじめ", text: "まりんもひとつ食べる？" },
-    { speaker: "まりん", text: "最近おなか空かないんだよね" }
-  ],
-
-  "学級委員長": [
-    { speaker: "はじめ", text: "まあ、内申点稼ぎだけどね" },
-    { speaker: "まりん", text: "よくやるよー。私には絶対ムリ！" }
-  ],
-
-  "秘孔": [
-       [
-          { speaker: "はじめ", text: "やだ。絶対、全身バラバラになる" },
-          { speaker: "まりん", text: "へーきへーき。私、天才だから" }
-          ],
-          [
-          { speaker: "はじめ", text: "そういうやつが一番ヤバい！" },
-          { speaker: "まりん", text: "ふふふ、痛いのは一瞬だから……" }
-          ]
-        ],
-
-  "眼鏡": [
-        [
-          { speaker: "はじめ", text: "私は永遠の眼鏡派だからね" },
-          { speaker: "まりん", text: "本当はコンタクトが怖いんでしょ？" }
-          ],
-          [
-          { speaker: "はじめ", text: "こ、怖くないし！　それに……" },
-          { speaker: "はじめ", text: "まりんが似合うって言ってくれたから" }
-          ],
-          [
-          { speaker: "まりん", text: "ほほーう、流石は私" },
-          { speaker: "まりん", text: "人の自己肯定感を上げるのが上手い！" }
-          ]
-        ],
-
-
-  "スリジャヤワルダナプラコッテ": [
-    { speaker: "まりん", text: "思い出せてスッキリした？" },
-    { speaker: "はじめ", text: "うん、これで勉強に集中できる" }
-  ],
-
-        "ラムネ": [
-          { speaker: "はじめ", text: "ブドウ糖が疲れた脳に効く……" },
-          { speaker: "まりん", text: "キマってんねえ" }
-          ]
-      };
-
-      const endingDialogue = [
-        { speaker: "　", text: "クリアおめでとうございます" },
-        { speaker: "　", text: "最後のキーワード【お別れは笑顔で】" }
-      ];
-
-            /* ==================================================
-            6. 状態管理用の変数
-            アプリが今どういう状態かを記録する
-            ================================================== */
-
-      /*
-      タイマーの現在状態をまとめた中心データ。
-      ここを見ると、今アプリが「待機中 / 作業中 / 休憩中 / 一時停止中」のどれか分かる。
-      */
-
- let timerState = {
-  mode: "idle", // idle / work / break
-  isRunning: false,
-  isPaused: false,
-  remainingTime: WORK_TIME,
-  endTime: null
-};
-
-            let intervalId = null;
-            let messageIntervalId = null;
-
-            let lastMessageIndex = -1;
-            let currentTrackIndex = -1;
-
-let currentDialoguePages = null;
-let currentDialoguePageIndex = 0;
-
-            /* 通常時の音量 */
-            let normalVolume = 1;
-
-            /* 今日の作業セッション数 */
-            let sessionCount = 0;
-            const SESSION_GOAL = 5;
-
-            /* 前回のセリフ番号を記録しておく */
-            let lastWorkEndIndex = -1;
-            let lastResumeMessageIndex = -1;
-
-            let isEnding = false;
-
-            /* ==================================================
-            7. テーマ設定
-            ================================================== */
-
-            let currentTheme = 0;
-
-            const themes = [
-              {
-                bodyBg: "#ddd2c3",
-                bodyText: "#2f2a24",
-                panelBg: "rgba(255,255,255,0.35)",
-                panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-                subText: "#5a4f45",
-                mainText: "#2f2a24",
-                visualizerColor: "#8b6f5a",
-                popupBg: "#e8dfd2",
-                isDark: false
-              },
-              {
-                bodyBg: "#bfcfda",
-                bodyText: "#24313a",
-                panelBg: "rgba(255,255,255,0.30)",
-                panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-                subText: "#4a5c68",
-                mainText: "#24313a",
-                visualizerColor: "#4a90e2",
-                popupBg: "#cfdbe6",
-                isDark: false
-              },
-              {
-                bodyBg: "#bfcfc3",
-                bodyText: "#2f3d33",
-                panelBg: "rgba(255,255,255,0.30)",
-                panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-                subText: "#567a63",
-                mainText: "#2f3d33",
-                visualizerColor: "#5f9e7a",
-                popupBg: "#cfe0d5",
-                isDark: false
-              },
-              {
-                bodyBg: "#2b2f3a",
-                bodyText: "#f2f2f2",
-                panelBg: "rgba(255,255,255,0.08)",
-                panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
-                subText: "#d6dcff",
-                mainText: "#f2f2f2",
-                visualizerColor: "#d6dcff",
-                popupBg: "#2b2f3a",
-                isDark: true
+          if (!hasMultiplePages) return;
+
+          if (hasNextPage) {
+            currentDialoguePageIndex++;
+          } else {
+            currentDialoguePageIndex = 0;
+          }
+
+          showDialoguePage();
+        });
+
+        const leftMessageName = document.getElementById("leftMessageName");
+        const rightMessageName = document.getElementById("rightMessageName");
+
+        const leftMessage = document.getElementById("leftMessage");
+        const rightMessage = document.getElementById("rightMessage");
+
+        const keywordInput = document.getElementById("keywordInput");
+
+        const passwordInput = document.getElementById("passwordInput");
+        const errorMessage = document.getElementById("errorMessage");
+        const lockScreen = document.getElementById("lockScreen");
+        const appContent = document.getElementById("appContent");
+
+        const mainImage = document.getElementById("mainImage");
+
+        const noticeOverlay = document.getElementById("noticeOverlay");
+        const noticeText = document.getElementById("noticeText");
+
+        const visualizer = document.getElementById("visualizer");
+
+        const endingWhiteout = document.getElementById("endingWhiteout");
+
+        const clearOverlay = document.getElementById("clearOverlay");
+        const clearBox = document.getElementById("clearBox");
+        const clearText = document.getElementById("clearText");
+
+        const creditOverlay = document.getElementById("creditOverlay");
+        const creditBox = document.getElementById("creditBox");
+        const creditText = document.getElementById("creditText");
+        const creditTitle = document.getElementById("creditTitle");
+
+        const seSuccess = document.getElementById("seSuccess");
+        const seFail = document.getElementById("seFail");
+        const seTransform = document.getElementById("seTransform");
+
+        /* ==================================================
+                                                                 3. 初期時間設定
+                                                                 ================================================== */
+
+        /* 時間設定（秒） */
+        let WORK_TIME = 25 * 60;
+        let BREAK_TIME = 5 * 60;
+
+        /* ==================================================
+                                                                 4. 音楽データ
+                                                                 ================================================== */
+
+        /* 再生する曲一覧 */
+        const tracks = [
+          "Epoch.mp3",
+          "Barely.mp3",
+          "Notion.mp3",
+          "Reflection.mp3",
+          "Woozy.mp3",
+          "Cozy.mp3",
+          "Fake.mp3",
+          "Yawn.mp3",
+          "Glass.mp3",
+          "Walk.mp3",
+        ];
+
+        /* ==================================================
+           5. セリフデータ
+           ================================================== */
+      </script>
+
+      <script src="js/dialogue-keyword.js"></script>
+
+      <script>
+        /* ==================================================
+  　　　　　6. 状態管理
+  　　　　　================================================== */
+
+        let timerState = {
+          mode: "idle", // idle / work / break
+          isRunning: false,
+          isPaused: false,
+          remainingTime: WORK_TIME,
+          endTime: null,
+        };
+
+        let intervalId = null;
+        let messageIntervalId = null;
+
+        const WORK_MESSAGE_INTERVAL = 5 * 60 * 1000;
+
+        let lastMessageIndex = -1;
+        let currentTrackIndex = -1;
+
+        let currentDialoguePages = null;
+        let currentDialoguePageIndex = 0;
+        let acquiredKeywords = [];
+        let unlockedDialogueKeywords = [];
+        let transformedQuizAnswers = [];
+
+        function getAllKeywords() {
+          const breakKeywords = breakMessages.map((item) => item.keyword);
+          const storyInputKeywords = Object.keys(keywordDialogues);
+          const storyFoundKeywords = Object.values(keywordDialogues)
+            .flatMap((data) => data.keywordsByPage || [])
+            .flat();
+
+          return [
+            ...new Set([
+              ...breakKeywords,
+              ...storyInputKeywords,
+              ...storyFoundKeywords,
+            ]),
+          ];
+        }
+
+        function updateKeywordDot() {
+          const hasUnusedAcquiredKeyword = acquiredKeywords.some(
+            (keyword) =>
+              keywordDialogues[keyword] &&
+              !unlockedDialogueKeywords.includes(keyword),
+          );
+
+          const dot = document.getElementById("keywordDot");
+
+          if (hasUnusedAcquiredKeyword) {
+            dot.style.display = "block";
+          } else {
+            dot.style.display = "none";
+          }
+        }
+
+        /* 通常時の音量 */
+        let normalVolume = 1;
+
+        /* 今日の作業セッション数 */
+        let sessionCount = 0;
+        const SESSION_GOAL = 5;
+
+        /* 前回のセリフ番号を記録しておく */
+        let lastWorkEndIndex = -1;
+        let lastResumeMessageIndex = -1;
+
+        let isEnding = false;
+
+        /* ==================================================
+                                                                7. テーマ設定
+                                                                ================================================== */
+
+        let currentTheme = 0;
+
+        const themes = [
+          {
+            bodyBg: "#ddd2c3",
+            bodyText: "#2f2a24",
+            panelBg: "rgba(255,255,255,0.35)",
+            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+            subText: "#5a4f45",
+            mainText: "#2f2a24",
+            visualizerColor: "#8b6f5a",
+            popupBg: "#e8dfd2",
+            isDark: false,
+          },
+          {
+            bodyBg: "#bfcfda",
+            bodyText: "#24313a",
+            panelBg: "rgba(255,255,255,0.30)",
+            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+            subText: "#4a5c68",
+            mainText: "#24313a",
+            visualizerColor: "#4a90e2",
+            popupBg: "#cfdbe6",
+            isDark: false,
+          },
+          {
+            bodyBg: "#bfcfc3",
+            bodyText: "#2f3d33",
+            panelBg: "rgba(255,255,255,0.30)",
+            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
+            subText: "#567a63",
+            mainText: "#2f3d33",
+            visualizerColor: "#5f9e7a",
+            popupBg: "#cfe0d5",
+            isDark: false,
+          },
+          {
+            bodyBg: "#2b2f3a",
+            bodyText: "#f2f2f2",
+            panelBg: "rgba(255,255,255,0.08)",
+            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
+            subText: "#d6dcff",
+            mainText: "#f2f2f2",
+            visualizerColor: "#d6dcff",
+            popupBg: "#2b2f3a",
+            isDark: true,
+          },
+        ];
+
+        /* テーマの色を画面全体に反映する */
+        function applyTheme(theme) {
+          /* ページ全体 */
+          document.body.style.background = theme.bodyBg;
+          document.body.style.color = theme.bodyText;
+
+          /* パネル類 */
+          document.querySelectorAll(".panel").forEach((panel) => {
+            panel.style.background = theme.panelBg;
+            panel.style.boxShadow = theme.panelShadow;
+          });
+
+          /* セリフ枠 */
+          messageBox.style.background = theme.panelBg;
+          messageBox.style.boxShadow = theme.panelShadow;
+
+          /* 補助色テキスト */
+          document.querySelectorAll(".speaker").forEach((el) => {
+            el.style.color = theme.subText;
+          });
+
+          document.getElementById("trackName").style.color = theme.subText;
+          document.getElementById("dateText").style.color = theme.subText;
+          document.getElementById("mode").style.color = theme.subText;
+
+          document.querySelectorAll(".panelTitle").forEach((el) => {
+            el.style.color = theme.subText;
+          });
+
+          /* 本文色 */
+          document.querySelectorAll(".line").forEach((el) => {
+            el.style.color = theme.mainText;
+          });
+
+          document.getElementById("timer").style.color = theme.mainText;
+
+          /* ビジュアライザー */
+          document.querySelectorAll("#visualizer span").forEach((bar) => {
+            bar.style.background = theme.visualizerColor;
+          });
+
+          /* タイマー設定ポップアップ */
+          const timerBox = document.getElementById("timerSettingBox");
+          if (timerBox) {
+            timerBox.style.background = theme.popupBg;
+            timerBox.style.boxShadow = theme.panelShadow;
+            timerBox.style.color = theme.mainText;
+
+            if (theme.isDark) {
+              document.documentElement.style.setProperty(
+                "--popup-button-bg",
+                "#3a4050",
+              );
+              timerBox.classList.add("dark-popup");
+            } else {
+              document.documentElement.style.setProperty(
+                "--popup-button-bg",
+                theme.panelBg,
+              );
+              timerBox.classList.remove("dark-popup");
+            }
+          }
+
+          /* 通知ポップアップ */
+          const noticeBox = document.getElementById("noticeBox");
+          const noticeTextEl = document.getElementById("noticeText");
+
+          if (noticeBox) {
+            noticeBox.style.background = theme.popupBg;
+            noticeBox.style.boxShadow = theme.panelShadow;
+            noticeBox.style.color = theme.mainText;
+          }
+
+          if (noticeTextEl) {
+            noticeTextEl.style.color = theme.mainText;
+          }
+
+          /* クリアポップアップ */
+          if (clearBox) {
+            clearBox.style.background = theme.popupBg;
+            clearBox.style.boxShadow = theme.panelShadow;
+            clearBox.style.color = theme.mainText;
+          }
+
+          if (clearText) {
+            clearText.style.color = theme.mainText;
+          }
+
+          /* クレジットポップアップ */
+          if (creditBox) {
+            creditBox.style.background = theme.popupBg;
+            creditBox.style.boxShadow = theme.panelShadow;
+            creditBox.style.color = theme.mainText;
+
+            if (theme.isDark) {
+              creditBox.classList.add("dark-popup");
+            } else {
+              creditBox.classList.remove("dark-popup");
+            }
+          }
+
+          if (creditText) {
+            creditText.style.color = theme.mainText;
+          }
+
+          if (creditTitle) {
+            creditTitle.style.color = theme.mainText;
+          }
+
+          /* キーワードリストポップアップ */
+          const keywordListBox = document.getElementById("keywordListBox");
+          const keywordListTitle = document.getElementById("keywordListTitle");
+          const keywordListContent =
+            document.getElementById("keywordListContent");
+
+          if (keywordListBox) {
+            keywordListBox.style.background = theme.popupBg;
+            keywordListBox.style.boxShadow = theme.panelShadow;
+            keywordListBox.style.color = theme.mainText;
+
+            if (theme.isDark) {
+              keywordListBox.classList.add("dark-popup");
+            } else {
+              keywordListBox.classList.remove("dark-popup");
+            }
+          }
+
+          if (keywordListTitle) {
+            keywordListTitle.style.color = theme.mainText;
+          }
+
+          if (keywordListContent) {
+            keywordListContent.style.color = theme.mainText;
+          }
+
+          /* CSS変数側にもボタン色を反映 */
+          document.documentElement.style.setProperty(
+            "--button-bg",
+            theme.panelBg,
+          );
+          document.documentElement.style.setProperty(
+            "--button-text",
+            theme.mainText,
+          );
+
+          if (theme.isDark) {
+            document.body.classList.add("dark-theme");
+          } else {
+            document.body.classList.remove("dark-theme");
+          }
+        }
+
+        /* テーマを次の番号へ切り替える */
+        function toggleTheme() {
+          currentTheme = (currentTheme + 1) % themes.length;
+          applyTheme(themes[currentTheme]);
+        }
+
+        /* ==================================================
+                                                                        8. パスワード関連
+                                                                        ================================================== */
+
+        /* パスワードチェック */
+        function checkPassword() {
+          const input = passwordInput.value;
+
+          if (input === APP_PASSWORD) {
+            lockScreen.style.display = "none";
+            appContent.style.display = "block";
+            errorMessage.innerText = "";
+          } else {
+            errorMessage.innerText = "パスワードが違います";
+            passwordInput.value = "";
+            passwordInput.focus();
+          }
+        }
+
+        /* Enterキーでもパスワードを送信できるようにする */
+        passwordInput.addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            checkPassword();
+          }
+        });
+
+        /* パスワード機能をオフにしている場合は、
+                                                                        最初からロック画面を消してアプリ本体を出す */
+        if (!USE_PASSWORD) {
+          lockScreen.style.display = "none";
+          appContent.style.display = "block";
+        }
+
+        /* ==================================================
+                                                                        9. 音量・ベル関連
+                                                                        ================================================== */
+
+        /* 音量調整 */
+        function setVolume(v) {
+          const volume = Number(v);
+
+          /* 通常音量として記録 */
+          normalVolume = volume;
+
+          music.volume = volume;
+          bell.volume = Math.min(volume, 0.6);
+        }
+
+        /* ベル音を鳴らす */
+        function playBell() {
+          bell.currentTime = 0;
+          bell.play().catch(() => {});
+        }
+
+        /* 成功効果音を鳴らす */
+        function playSuccessSE() {
+          seSuccess.currentTime = 0;
+          seSuccess.play().catch(() => {});
+        }
+
+        /* 失敗効果音を鳴らす */
+        function playFailSE() {
+          seFail.currentTime = 0;
+          seFail.play().catch(() => {});
+        }
+
+        function playTransformSE() {
+          seTransform.currentTime = 0;
+          seTransform.play().catch(() => {});
+        }
+
+        /* ==================================================
+                                                                        10. タイマー設定ポップアップ関連
+                                                                        ================================================== */
+
+        /* タイマー設定ポップアップを開く */
+        function openTimerSettings() {
+          if (isEnding) return;
+
+          const overlay = document.getElementById("timerSettingOverlay");
+          const title = document.getElementById("timerSettingTitle");
+          const form = document.getElementById("timerSettingForm");
+          const actions = document.getElementById("timerActionButtons");
+          const actionModeText = document.getElementById("timerActionModeText");
+          const pauseResumeButton =
+            document.getElementById("pauseResumeButton");
+          const finishModeButton = document.getElementById("finishModeButton");
+
+          overlay.style.display = "flex";
+
+          /* 動作中または一時停止中なら、操作ボタンを表示 */
+          if (timerState.isRunning || timerState.isPaused) {
+            title.style.display = "none";
+            form.style.display = "none";
+            actions.style.display = "block";
+
+            if (timerState.mode === "work") {
+              actionModeText.innerText = timerState.isRunning
+                ? "今は作業時間中です"
+                : "作業時間を一時停止中です";
+            } else {
+              actionModeText.innerText = timerState.isRunning
+                ? "今は休憩時間中です"
+                : "休憩時間を一時停止中です";
+            }
+
+            updateTimerActionTime();
+            pauseResumeButton.innerText = timerState.isRunning
+              ? "一時停止"
+              : "再開";
+            finishModeButton.innerText =
+              timerState.mode === "work" ? "作業終了" : "休憩終了";
+          } else {
+            title.style.display = "block";
+            form.style.display = "block";
+            actions.style.display = "none";
+          }
+        }
+
+        /* ポップアップ側のタイマー表示を更新する */
+        function updateTimerActionTime() {
+          const actionTime = document.getElementById("timerActionTime");
+          if (actionTime) {
+            actionTime.innerText = timerDisplay.innerText;
+          }
+        }
+
+        /* タイマー設定ポップアップを閉じる */
+        function closeTimerSettings() {
+          document.getElementById("timerSettingOverlay").style.display = "none";
+          document.getElementById("timerSettingTitle").style.display = "block";
+        }
+
+        /* ポップアップから一時停止 / 再開を切り替える */
+        function togglePauseFromSettings() {
+          if (timerState.isRunning) {
+            pauseTimerOnly();
+            openTimerSettings();
+          } else if (timerState.isPaused) {
+            startTimer(false);
+            closeTimerSettings();
+          }
+        }
+
+        /* ポップアップからリセットする
+                                                                  ※今は呼び出しボタンがないが、残してある関数 */
+        function resetFromSettings() {
+          resetTimer();
+          closeTimerSettings();
+        }
+
+        /* ポップアップから作業終了 / 休憩終了する */
+        function finishFromSettings() {
+          skipCurrentMode();
+          closeTimerSettings();
+        }
+
+        /* 設定した時間でタイマーを開始する */
+        function startFromSettings() {
+          const workMinutes = Number(
+            document.getElementById("workMinutesInput").value,
+          );
+          const breakMinutes = Number(
+            document.getElementById("breakMinutesInput").value,
+          );
+
+          if (workMinutes < 1 || breakMinutes < 1) return;
+
+          /* 入力値を秒に変換 */
+          WORK_TIME = workMinutes * 60;
+          BREAK_TIME = breakMinutes * 60;
+
+          /* 作業モードの初期状態に戻す */
+          timerState.mode = "work";
+          timerState.isRunning = false;
+          timerState.isPaused = false;
+          timerState.remainingTime = WORK_TIME;
+          timerState.endTime = null;
+
+          /* 表示を先に更新 */
+          updateModeDisplay();
+          updateTimerDisplay();
+          updateModeImage();
+
+          /* ポップアップを閉じて開始 */
+          closeTimerSettings();
+          startTimer();
+        }
+
+        /* ==================================================
+           11. タイマー表示関連
+           ================================================== */
+      </script>
+
+      <script src="js/timer.js"></script>
+
+      <script>
+        /* タイマー表示を更新する。
+           timerState.remainingTime（秒）を「分:秒」の形に直して画面へ反映する。 */
+        function updateTimerDisplay() {
+          const min = Math.floor(timerState.remainingTime / 60);
+          const sec = timerState.remainingTime % 60;
+
+          timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
+
+          updateTimerActionTime();
+        }
+
+        /* 作業時間 / 休憩時間 の表示を切り替える */
+        function updateModeDisplay() {
+          if (timerState.mode === "idle") {
+            modeDisplay.innerText = "タイマー設定";
+          } else if (timerState.mode === "work") {
+            modeDisplay.innerText = "作業時間";
+          } else if (timerState.mode === "break") {
+            modeDisplay.innerText = "休憩時間";
+          }
+        }
+
+        /* ==================================================
+           12. 画像切り替え関連
+           ================================================== */
+
+        /* 今のモードに合わせて画像を切り替える */
+        function updateModeImage() {
+          /* 両方のフェードクラスを一旦外す */
+          mainImage.classList.remove("fade-in-long");
+          mainImage.classList.remove("fade-in-short");
+
+          /* 画像を切り替え */
+          mainImage.src = timerState.mode === "work" ? WORK_IMAGE : BREAK_IMAGE;
+
+          /* 強制再描画 */
+          void mainImage.offsetWidth;
+
+          /* 切り替え時は短いフェード */
+          mainImage.classList.add("fade-in-short");
+        }
+
+        /* ==================================================
+                                                                13. 通知表示関連
+                                                                ================================================== */
+
+        /* オーバーレイ通知を表示する */
+        function showNotice(text) {
+          noticeText.innerText = text;
+          noticeOverlay.style.display = "flex";
+        }
+
+        /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
+        /*
+                                                    作業終了・休憩終了の通知を閉じたあと、次のタイマーを開始する。
+                                                    ここで音量とビジュアライザーも元に戻す。
+                                                    */
+        function closeNoticeAndStartNext() {
+          noticeOverlay.style.display = "none";
+
+          timerState.isPaused = false;
+
+          music.volume = normalVolume;
+          visualizer.classList.remove("low-volume");
+
+          updateModeImage();
+
+          startVisualizer();
+
+          if (timerState.mode === "break") {
+            showRandomMessage();
+            startTimer(false);
+          } else {
+            startTimer(false);
+            showRandomResumeMessage();
+          }
+        }
+
+        /* 通知はオーバーレイだけ使う */
+        function notifyModeChange(text) {
+          showNotice(text);
+          playBell();
+
+          /* 音楽の音量を下げる */
+          music.volume = normalVolume * 0.2;
+
+          /* ビジュアライザーを小さくする */
+          visualizer.classList.add("low-volume");
+        }
+
+        function showClearPopup() {
+          clearOverlay.style.display = "flex";
+          keywordInput.blur();
+        }
+
+        function closeClearPopup() {
+          clearOverlay.style.display = "none";
+        }
+
+        function shareOnX() {
+          const text =
+            "◤　百合ポモドーロタイマー　◢\n━━━━━━━━━━━━━━━\nはじめとまりんの物語を見届けた\n━━━━━━━━━━━━━━━\n\n止まっていた時間が動き出し、\n二人は新たな一歩を踏み出した。\n\n#nookQuietTalk\n";
+          const url = "https://namahage0916-collab.github.io/lofi-app/";
+
+          const shareUrl =
+            "https://twitter.com/intent/tweet?text=" +
+            encodeURIComponent(text) +
+            "&url=" +
+            encodeURIComponent(url);
+
+          window.open(shareUrl, "_blank");
+        }
+
+        function showCreditPopup() {
+          creditOverlay.style.display = "flex";
+          keywordInput.blur();
+        }
+
+        function closeCreditPopup() {
+          creditOverlay.style.display = "none";
+        }
+
+        function showKeywordListPopup() {
+          const overlay = document.getElementById("keywordListOverlay");
+          overlay.style.display = "flex";
+
+          updateKeywordListContent(true);
+
+          keywordInput.blur();
+        }
+
+        function closeKeywordListPopup() {
+          const overlay = document.getElementById("keywordListOverlay");
+          overlay.style.display = "none";
+        }
+
+        function selectKeywordFromList(keyword) {
+          closeKeywordListPopup();
+
+          keywordInput.value = keyword;
+          keywordInput.focus();
+          keywordInput.setSelectionRange(keyword.length, keyword.length);
+        }
+
+        function updateKeywordListContent(withAnimation = false) {
+          const content = document.getElementById("keywordListContent");
+
+          content.innerHTML = keywordListItems
+            .map((item) => {
+              if (item.type === "quiz") {
+                const question = item.question;
+                const answer = item.answer;
+
+                const hasQuestion = acquiredKeywords.includes(question);
+                const hasAnswer = acquiredKeywords.includes(answer);
+
+                if (!hasQuestion && !hasAnswer) {
+                  return `<div class="keywordListItem">🔒？？？</div>`;
+                }
+
+                if (hasQuestion && !hasAnswer) {
+                  return `<div class="keywordListItem">🔒 ${question}</div>`;
+                }
+
+                if (withAnimation && !transformedQuizAnswers.includes(answer)) {
+                  return `
+          <div class="keywordListItem" data-answer="${answer}">
+            🔒 ${question}
+          </div>
+        `;
+                }
+
+                return `<div class="keywordListItem">🔑 ${answer}</div>`;
               }
-            ];
 
-            /* テーマの色を画面全体に反映する */
-            function applyTheme(theme) {
+              if (item.type === "normal") {
+                const keyword = item.keyword;
 
-              /* ページ全体 */
-              document.body.style.background = theme.bodyBg;
-              document.body.style.color = theme.bodyText;
+                if (acquiredKeywords.includes(keyword)) {
+                  const isActive = unlockedDialogueKeywords.includes(keyword);
+                  const extraClass = isActive ? " active" : "";
 
-              /* パネル類 */
-              document.querySelectorAll(".panel").forEach(panel => {
-                  panel.style.background = theme.panelBg;
-                  panel.style.boxShadow = theme.panelShadow;
+                  return `
+          <div class="keywordListItem">🔑
+            <span class="keywordItemText unlocked${extraClass}" onclick="selectKeywordFromList('${keyword}')">
+              ${keyword}
+            </span>
+          </div>
+        `;
+                }
+
+                return `<div class="keywordListItem">🔑？？？</div>`;
+              }
+
+              return "";
+            })
+            .join("");
+
+          if (withAnimation) {
+            const targets = document.querySelectorAll(
+              ".keywordListItem[data-answer]",
+            );
+
+            if (targets.length > 0) {
+              const lastTarget = targets[targets.length - 1];
+
+              lastTarget.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+
+              // リストを開いてから、少し間を置いて変化開始
+              setTimeout(() => {
+                playTransformSE();
+              }, 650);
+
+              setTimeout(() => {
+                targets.forEach((el) => {
+                  el.classList.add("transforming");
                 });
 
-                /* セリフ枠 */
-                messageBox.style.background = theme.panelBg;
-                messageBox.style.boxShadow = theme.panelShadow;
+                setTimeout(() => {
+                  targets.forEach((el) => {
+                    const answer = el.dataset.answer;
 
-                /* 補助色テキスト */
-                document.querySelectorAll(".speaker").forEach(el => {
-                    el.style.color = theme.subText;
+                    el.innerHTML = `🔑 ${answer}`;
+
+                    if (!transformedQuizAnswers.includes(answer)) {
+                      transformedQuizAnswers.push(answer);
+                    }
+
+                    el.classList.remove("transforming");
+                    el.classList.add("keyword-appear");
                   });
+                }, 1000);
+              }, 700);
+            }
+          }
+        }
 
-                  document.getElementById("trackName").style.color = theme.subText;
-                  document.getElementById("dateText").style.color = theme.subText;
-                  document.getElementById("mode").style.color = theme.subText;
+        /* ==================================================
+                                                                14. セリフ・キーワード関連
+                                                                ================================================== */
 
-                  document.querySelectorAll(".panelTitle").forEach(el => {
-                      el.style.color = theme.subText;
-                    });
+        /* 前回と同じ会話を避けながらランダムに選ぶ */
+        function getRandomMessageIndex() {
+          const currentMessages =
+            timerState.mode === "work" ? messages : breakMessages;
 
-                    /* 本文色 */
-                    document.querySelectorAll(".line").forEach(el => {
-                        el.style.color = theme.mainText;
-                      });
+          if (currentMessages.length === 1) return 0;
 
-                      document.getElementById("timer").style.color = theme.mainText;
+          let randomIndex;
+          do {
+            randomIndex = Math.floor(Math.random() * currentMessages.length);
+          } while (randomIndex === lastMessageIndex);
 
-                      /* ビジュアライザー */
-                      document.querySelectorAll("#visualizer span").forEach(bar => {
-                          bar.style.background = theme.visualizerColor;
-                        });
+          return randomIndex;
+        }
 
-                        /* タイマー設定ポップアップ */
-                        const timerBox = document.getElementById("timerSettingBox");
-                        if (timerBox) {
-                          timerBox.style.background = theme.popupBg;
-                          timerBox.style.boxShadow = theme.panelShadow;
-                          timerBox.style.color = theme.mainText;
+        function getRandomBreakMessageIndex() {
+          const candidates = breakMessages
+            .map((message, index) => ({ message, index }))
+            .filter((item) => !acquiredKeywords.includes(item.message.keyword));
 
-                          if (theme.isDark) {
-                            document.documentElement.style.setProperty("--popup-button-bg", "#3a4050");
-                            timerBox.classList.add("dark-popup");
-                          } else {
-                          document.documentElement.style.setProperty("--popup-button-bg", theme.panelBg);
-                          timerBox.classList.remove("dark-popup");
-                        }
-                      }
+          if (candidates.length === 0) {
+            return Math.floor(Math.random() * breakMessages.length);
+          }
 
-                      /* 通知ポップアップ */
-                      const noticeBox = document.getElementById("noticeBox");
-                      const noticeTextEl = document.getElementById("noticeText");
+          const randomCandidate =
+            candidates[Math.floor(Math.random() * candidates.length)];
 
-                      if (noticeBox) {
-                        noticeBox.style.background = theme.popupBg;
-                        noticeBox.style.boxShadow = theme.panelShadow;
-                        noticeBox.style.color = theme.mainText;
-                      }
+          return randomCandidate.index;
+        }
 
-                      if (noticeTextEl) {
-                        noticeTextEl.style.color = theme.mainText;
-                      }
+        /* 会話を表示する */
+        let currentKeywordsByPage = null;
 
-                      /* クリアポップアップ */
-                      if (clearBox) {
-                        clearBox.style.background = theme.popupBg;
-                        clearBox.style.boxShadow = theme.panelShadow;
-                        clearBox.style.color = theme.mainText;
-                      }
+        function showDialogue(dialogue, keywordsByPage = null) {
+          currentDialoguePages = Array.isArray(dialogue[0])
+            ? dialogue
+            : [dialogue];
+          currentDialoguePageIndex = 0;
+          currentKeywordsByPage = keywordsByPage;
 
-                      if (clearText) {
-                        clearText.style.color = theme.mainText;
-                      }
+          showDialoguePage();
+        }
 
-/* クレジットポップアップ */
-if (creditBox) {
-  creditBox.style.background = theme.popupBg;
-  creditBox.style.boxShadow = theme.panelShadow;
-  creditBox.style.color = theme.mainText;
+        function showDialoguePage() {
+          const dialogue = currentDialoguePages[currentDialoguePageIndex];
 
-  if (theme.isDark) {
-    creditBox.classList.add("dark-popup");
-  } else {
-    creditBox.classList.remove("dark-popup");
-  }
-}
+          messageBox.innerHTML = "";
 
-if (creditText) {
-  creditText.style.color = theme.mainText;
-}
+          dialogue.forEach((item) => {
+            const lineBlock = document.createElement("div");
 
-if (creditTitle) {
-  creditTitle.style.color = theme.mainText;
-}
+            if (item.speaker.trim() === "") {
+              lineBlock.className = "dialogLine center";
+            } else {
+              lineBlock.className =
+                item.speaker === "まりん"
+                  ? "dialogLine left"
+                  : "dialogLine right";
+            }
 
-                      /* CSS変数側にもボタン色を反映 */
-                      document.documentElement.style.setProperty("--button-bg", theme.panelBg);
-                      document.documentElement.style.setProperty("--button-text", theme.mainText);
+            if (item.speaker) {
+              const speakerEl = document.createElement("div");
+              speakerEl.className = "speaker";
+              speakerEl.innerText = item.speaker;
+              lineBlock.appendChild(speakerEl);
+            }
 
-if (theme.isDark) {
-  document.body.classList.add("dark-theme");
-} else {
-  document.body.classList.remove("dark-theme");
-}
+            const textEl = document.createElement("div");
+            textEl.className = "line";
+            textEl.innerHTML = "「" + highlightKeywords(item.text) + "」";
 
-                    }
+            lineBlock.appendChild(textEl);
+            messageBox.appendChild(lineBlock);
+          });
 
-                    /* テーマを次の番号へ切り替える */
-                    function toggleTheme() {
-                      currentTheme = (currentTheme + 1) % themes.length;
-                      applyTheme(themes[currentTheme]);
-                    }
+          function highlightKeywords(text) {
+            // 【〜】で囲まれている部分を丸ごと取得
+            return text.replace(/【(.*?)】/g, (match) => {
+              return `<span class="keyword-highlight">${match}</span>`;
+            });
+          }
 
-                    /* ==================================================
-                    8. パスワード関連
-                    ================================================== */
+          applyTheme(themes[currentTheme]);
 
-                    /* パスワードチェック */
-                    function checkPassword() {
-                      const input = passwordInput.value;
+          // ★ここが重要
+          const hasMultiplePages = currentDialoguePages.length > 1;
+          const hasNextPage =
+            currentDialoguePageIndex < currentDialoguePages.length - 1;
 
-                      if (input === APP_PASSWORD) {
-                        lockScreen.style.display = "none";
-                        appContent.style.display = "block";
-                        errorMessage.innerText = "";
-                      } else {
-                      errorMessage.innerText = "パスワードが違います";
-                      passwordInput.value = "";
-                      passwordInput.focus();
-                    }
-                  }
+          if (!hasMultiplePages) {
+            messageBox.classList.remove("has-next");
+            messageBox.classList.remove("has-end");
+          } else if (hasNextPage) {
+            messageBox.classList.add("has-next");
+            messageBox.classList.remove("has-end");
+          } else {
+            messageBox.classList.remove("has-next");
+            messageBox.classList.add("has-end");
+          }
 
-                  /* Enterキーでもパスワードを送信できるようにする */
-                  passwordInput.addEventListener("keydown", function(event) {
-                      if (event.key === "Enter") {
-                        checkPassword();
-                      }
-                    });
+          if (
+            currentKeywordsByPage &&
+            currentKeywordsByPage[currentDialoguePageIndex]
+          ) {
+            currentKeywordsByPage[currentDialoguePageIndex].forEach(
+              (keyword) => {
+                acquireKeyword(keyword);
+              },
+            );
+          }
+        }
 
-                    /* パスワード機能をオフにしている場合は、
-                    最初からロック画面を消してアプリ本体を出す */
-                    if (!USE_PASSWORD) {
-                      lockScreen.style.display = "none";
-                      appContent.style.display = "block";
-                    }
+        function showKeywordNotice(keyword) {
+          const NOTICE_DURATION = 7000;
 
-                    /* ==================================================
-                    9. 音量・ベル関連
-                    ================================================== */
+          const area = document.getElementById("keywordToastArea");
 
-                    /* 音量調整 */
-                    function setVolume(v) {
-                      const volume = Number(v);
+          const notice = document.createElement("div");
+          notice.className = "keywordNotice";
+          const icon = quizKeywords.includes(keyword) ? "🔒" : "🔑";
 
-                      /* 通常音量として記録 */
-                      normalVolume = volume;
+          notice.innerText = icon + " " + keyword;
 
-                      music.volume = volume;
-                      bell.volume = Math.min(volume, 0.6);
-                    }
+          notice.style.animationDuration = NOTICE_DURATION + "ms";
 
-                    /* ベル音を鳴らす */
-                    function playBell() {
-                      bell.currentTime = 0;
-                      bell.play().catch(() => {});
-                    }
+          area.appendChild(notice);
 
-                    /* 成功効果音を鳴らす */
-                    function playSuccessSE() {
-                      seSuccess.currentTime = 0;
-                      seSuccess.play().catch(() => {});
-                    }
+          setTimeout(() => {
+            notice.remove();
+          }, NOTICE_DURATION);
+        }
 
-                    /* 失敗効果音を鳴らす */
-                    function playFailSE() {
-                      seFail.currentTime = 0;
-                      seFail.play().catch(() => {});
-                    }
+        function acquireKeyword(keyword, delayNotice = 0) {
+          if (!keyword) return;
 
-                    /* ==================================================
-                    10. タイマー設定ポップアップ関連
-                    ================================================== */
+          if (acquiredKeywords.includes(keyword)) return;
 
-                    /* タイマー設定ポップアップを開く */
-                    function openTimerSettings() {
-                      if (isEnding) return;
+          acquiredKeywords.push(keyword);
 
-                      const overlay = document.getElementById("timerSettingOverlay");
-                      const title = document.getElementById("timerSettingTitle");
-                      const form = document.getElementById("timerSettingForm");
-                      const actions = document.getElementById("timerActionButtons");
-                      const actionModeText = document.getElementById("timerActionModeText");
-                      const pauseResumeButton = document.getElementById("pauseResumeButton");
-                      const finishModeButton = document.getElementById("finishModeButton");
+          setTimeout(() => {
+            showKeywordNotice(keyword);
+          }, delayNotice);
 
-                      overlay.style.display = "flex";
+          updateKeywordDot();
 
-                      /* 動作中または一時停止中なら、操作ボタンを表示 */
-                      if (timerState.isRunning || timerState.isPaused) {
-                        title.style.display = "none";
-                        form.style.display = "none";
-                        actions.style.display = "block";
+          console.log("キーワード取得:", keyword);
+        }
 
-                        if (timerState.mode === "work") {
-                          actionModeText.innerText = timerState.isRunning ? "いまは作業時間中です" : "作業時間を一時停止中です";
-                        } else {
-                          actionModeText.innerText = timerState.isRunning ? "いまは休憩時間中です" : "休憩時間を一時停止中です";
-                        }
+        /* 作業中 / 休憩中の会話を表示する */
+        function showRandomMessage() {
+          const currentMessages =
+            timerState.mode === "work" ? messages : breakMessages;
+          const randomIndex =
+            timerState.mode === "break"
+              ? getRandomBreakMessageIndex()
+              : getRandomMessageIndex();
 
-                        updateTimerActionTime();
-                        pauseResumeButton.innerText = timerState.isRunning ? "一時停止" : "再開";
-                        finishModeButton.innerText = timerState.mode === "work" ? "作業終了" : "休憩終了";
+          lastMessageIndex = randomIndex;
 
-                      } else {
-                        title.style.display = "block";
-                        form.style.display = "block";
-                        actions.style.display = "none";
-                      }
-                    }
+          const selected = currentMessages[randomIndex];
 
-                /* ポップアップ側のタイマー表示を更新する */
-                function updateTimerActionTime() {
-                  const actionTime = document.getElementById("timerActionTime");
-                  if (actionTime) {
-                    actionTime.innerText = timerDisplay.innerText;
-                  }
+          if (timerState.mode === "break") {
+            showDialogue(selected.dialogue);
+            acquireKeyword(selected.keyword);
+          } else {
+            showDialogue(selected);
+          }
+        }
+
+        /* サイトを開いた直後の会話を表示する */
+        function showIdleMessage() {
+          const randomIndex = Math.floor(Math.random() * idleMessages.length);
+          showDialogue(idleMessages[randomIndex]);
+        }
+
+        /* 5分ごとにセリフを更新するループ開始 */
+        function startMessageLoop() {
+          if (messageIntervalId) return;
+
+          messageIntervalId = setInterval(() => {
+            if (!timerState.isRunning) return;
+
+            // 作業中だけ、5分ごとにセリフを変える
+            if (timerState.mode !== "work") return;
+
+            showRandomMessage();
+          }, WORK_MESSAGE_INTERVAL);
+        }
+
+        /* セリフ更新ループ停止 */
+        function stopMessageLoop() {
+          clearInterval(messageIntervalId);
+          messageIntervalId = null;
+        }
+
+        /* キーワード入力でセリフが出たら、セリフ切り替えタイマーを再スタートさせる */
+        function resetMessageLoop() {
+          stopMessageLoop();
+
+          if (timerState.isRunning) {
+            startMessageLoop();
+          }
+        }
+
+        /* キーワードを比較しやすい形に整える
+                                                                  例：前後の空白を消す、英字を小文字化する */
+        function normalizeKeyword(text) {
+          return text.trim().toLowerCase();
+        }
+
+        /* 入力された語が、どの本来のキーワードに属するか探す */
+        function findKeyword(input) {
+          for (const key in keywordMap) {
+            if (keywordMap[key].includes(input)) {
+              return key;
+            }
+          }
+          return null;
+        }
+
+        /* キーワード入力を判定する */
+        /*
+                                                    キーワード入力欄の中身を判定する。
+                                                    一致するキーワードがあれば対応セリフを表示し、
+                                                    エンディング用キーワードなら特別処理へ進む。
+                                                    */
+        function checkKeyword() {
+          const input = normalizeKeyword(keywordInput.value);
+
+          if (!input) return;
+
+          const key = findKeyword(input);
+
+          if (isEnding && key !== "お別れは笑顔で" && key !== "始まりの物語") {
+            playFailSE();
+            keywordInput.value = "";
+            return;
+          }
+
+          if (key === "また会う日まで") {
+            startEnding();
+          } else if (key === "お別れは笑顔で" && isEnding) {
+            acquireKeyword("お別れは笑顔で"); // ←追加
+            showClearPopup();
+          } else if (key === "始まりの物語" && isEnding) {
+            localStorage.removeItem("endingReached");
+            location.reload();
+          } else if (key && keywordDialogues[key]) {
+            currentActiveKeyword = key;
+            const alreadyUnlockedDialogue =
+              unlockedDialogueKeywords.includes(key);
+            const keywordData = keywordDialogues[key];
+
+            playSuccessSE();
+
+            if (alreadyUnlockedDialogue) {
+              // すでに解放済みなら、演出をスキップしてすぐ会話表示
+              if (Array.isArray(keywordData)) {
+                showDialogue(keywordData);
+              } else {
+                showDialogue(keywordData.dialogue, keywordData.keywordsByPage);
+              }
+            } else {
+              // 初回だけ Dialogue Unlocked 演出を出す
+              unlockedDialogueKeywords.push(key);
+              updateKeywordDot();
+
+              acquireKeyword(key, 2000);
+              showKeywordFoundEffect();
+
+              setTimeout(() => {
+                if (Array.isArray(keywordData)) {
+                  showDialogue(keywordData);
+                } else {
+                  showDialogue(
+                    keywordData.dialogue,
+                    keywordData.keywordsByPage,
+                  );
                 }
-
-                /* タイマー設定ポップアップを閉じる */
-                function closeTimerSettings() {
-                  document.getElementById("timerSettingOverlay").style.display = "none";
-                  document.getElementById("timerSettingTitle").style.display = "block";
-                }
-
-                /* ポップアップから一時停止 / 再開を切り替える */
-                function togglePauseFromSettings() {
-                  if (timerState.isRunning) {
-                    pauseTimerOnly();
-                    openTimerSettings();
-                  } else if (timerState.isPaused) {
-                    startTimer(false);
-                    closeTimerSettings();
-                  }
-                }
-
-              /* ポップアップからリセットする
-              ※今は呼び出しボタンがないが、残してある関数 */
-              function resetFromSettings() {
-                resetTimer();
-                closeTimerSettings();
-              }
-
-              /* ポップアップから作業終了 / 休憩終了する */
-              function finishFromSettings() {
-                skipCurrentMode();
-                closeTimerSettings();
-              }
-
-              /* 設定した時間でタイマーを開始する */
-              function startFromSettings() {
-                const workMinutes = Number(document.getElementById("workMinutesInput").value);
-                const breakMinutes = Number(document.getElementById("breakMinutesInput").value);
-
-                if (workMinutes < 1 || breakMinutes < 1) return;
-
-                /* 入力値を秒に変換 */
-                WORK_TIME = workMinutes * 60;
-                BREAK_TIME = breakMinutes * 60;
-
-                /* 作業モードの初期状態に戻す */
-                timerState.mode = "work";
-                timerState.isRunning = false;
-                timerState.isPaused = false;
-                timerState.remainingTime = WORK_TIME;
-                timerState.endTime = null;
-
-                /* 表示を先に更新 */
-                updateModeDisplay();
-                updateTimerDisplay();
-                updateModeImage();
-
-                /* ポップアップを閉じて開始 */
-                closeTimerSettings();
-                startTimer();
-              }
-
-              /* ==================================================
-              11. タイマー表示関連
-              ================================================== */
-
-              /* タイマー表示を更新する */
-/*
-タイマー表示を更新する。
-timerState.remainingTime（秒）を「分:秒」の形に直して画面へ反映する。
-*/
-function updateTimerDisplay() {
-  const min = Math.floor(timerState.remainingTime / 60);
-  const sec = timerState.remainingTime % 60;
-
-  timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
-
-  updateTimerActionTime();
-}
-
-              /* 作業時間 / 休憩時間 の表示を切り替える */
-function updateModeDisplay() {
-  if (timerState.mode === "idle") {
-    modeDisplay.innerText = "タイマー設定";
-  } else if (timerState.mode === "work") {
-    modeDisplay.innerText = "作業時間";
-  } else if (timerState.mode === "break") {
-    modeDisplay.innerText = "休憩時間";
-  }
-}
-
-            /* ==================================================
-            12. 画像切り替え関連
-            ================================================== */
-
-            /* 今のモードに合わせて画像を切り替える */
-function updateModeImage() {
-  /* 両方のフェードクラスを一旦外す */
-  mainImage.classList.remove("fade-in-long");
-  mainImage.classList.remove("fade-in-short");
-
-  /* 画像を切り替え */
-  mainImage.src = timerState.mode === "work" ? WORK_IMAGE : BREAK_IMAGE;
-
-  /* 強制再描画 */
-  void mainImage.offsetWidth;
-
-  /* 切り替え時は短いフェード */
-  mainImage.classList.add("fade-in-short");
-}
-
-            /* ==================================================
-            13. 通知表示関連
-            ================================================== */
-
-            /* オーバーレイ通知を表示する */
-            function showNotice(text) {
-              noticeText.innerText = text;
-              noticeOverlay.style.display = "flex";
+              }, 1400);
             }
 
-            /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
-            /*
-作業終了・休憩終了の通知を閉じたあと、次のタイマーを開始する。
-ここで音量とビジュアライザーも元に戻す。
-*/
-function closeNoticeAndStartNext() {
-              noticeOverlay.style.display = "none";
-
-              timerState.isPaused = false;
-
-              /* 音量を戻す */
-              music.volume = normalVolume;
-
-              /* ビジュアライザーも元に戻す */
-              visualizer.classList.remove("low-volume");
-
-              updateModeImage();
-
-              /* 念のため再開 */
-              startVisualizer();
-              startTimer();
-
-              /* 休憩明けで作業に戻るときだけ、再開セリフを出す */
-              if (timerState.mode === "work") {
-                showRandomResumeMessage();
-              }
-            }
-
-            /* 通知はオーバーレイだけ使う */
-            function notifyModeChange(text) {
-              showNotice(text);
-              playBell();
-
-              /* 音楽の音量を下げる */
-              music.volume = normalVolume * 0.2;
-
-              /* ビジュアライザーを小さくする */
-              visualizer.classList.add("low-volume");
-            }
-
-            function showClearPopup() {
-              clearOverlay.style.display = "flex";
-              keywordInput.blur();
-            }
-
-            function closeClearPopup() {
-              clearOverlay.style.display = "none";
-            }
-
-function shareOnX() {
-  const text = "◤　百合ポモドーロタイマー　◢\n━━━━━━━━━━━━━━━\nはじめとまりんの物語を見届けた\n━━━━━━━━━━━━━━━\n\n止まっていた時間が動き出し、\n二人は新たな一歩を踏み出した。\n\n#nookQuietTalk\n";
-  const url = "https://namahage0916-collab.github.io/lofi-app/";
-
-  const shareUrl =
-    "https://twitter.com/intent/tweet?text=" +
-    encodeURIComponent(text) +
-    "&url=" +
-    encodeURIComponent(url);
-
-  window.open(shareUrl, "_blank");
-}
-
-function showCreditPopup() {
-  creditOverlay.style.display = "flex";
-  keywordInput.blur();
-}
-
-function closeCreditPopup() {
-  creditOverlay.style.display = "none";
-}
-
-            /* ==================================================
-            14. セリフ・キーワード関連
-            ================================================== */
-
-            /* 前回と同じ会話を避けながらランダムに選ぶ */
-            function getRandomMessageIndex() {
-              const currentMessages = timerState.mode === "work" ? messages : breakMessages;
-
-              if (currentMessages.length === 1) return 0;
-
-              let randomIndex;
-              do {
-                randomIndex = Math.floor(Math.random() * currentMessages.length);
-              } while (randomIndex === lastMessageIndex);
-
-              return randomIndex;
-            }
-
-            /* 会話を表示する */
-function showDialogue(dialogue) {
-  currentDialoguePages = Array.isArray(dialogue[0]) ? dialogue : [dialogue];
-  currentDialoguePageIndex = 0;
-
-  showDialoguePage();
-}
-
-function showDialoguePage() {
-  const dialogue = currentDialoguePages[currentDialoguePageIndex];
-
-  messageBox.innerHTML = "";
-
-  dialogue.forEach(item => {
-    const lineBlock = document.createElement("div");
-
-    if (item.speaker.trim() === "") {
-      lineBlock.className = "dialogLine center";
-    } else {
-      lineBlock.className = item.speaker === "まりん"
-        ? "dialogLine left"
-        : "dialogLine right";
-    }
-
-    if (item.speaker) {
-      const speakerEl = document.createElement("div");
-      speakerEl.className = "speaker";
-      speakerEl.innerText = item.speaker;
-      lineBlock.appendChild(speakerEl);
-    }
-
-    const textEl = document.createElement("div");
-    textEl.className = "line";
-    textEl.innerText = "「" + item.text + "」";
-
-    lineBlock.appendChild(textEl);
-    messageBox.appendChild(lineBlock);
-  });
-
-  applyTheme(themes[currentTheme]);
-
-  // ★ここが重要
-const hasMultiplePages = currentDialoguePages.length > 1;
-const hasNextPage = currentDialoguePageIndex < currentDialoguePages.length - 1;
-
-if (!hasMultiplePages) {
-  messageBox.classList.remove("has-next");
-  messageBox.classList.remove("has-end");
-} else if (hasNextPage) {
-  messageBox.classList.add("has-next");
-  messageBox.classList.remove("has-end");
-} else {
-  messageBox.classList.remove("has-next");
-  messageBox.classList.add("has-end");
-}
-}
-
-            /* 作業中 / 休憩中の会話を表示する */
-            function showRandomMessage() {
-              const currentMessages = timerState.mode === "work" ? messages : breakMessages;
-              const randomIndex = getRandomMessageIndex();
-
-              lastMessageIndex = randomIndex;
-              showDialogue(currentMessages[randomIndex]);
-            }
-
-            /* サイトを開いた直後の会話を表示する */
-            function showIdleMessage() {
-              const randomIndex = Math.floor(Math.random() * idleMessages.length);
-              showDialogue(idleMessages[randomIndex]);
-            }
-
-            /* 1分ごとにセリフを更新するループ開始 */
-            function startMessageLoop() {
-              if (messageIntervalId) return;
-
-              messageIntervalId = setInterval(() => {
-                  if (!timerState.isRunning) return;
-                  showRandomMessage();
-                }, 60000);
-              }
-
-              /* セリフ更新ループ停止 */
-              function stopMessageLoop() {
-                clearInterval(messageIntervalId);
-                messageIntervalId = null;
-              }
-
-             /* キーワード入力でセリフが出たら、セリフ切り替えタイマーを再スタートさせる */
-function resetMessageLoop() {
-  stopMessageLoop();
-
-  if (timerState.isRunning) {
-    startMessageLoop();
-  }
-}
-
-              /* キーワードを比較しやすい形に整える
-              例：前後の空白を消す、英字を小文字化する */
-              function normalizeKeyword(text) {
-                return text.trim().toLowerCase();
-              }
-
-              /* 入力された語が、どの本来のキーワードに属するか探す */
-              function findKeyword(input) {
-                for (const key in keywordMap) {
-                  if (keywordMap[key].includes(input)) {
-                    return key;
-                  }
-                }
-                return null;
-              }
-
-              /* キーワード入力を判定する */
-              /*
-キーワード入力欄の中身を判定する。
-一致するキーワードがあれば対応セリフを表示し、
-エンディング用キーワードなら特別処理へ進む。
-*/
-function checkKeyword() {
-                const input = normalizeKeyword(keywordInput.value);
-
-                if (!input) return;
-
-                const key = findKeyword(input);
-
-                if (isEnding && key !== "お別れは笑顔で" && key !== "始まりの物語") {
-                  playFailSE();
-                  keywordInput.value = "";
-                  return;
-                }
-
-if (key === "また会う日まで") {
-  startEnding();
-} else if (key === "お別れは笑顔で" && isEnding) {
-  showClearPopup();
-              } else if (key === "始まりの物語" && isEnding) {
- localStorage.removeItem("endingReached");
-location.reload();
-
-
-} else if (key && keywordDialogues[key]) {
-  playSuccessSE();
-  showKeywordFoundEffect();
-
-  // ❌ すぐ表示しない
-  // showDialogue(keywordDialogues[key]);
-
-  // ✅ 画像が消え始めるタイミングで表示
-  setTimeout(() => {
-    showDialogue(keywordDialogues[key]);
-  }, 1400);
-
-  resetMessageLoop();
-} else {
-  playFailSE();
-}
+            resetMessageLoop();
+          } else {
+            playFailSE();
+          }
 
           if (key) {
             keywordInput.blur();
@@ -2876,24 +1460,6 @@ location.reload();
           if (event.key === "Enter") {
             checkKeyword();
           }
-        }
-
-        /* 作業終了時のセリフをランダム表示する */
-        function showRandomWorkEndMessage() {
-          if (workEndMessages.length === 1) {
-            lastWorkEndIndex = 0;
-            showDialogue(workEndMessages[0]);
-            return;
-          }
-
-          let randomIndex;
-
-          do {
-            randomIndex = Math.floor(Math.random() * workEndMessages.length);
-          } while (randomIndex === lastWorkEndIndex);
-
-          lastWorkEndIndex = randomIndex;
-          showDialogue(workEndMessages[randomIndex]);
         }
 
         /* 作業再開時のセリフをランダム表示する */
@@ -2914,10 +1480,9 @@ location.reload();
           showDialogue(resumeMessages[randomIndex]);
         }
 
-
         /* ==================================================
-        15. 曲関連
-        ================================================== */
+                                                            15. 曲関連
+                                                            ================================================== */
 
         /* 前回と同じ曲を避けながらランダムに選ぶ */
         function getRandomTrackIndex() {
@@ -2949,70 +1514,72 @@ location.reload();
 
         /* 曲が終わったら次の曲へ */
         music.addEventListener("ended", () => {
-            if (timerState.isRunning || timerState.isPaused) {
-              playRandomTrack();
-            }
-          });
-
-          /* ==================================================
-          16. ビジュアライザー関連
-          ================================================== */
-
-          /* ビジュアライザー開始 */
-          function startVisualizer() {
-            visualizer.classList.remove("paused");
+          if (timerState.isRunning || timerState.isPaused) {
+            playRandomTrack();
           }
+        });
 
-          /* ビジュアライザー停止 */
-          function stopVisualizer() {
-            visualizer.classList.add("paused");
-          }
+        /* ==================================================
+                                                              16. ビジュアライザー関連
+                                                              ================================================== */
 
-          /* ==================================================
-          17. エンディング処理
-          ================================================== */
+        /* ビジュアライザー開始 */
+        function startVisualizer() {
+          visualizer.classList.remove("paused");
+        }
 
-          /*
-エンディング演出を開始する。
-タイマーを止め、白フェード、エンディング画像、エンディングBGMへ切り替える。
-*/
-function startEnding() {
-            localStorage.setItem("endingReached", "true");
-            isEnding = true;
+        /* ビジュアライザー停止 */
+        function stopVisualizer() {
+          visualizer.classList.add("paused");
+        }
 
-                  const timerPanel = document.getElementById("timerPanel");
-                  timerPanel.style.cursor = "default";
-                  timerPanel.style.pointerEvents = "none";
+        /* ==================================================
+                                                              17. エンディング処理
+                                                              ================================================== */
 
-                  /* タイマーとセリフ更新を止める */
-                  clearInterval(intervalId);
-                  intervalId = null;
-                  stopMessageLoop();
+        /*
+                                                    エンディング演出を開始する。
+                                                    タイマーを止め、白フェード、エンディング画像、エンディングBGMへ切り替える。
+                                                    */
+        function startEnding() {
+          localStorage.setItem("endingReached", "true");
+          isEnding = true;
+          acquireKeyword("また会う日まで", 7000);
+          acquireKeyword("お別れは笑顔で", 9000);
 
-                  timerState.isRunning = false;
-                  timerState.isPaused = false;
-                  timerState.endTime = null;
+          const timerPanel = document.getElementById("timerPanel");
+          timerPanel.style.cursor = "default";
+          timerPanel.style.pointerEvents = "none";
 
-                  /* 通常BGMを停止 */
-                  music.pause();
-                  music.currentTime = 0;
+          /* タイマーとセリフ更新を止める */
+          clearInterval(intervalId);
+          intervalId = null;
+          stopMessageLoop();
 
-                  stopVisualizer();
-                  trackNameDisplay.innerText = "Nothing";
+          timerState.isRunning = false;
+          timerState.isPaused = false;
+          timerState.endTime = null;
 
-                  /* 入力欄を閉じる */
-                  keywordInput.blur();
+          /* 通常BGMを停止 */
+          music.pause();
+          music.currentTime = 0;
+
+          stopVisualizer();
+          trackNameDisplay.innerText = "Nothing";
+
+          /* 入力欄を閉じる */
+          keywordInput.blur();
 
           /* 白くする */
           endingWhiteout.classList.add("active");
 
-                  /* 完全に白くなってから、見えない裏側で画像とセリフを切り替える */
-                  setTimeout(() => {
-                      mainImage.src = ENDING_IMAGE;
-                      showDialogue(endingDialogue);
-                    }, WHITEOUT_DURATION + 300);
+          /* 完全に白くなってから、見えない裏側で画像とセリフを切り替える */
+          setTimeout(() => {
+            mainImage.src = ENDING_IMAGE;
+            showDialogue(endingDialogue);
+          }, WHITEOUT_DURATION + 300);
 
-                    /* 白い画面を少し保ってから戻す */
+          /* 白い画面を少し保ってから戻す */
           setTimeout(() => {
             endingWhiteout.classList.remove("active");
             applyTheme(themes[currentTheme]);
@@ -3028,262 +1595,64 @@ function startEnding() {
 
             trackNameDisplay.innerText = "Nothing";
 
-            music.play().then(() => {
-              startVisualizer();
-            }).catch(() => {
-              stopVisualizer();
-            });
+            music
+              .play()
+              .then(() => {
+                startVisualizer();
+              })
+              .catch(() => {
+                stopVisualizer();
+              });
           }, WHITEOUT_DURATION + 1300);
-                      }
-
-          /* ==================================================
-          18. 作業終了 / 休憩終了時の処理
-          ================================================== */
-
-          /* 作業終了 / 休憩終了時の処理 */
-/*
-作業時間または休憩時間が終わったときの処理。
-作業→休憩、休憩→作業に切り替える中心処理。
-*/
-function finishCurrentMode() {
-  stopTimerForNotice();
-  timerState.isPaused = false;
-
-  if (timerState.mode === "work") {
-    sessionCount++;
-    updateFocusDisplay();
-
-    timerState.mode = "break";
-    timerState.remainingTime = BREAK_TIME;
-
-    showRandomWorkEndMessage();
-    lastMessageIndex = -1;
-
-    notifyModeChange(`作業終了！\n${BREAK_TIME / 60}分休憩です。`);
-
-  } else {
-    timerState.mode = "work";
-    timerState.remainingTime = WORK_TIME;
-
-    lastMessageIndex = -1;
-
-    notifyModeChange("休憩終了！\n作業を再開しましょう。");
-  }
-
-  updateModeDisplay();
-  updateTimerDisplay();
-}
+        }
 
         /* ==================================================
-        19. タイマー本体
-        ================================================== */
+                                                          20. 補助表示関連
+                                                          ================================================== */
 
-        /* 残り時間を計算して表示する */
-/*
-タイマーの心臓部。
-現在時刻と終了予定時刻から、残り時間を毎回計算する。
-ブラウザが一時停止してもズレにくい。
-*/
-function tickTimer() {
-  if (!timerState.isRunning || timerState.endTime === null) return;
+        /* 今日の日付を表示する */
+        function updateDate() {
+          const now = new Date();
 
-  const now = Date.now();
-  const diffMs = timerState.endTime - now;
-  timerState.remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, "0");
+          const day = String(now.getDate()).padStart(2, "0");
 
-  updateTimerDisplay();
+          const week = ["日", "月", "火", "水", "木", "金", "土"];
+          const dayOfWeek = week[now.getDay()];
 
-  if (timerState.remainingTime <= 0) {
-    finishCurrentMode();
-  }
-}
+          const text = `${year}/${month}/${day}（${dayOfWeek}）`;
 
-        /* タイマー開始 */
-        /*
-タイマーを開始・再開する。
-終了予定時刻 endTime を作って、tickTimer() を定期実行する。
-*/
-function startTimer(showMessage = true) {
-  if (timerState.isRunning) return;
+          document.getElementById("dateText").innerText = text;
+        }
 
-  timerState.isRunning = true;
-  timerState.isPaused = false;
-  timerState.endTime = Date.now() + timerState.remainingTime * 1000;
+        /* 今日の集中メーターを更新する
+                                                          今は左パネルを別用途に使っているが、機能自体は残してある */
+        function updateFocusDisplay() {
+          const focusMeter = document.getElementById("focusMeter");
+          if (!focusMeter) return;
 
-  updateModeDisplay();
-if (showMessage) {
-  showRandomMessage();
-}
+          const filled = "■".repeat(Math.min(sessionCount, SESSION_GOAL));
+          const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
 
-  if (music.paused) {
-    if (!music.src) {
-      playRandomTrack();
-    } else {
-      music.play().catch(() => {});
-      startVisualizer();
-    }
-  }
+          focusMeter.innerText = filled + empty;
+        }
 
-  startMessageLoop();
+        /* ==================================================
+                                                          21. ページ表示状態の変化
+                                                          ================================================== */
 
-  tickTimer();
-  intervalId = setInterval(tickTimer, 250);
-}
-
-      /* タイマー停止 */
-      function stopTimer() {
-  clearInterval(intervalId);
-  intervalId = null;
-
-  if (timerState.isRunning && timerState.endTime !== null) {
-    const diffMs = timerState.endTime - Date.now();
-    timerState.remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-  }
-
-  timerState.isRunning = false;
-  timerState.endTime = null;
-
-  music.pause();
-  stopMessageLoop();
-  stopVisualizer();
-  updateTimerDisplay();
-}
-
-      /* 時間切れ時専用の停止
-      タイマーは止めるが、音楽は止めない */
-function stopTimerForNotice() {
-  clearInterval(intervalId);
-  intervalId = null;
-
-  if (timerState.isRunning && timerState.endTime !== null) {
-    const diffMs = timerState.endTime - Date.now();
-    timerState.remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-  }
-
-  timerState.isRunning = false;
-  timerState.endTime = null;
-
-  /* 音楽は止めない */
-  stopMessageLoop();
-  updateTimerDisplay();
-}
-
-      /* 今のモードを強制終了する */
-/*
-「作業終了」「休憩終了」ボタン用。
-終了予定時刻を今にして、自然な時間切れとして処理する。
-*/
-function skipCurrentMode() {
-  timerState.endTime = Date.now();
-  tickTimer();
-}
-
-      /* タイマーと音楽を初期状態に戻す */
-      /*
-タイマーと音楽を初期状態に戻す。
-現在は通常画面へのリセット用として残している。
-*/
-function resetTimer() {
-        stopTimer();
-
-        timerState.mode = "idle";
-        timerState.isRunning = false;
-        timerState.isPaused = false;
-        timerState.remainingTime = WORK_TIME;
-        timerState.endTime = null;
-
-        lastMessageIndex = -1;
-        currentTrackIndex = -1;
-        lastWorkEndIndex = -1;
-        sessionCount = 0;
-
-        updateModeDisplay();
-        updateTimerDisplay();
-        updateFocusDisplay();
-        showIdleMessage();
-        mainImage.src = IDLE_IMAGE;
-
-        music.pause();
-        music.currentTime = 0;
-        music.removeAttribute("src");
-        music.load();
-
-        trackNameDisplay.innerText = "No track";
-        noticeOverlay.style.display = "none";
-
-        visualizer.classList.remove("low-volume");
-        music.volume = normalVolume;
-      }
-
-      /* 一時停止
-      タイマー・音楽・ビジュアライザーを止める */
-function pauseTimerOnly() {
-  clearInterval(intervalId);
-  intervalId = null;
-
-  if (timerState.isRunning && timerState.endTime !== null) {
-    const diffMs = timerState.endTime - Date.now();
-    timerState.remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-  }
-
-  timerState.isRunning = false;
-  timerState.isPaused = true;
-  timerState.endTime = null;
-
-  music.pause();
-  stopMessageLoop();
-  stopVisualizer();
-
-  updateTimerDisplay();
-}
-
-      /* ==================================================
-      20. 補助表示関連
-      ================================================== */
-
-      /* 今日の日付を表示する */
-      function updateDate() {
-        const now = new Date();
-
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-
-        const week = ["日", "月", "火", "水", "木", "金", "土"];
-        const dayOfWeek = week[now.getDay()];
-
-        const text = `${year}/${month}/${day}（${dayOfWeek}）`;
-
-        document.getElementById("dateText").innerText = text;
-      }
-
-      /* 今日の集中メーターを更新する
-      今は左パネルを別用途に使っているが、機能自体は残してある */
-      function updateFocusDisplay() {
-        const focusMeter = document.getElementById("focusMeter");
-        if (!focusMeter) return;
-
-        const filled = "■".repeat(Math.min(sessionCount, SESSION_GOAL));
-        const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
-
-        focusMeter.innerText = filled + empty;
-      }
-
-      /* ==================================================
-      21. ページ表示状態の変化
-      ================================================== */
-
-      /* タブに戻ってきた時に時間表示を更新 */
-      document.addEventListener("visibilitychange", () => {
+        /* タブに戻ってきた時に時間表示を更新 */
+        document.addEventListener("visibilitychange", () => {
           if (timerState.isRunning) {
             tickTimer();
           }
         });
 
         /* ==================================================
-        22. 初期設定
-        ページを開いた直後に一度だけ実行する
-        ================================================== */
+                                                            22. 初期設定
+                                                            ページを開いた直後に一度だけ実行する
+                                                            ================================================== */
 
         /* ベル音の初期音量 */
         bell.volume = 0.5;
@@ -3297,50 +1666,57 @@ function pauseTimerOnly() {
         showIdleMessage();
         mainImage.src = IDLE_IMAGE;
 
-applyTheme(themes[currentTheme]);
+        applyTheme(themes[currentTheme]);
 
-if (localStorage.getItem("endingReached") === "true") {
-  isEnding = true;
+        if (localStorage.getItem("endingReached") === "true") {
+          isEnding = true;
 
-  mainImage.src = ENDING_IMAGE;
-  showDialogue(endingDialogue);
+          mainImage.src = ENDING_IMAGE;
+          showDialogue(endingDialogue);
 
-  music.src = ENDING_BGM;
-  music.volume = normalVolume;
-  music.loop = true;
-  trackNameDisplay.innerText = "Nothing";
+          music.src = ENDING_BGM;
+          music.volume = normalVolume;
+          music.loop = true;
+          trackNameDisplay.innerText = "Nothing";
 
-  document.body.addEventListener("click", () => {
-    music.play().then(() => {
-      startVisualizer();
-    }).catch(() => {});
-  }, { once: true });
+          document.body.addEventListener(
+            "click",
+            () => {
+              music
+                .play()
+                .then(() => {
+                  startVisualizer();
+                })
+                .catch(() => {});
+            },
+            { once: true },
+          );
 
-  const timerPanel = document.getElementById("timerPanel");
-  timerPanel.style.cursor = "default";
-  timerPanel.style.pointerEvents = "none";
+          const timerPanel = document.getElementById("timerPanel");
+          timerPanel.style.cursor = "default";
+          timerPanel.style.pointerEvents = "none";
 
-  stopVisualizer();
-}
+          stopVisualizer();
+        }
 
+        function showKeywordFoundEffect() {
+          const effect = document.getElementById("keywordFoundEffect");
 
-function showKeywordFoundEffect() {
-  const effect = document.getElementById("keywordFoundEffect");
+          if (!effect) return;
 
-  if (!effect) return;
+          effect.classList.remove("show");
 
-  effect.classList.remove("show");
+          void effect.offsetWidth;
 
-  void effect.offsetWidth;
+          effect.classList.add("show");
 
-  effect.classList.add("show");
+          setTimeout(() => {
+            effect.classList.remove("show");
+          }, 2000);
+        }
 
-  setTimeout(() => {
-    effect.classList.remove("show");
-  }, 2000);
-}
-
-    </script>
-</div>
-</body>
+        updateKeywordDot();
+      </script>
+    </div>
+  </body>
 </html>
