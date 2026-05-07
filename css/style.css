@@ -5,6 +5,11 @@
   --button-bg: rgba(255, 255, 255, 0.3);
   --button-text: #24313a;
   --popup-button-bg: rgba(255, 255, 255, 0.3);
+
+  --panel-bg: rgba(255, 255, 255, 0.08);
+  --panel-hover-bg: rgba(255, 255, 255, 0.18);
+  --panel-active-bg: rgba(255, 255, 255, 0.24);
+
   --space: 8px;
 }
 
@@ -69,23 +74,21 @@ button:active {
   filter: brightness(0.85);
 }
 
-/* 黒テーマのポップアップ内だけ、hover時に明るくする */
+/* 黒テーマのときだけ、ボタンを白っぽくする */
 .dark-popup button:hover {
   filter: brightness(1.25);
 }
 
-/* 黒テーマのポップアップ内だけ、押したときも少し明るくする */
 .dark-popup button:active {
   filter: brightness(1.1);
 }
 
-/* 黒テーマのときだけ、ボタンを白っぽくする */
 body.dark-theme button:hover {
-  background: rgba(255, 255, 255, 0.18) !important;
+  background: var(--panel-hover-bg) !important;
 }
 
 body.dark-theme button:active {
-  background: rgba(255, 255, 255, 0.24) !important;
+  background: var(--panel-active-bg) !important;
 }
 
 /* タイマー設定ポップアップ内のボタン背景 */
@@ -112,14 +115,14 @@ input[type="range"] {
   3. レイアウト系
   ================================================== */
 
-/* 画像とセリフ枠をまとめたエリア */
+/* 画像・セリフ枠の横幅 */
 #imageArea {
   width: 80%;
   max-width: 600px;
   margin: var(--space) auto 0;
 }
 
-/* 左パネルと右パネルを並べるエリア */
+/* キーワード入力欄・タイマーパネルの並び */
 #controlRow {
   width: 80%;
   max-width: 600px;
@@ -131,7 +134,7 @@ input[type="range"] {
   flex-wrap: wrap;
 }
 
-/* テーマボタン・ビジュアライザー・曲名の横並びエリア */
+/* 下部ボタン・ビジュアライザー・曲名の並び */
 #buttonRow {
   margin: var(--space) auto 0;
   width: 80%;
@@ -177,36 +180,38 @@ input[type="range"] {
   filter: none;
 }
 
-/* セリフ枠 */
 #messageBox {
+  position: relative;
+  cursor: default;
+
   margin-top: var(--space);
   padding: 12px;
-  background: rgba(255, 255, 255, 0.08);
+
+  background: var(--panel-bg);
   border-radius: 12px;
   box-sizing: border-box;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
-#messageBox {
-  position: relative;
-  cursor: default;
-}
-
-#messageBox.has-next {
+#messageBox.has-next,
+#messageBox.has-end {
   cursor: pointer;
+
   transition:
     background 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.1s ease;
 }
 
-#messageBox.has-next:hover {
-  background: rgba(255, 255, 255, 0.18) !important;
+#messageBox.has-next:hover,
+#messageBox.has-end:hover {
+  background: var(--panel-hover-bg) !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
 }
 
-#messageBox.has-next:active {
-  background: rgba(255, 255, 255, 0.24) !important;
+#messageBox.has-next:active,
+#messageBox.has-end:active {
+  background: var(--panel-active-bg) !important;
   transform: scale(0.99);
 }
 
@@ -220,10 +225,6 @@ input[type="range"] {
   animation: nextArrowBlink 1.2s ease-in-out infinite;
 }
 
-#messageBox.has-end {
-  cursor: pointer;
-}
-
 #messageBox.has-end::after {
   content: "↺";
   position: absolute;
@@ -232,24 +233,6 @@ input[type="range"] {
   font-size: 20px;
   opacity: 0.75;
   animation: nextArrowBlink 1.2s ease-in-out infinite;
-}
-
-#messageBox.has-end {
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.1s ease;
-}
-
-#messageBox.has-end:hover {
-  background: rgba(255, 255, 255, 0.18) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
-}
-
-#messageBox.has-end:active {
-  background: rgba(255, 255, 255, 0.24) !important;
-  transform: scale(0.99);
 }
 
 @keyframes nextArrowBlink {
@@ -295,13 +278,13 @@ input[type="range"] {
   }
 }
 
-/* 会話1組ぶん */
+/* 会話行 */
 .dialogLine {
   margin-bottom: 4px;
   margin-top: 0;
 }
 
-/* 最後の行だけ下余白なし */
+/* 最後の会話行は下余白なし */
 .dialogLine:last-child {
   margin-bottom: 0;
 }
@@ -312,22 +295,20 @@ input[type="range"] {
 
 .dialogLine.left {
   text-align: left;
-  padding-left: 12px; /* ← 内側に寄せる */
+  padding-left: 12px;
 }
 
 .dialogLine.right {
   text-align: right;
-  padding-right: 12px; /* ← 内側に寄せる */
+  padding-right: 12px;
 }
 
-/* 話者名 */
 .speaker {
   font-size: 18px;
   color: #b8c0ff;
   margin-bottom: 0px;
 }
 
-/* セリフ本文 */
 .line {
   font-size: 20px;
   color: #f2f2f2;
@@ -378,7 +359,7 @@ input[type="range"] {
 /* パネル共通デザイン */
 .panel {
   flex: 1 1 240px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--panel-bg);
   border-radius: 12px;
   padding: 18px 20px;
   box-sizing: border-box;
@@ -405,26 +386,6 @@ input[type="range"] {
   color: #d6dcff;
 }
 
-/* 「今日の集中」用の大きめ見出し（今は未使用だが残しておく） */
-.panelTitle.focusTitle {
-  font-size: 24px;
-}
-
-/* 今日の集中ゲージ（今は未使用だが残しておく） */
-#focusMeter {
-  font-size: 32px;
-  letter-spacing: -3px;
-  margin-top: 8px;
-}
-
-/* 判定結果表示用（今は未使用だが残しておく） */
-#keywordResult {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #d6dcff;
-  min-height: 20px;
-}
-
 /* タイマーパネル全体 */
 #timerPanel {
   cursor: pointer;
@@ -435,13 +396,13 @@ input[type="range"] {
 
 /* タイマーパネルにマウスを乗せたとき */
 #timerPanel:hover {
-  background: rgba(255, 255, 255, 0.18) !important;
+  background: var(--panel-hover-bg) !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
 }
 
 /* タイマーパネルを押したとき */
 #timerPanel:active {
-  background: rgba(255, 255, 255, 0.24) !important;
+  background: var(--panel-active-bg) !important;
   transform: scale(0.99);
 }
 
@@ -460,43 +421,48 @@ input[type="range"] {
 }
 
 /* ==================================================
-  6. 通知・ポップアップ
-  ================================================== */
+   共通オーバーレイ
+   ================================================== */
 
-/* オーバーレイ通知全体 */
-#noticeOverlay {
+.modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
+
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+
   padding: 20px;
   box-sizing: border-box;
-}
 
-#clearOverlay {
-  position: fixed;
-  inset: 0;
   background: rgba(0, 0, 0, 0.72);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 10002;
-  padding: 20px;
-  box-sizing: border-box;
+
+  z-index: 1000;
 }
 
-#clearBox {
+/* ==================================================
+   共通ポップアップBOX
+   ================================================== */
+
+.modalBox {
   background: #2b2b44;
   color: #ffffff;
-  border-radius: 16px;
-  padding: 28px 24px;
+
   width: 90%;
   max-width: 460px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  border-radius: 16px;
+  padding: 28px 24px;
+
   box-sizing: border-box;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+#keywordListBox {
+  max-width: 520px;
+  max-height: 80vh;
+  overflow: hidden;
 }
 
 #clearText {
@@ -506,48 +472,12 @@ input[type="range"] {
   color: #ffffff;
 }
 
-/* オーバーレイの中の箱 */
-#noticeBox {
-  background: #2b2b44;
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 28px 24px;
-  width: 90%;
-  max-width: 460px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  box-sizing: border-box;
-}
-
-/* オーバーレイに出る文字 */
 #noticeText {
   font-size: 20px;
   line-height: 1.6;
   margin-bottom: 20px;
   white-space: pre-line;
   color: #ffffff;
-}
-
-#creditOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 10003;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-#creditBox {
-  background: #2b2b44;
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 28px 24px;
-  width: 90%;
-  max-width: 460px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  box-sizing: border-box;
 }
 
 #creditTitle {
@@ -560,38 +490,6 @@ input[type="range"] {
   line-height: 1.8;
   text-align: left;
   margin-bottom: 20px;
-}
-
-#creditBox button {
-  display: block;
-  width: 100%;
-  max-width: 260px;
-  margin: 10px auto 0;
-}
-
-#keywordListOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 10004;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-#keywordListBox {
-  background: #2b2b44;
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 28px 24px;
-  width: 90%;
-  max-width: 520px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  box-sizing: border-box;
-  max-height: 80vh;
-  overflow: hidden;
 }
 
 #keywordListTitle {
@@ -609,7 +507,7 @@ input[type="range"] {
   overflow-y: auto;
   overflow-x: hidden;
 
-  padding-left: 12px; /* ← 追加 */
+  padding-left: 12px;
   padding-right: 8px;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
@@ -619,64 +517,6 @@ input[type="range"] {
   display: block;
   white-space: nowrap;
   padding-right: 8px;
-}
-
-/* ================================
-PCだけキーワードを2列にする
-================================ */
-@media (min-width: 769px) {
-  #keywordListContent {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 20px; /* 行間 / 列間 */
-  }
-}
-
-/* ==================================================
-  7. ロック画面
-  ================================================== */
-
-/* ロック画面全体 */
-#lockScreen {
-  position: fixed;
-  inset: 0;
-  background: #1e1e2f;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* ロック画面の見出し */
-#lockScreen h2 {
-  margin-bottom: 20px;
-  font-size: 28px;
-}
-
-/* パスワード入力欄 */
-#passwordInput {
-  font-size: 18px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: none;
-  width: 260px;
-  max-width: 80%;
-  box-sizing: border-box;
-}
-
-/* パスワードエラー表示 */
-#errorMessage {
-  color: #ff9b9b;
-  margin-top: 12px;
-  min-height: 24px;
-}
-
-/* アプリ本体。最初は非表示 */
-#appContent {
-  display: none;
 }
 
 /* ==================================================
@@ -790,31 +630,6 @@ PCだけキーワードを2列にする
   10. タイマー設定ポップアップ
   ================================================== */
 
-/* ポップアップ全体 */
-#timerSettingOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 10001;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* ポップアップの箱 */
-#timerSettingBox {
-  background: #2b2b44;
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 28px 24px;
-  width: 90%;
-  max-width: 460px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  box-sizing: border-box;
-}
-
 /* ポップアップタイトル */
 #timerSettingTitle {
   font-size: 24px;
@@ -843,7 +658,7 @@ PCだけキーワードを2列にする
   border: none;
 }
 
-/* ポップアップ内のボタン群 */
+/* タイマー設定フォーム内のボタン */
 .timerSettingButtons {
   display: flex;
   gap: 10px;
@@ -860,7 +675,7 @@ PCだけキーワードを2列にする
   width: 100%;
 }
 
-/* 作業中・休憩中の3ボタンを並べる専用エリア */
+/* 作業中・休憩中の操作ボタン */
 .timerActionButtonList {
   display: flex;
   flex-direction: column;
@@ -868,7 +683,7 @@ PCだけキーワードを2列にする
   width: 100%;
 }
 
-/* 3ボタン本体 */
+/* 操作ボタン本体 */
 .timerActionButtonList button {
   display: block;
   width: 100%;
@@ -894,7 +709,240 @@ PCだけキーワードを2列にする
 }
 
 /* ==================================================
-  11. スマホ向け調整
+  11. エンディング演出
+  ================================================== */
+
+#endingWhiteout {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20000;
+  transition: opacity 4s ease;
+}
+
+#endingWhiteout.active {
+  opacity: 1;
+}
+
+#keywordFoundEffect {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+
+  opacity: 0;
+  z-index: 9999;
+}
+
+#keywordToastArea {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 15000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* PCでは通知をアプリ幅に合わせる */
+@media (min-width: 1024px) {
+  #keywordToastArea {
+    right: calc((100vw - 600px) / 2 + 20px);
+  }
+}
+
+.keywordNotice {
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #24313a;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  animation: keywordNoticeFade 7s ease forwards;
+}
+
+#keywordFoundEffect img {
+  width: min(90vw, 580px);
+}
+
+#keywordFoundEffect.show {
+  animation: keywordFoundBackground 2s ease forwards;
+}
+
+#keywordFoundEffect.show img {
+  animation: keywordFoundImage 2s ease forwards;
+}
+
+@keyframes keywordFoundBackground {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes keywordFoundImage {
+  0% {
+    transform: scale(0.85) translateY(10px);
+  }
+
+  20% {
+    transform: scale(1.05) translateY(0);
+  }
+
+  70% {
+    transform: scale(1) translateY(0);
+  }
+
+  100% {
+    transform: scale(1) translateY(-18px);
+  }
+}
+
+.keyword-highlight {
+  color: #9a3a3a;
+  font-weight: bold;
+}
+
+body.dark-theme .keyword-highlight {
+  color: #ff6b6b;
+}
+
+.keywordItemText.unlocked {
+  cursor: pointer;
+  color: #6fa8ff;
+  text-decoration: underline;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.keywordItemText.unlocked:hover {
+  color: #9fc3ff;
+  opacity: 0.9;
+}
+
+.keywordItemText.unlocked:active {
+  opacity: 0.6;
+}
+
+body.dark-theme .keywordItemText.unlocked {
+  color: #8ab4ff;
+}
+
+.keywordListItem.unlocked:active {
+  transform: translateX(3px) scale(0.97);
+}
+
+.keywordItemText {
+  display: inline;
+}
+
+.keywordItemText.unlocked.active {
+  color: #a070d6; /* 紫 */
+}
+
+body.dark-theme .keywordItemText.unlocked.active {
+  color: #c59cff; /* ダーク用の少し明るい紫 */
+}
+
+/* キーワードボタン用の赤い点 */
+.keyword-button {
+  position: relative;
+}
+
+.keyword-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+}
+
+.transforming {
+  animation: keywordTransform 1s ease forwards;
+}
+
+@keyframes keywordTransform {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.keyword-appear {
+  animation: keywordAppear 0.8s ease forwards;
+}
+
+@keyframes keywordAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#sceneFade {
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 4s ease;
+  z-index: 9998;
+}
+
+#sceneFade.active {
+  opacity: 0.85;
+}
+
+#sceneFade.white {
+  background: white;
+}
+
+#sceneFade.white.active {
+  opacity: 1;
+}
+
+#sceneFade.black {
+  background: black;
+}
+
+#sceneFade.black.active {
+  opacity: 1;
+}
+
+/* ==================================================
+  12. スマホ向け調整
   ================================================== */
 @media (max-width: 768px) {
   body {
@@ -1045,208 +1093,5 @@ PCだけキーワードを2列にする
 @media (max-width: 380px) {
   .line {
     font-size: 16px;
-  }
-}
-
-/* ==================================================
-  12. エンディング演出
-  ================================================== */
-
-#endingWhiteout {
-  position: fixed;
-  inset: 0;
-  background: #ffffff;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 20000;
-  transition: opacity 4s ease;
-}
-
-#endingWhiteout.active {
-  opacity: 1;
-}
-
-#keywordFoundEffect {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-
-  opacity: 0;
-  z-index: 9999;
-}
-
-#keywordToastArea {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 15000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-}
-
-/* PCだけ調整 */
-@media (min-width: 1024px) {
-  #keywordToastArea {
-    right: calc((100vw - 600px) / 2 + 20px);
-  }
-}
-
-.keywordNotice {
-  font-size: 14px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: #ffffff; /* ← 完全に不透明 */
-  color: #24313a;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-  animation: keywordNoticeFade 7s ease forwards;
-}
-
-#keywordFoundEffect img {
-  width: min(90vw, 580px);
-}
-
-#keywordFoundEffect.show {
-  animation: keywordFoundBackground 2s ease forwards;
-}
-
-#keywordFoundEffect.show img {
-  animation: keywordFoundImage 2s ease forwards;
-}
-
-@keyframes keywordFoundBackground {
-  0% {
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  70% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes keywordFoundImage {
-  0% {
-    transform: scale(0.85) translateY(10px);
-  }
-
-  20% {
-    transform: scale(1.05) translateY(0);
-  }
-
-  70% {
-    transform: scale(1) translateY(0);
-  }
-
-  100% {
-    transform: scale(1) translateY(-18px);
-  }
-}
-
-.keyword-highlight {
-  color: #9a3a3a;
-  font-weight: bold;
-}
-
-body.dark-theme .keyword-highlight {
-  color: #ff6b6b;
-}
-
-.keywordItemText.unlocked {
-  cursor: pointer;
-  color: #6fa8ff;
-  text-decoration: underline;
-  transition:
-    color 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.keywordItemText.unlocked:hover {
-  color: #9fc3ff;
-  opacity: 0.9;
-}
-
-.keywordItemText.unlocked:active {
-  opacity: 0.6;
-}
-
-body.dark-theme .keywordItemText.unlocked {
-  color: #8ab4ff;
-}
-
-.keywordListItem.unlocked:active {
-  transform: translateX(3px) scale(0.97);
-}
-
-.keywordItemText {
-  display: inline;
-}
-
-.keywordItemText.unlocked.active {
-  color: #a070d6; /* 紫 */
-}
-
-body.dark-theme .keywordItemText.unlocked.active {
-  color: #c59cff; /* ダーク用の少し明るい紫 */
-}
-
-/* キーワードボタン用の赤い点 */
-.keyword-button {
-  position: relative;
-}
-
-.keyword-dot {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 10px;
-  height: 10px;
-  background: #ff4d4d;
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
-}
-
-.transforming {
-  animation: keywordTransform 1s ease forwards;
-}
-
-@keyframes keywordTransform {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-}
-
-.keyword-appear {
-  animation: keywordAppear 0.8s ease forwards;
-}
-
-@keyframes keywordAppear {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
   }
 }

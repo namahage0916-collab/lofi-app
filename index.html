@@ -1,18 +1,27 @@
 <!doctype html>
 <html lang="ja">
   <head>
-    <!-- ==================================================
-    head：ページの基本設定
-    ================================================== -->
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nook: Quiet Talk</title>
     <meta name="robots" content="noindex" />
 
-    <!-- ==================================================
-    CSS：見た目の設定
-    ================================================== -->
+    <meta property="og:title" content="nook: Quiet Talk" />
+    <meta
+      property="og:description"
+      content="幼なじみ二人の会話を見守る百合ポモドーロタイマー。"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://namahage0916-collab.github.io/lofi-app/"
+    />
+    <meta
+      property="og:image"
+      content="https://namahage0916-collab.github.io/lofi-app/image.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -20,44 +29,21 @@
   <body>
     <div id="keywordToastArea"></div>
 
-    <!-- ==================================================
-  HTML
-  実際に画面に表示する部品を書く場所
-  ・ロック画面
-  ・通知
-  ・ポップアップ
-  ・アプリ本体
-  ================================================== -->
-
-    <div id="endingWhiteout"></div>
+    <div id="sceneFade"></div>
 
     <div id="keywordFoundEffect">
       <img src="keyword.png" alt="Keyword Found" />
     </div>
 
-    <!-- ==================================================
-  1. ロック画面
-  ================================================== -->
-    <div id="lockScreen">
-      <h2>🔒 パスワードを入力</h2>
-      <input type="password" id="passwordInput" placeholder="Password" />
-      <br /><br />
-      <button onclick="checkPassword()">入る</button>
-      <div id="errorMessage"></div>
-    </div>
-
-    <!-- ==================================================
-  2. 作業終了・休憩終了の通知オーバーレイ
-  ================================================== -->
-    <div id="noticeOverlay">
-      <div id="noticeBox">
+    <div id="noticeOverlay" class="modalOverlay">
+      <div id="noticeBox" class="modalBox">
         <div id="noticeText"></div>
         <button onclick="closeNoticeAndStartNext()">閉じる</button>
       </div>
     </div>
 
-    <div id="clearOverlay">
-      <div id="clearBox">
+    <div id="clearOverlay" class="modalOverlay">
+      <div id="clearBox" class="modalBox">
         <div id="clearText">
           二人の物語を見届けていただき<br />ありがとうございました。<br /><br />
           同じ場所にはいられなくても<br />はじめとまりんの時間は<br />確かにここにありました。<br /><br /><br />
@@ -68,8 +54,8 @@
       </div>
     </div>
 
-    <div id="creditOverlay">
-      <div id="creditBox">
+    <div id="creditOverlay" class="modalOverlay">
+      <div id="creditBox" class="modalBox">
         <div id="creditTitle">クレジット</div>
 
         <div id="creditText">
@@ -93,8 +79,8 @@
       </div>
     </div>
 
-    <div id="keywordListOverlay">
-      <div id="keywordListBox">
+    <div id="keywordListOverlay" class="modalOverlay">
+      <div id="keywordListBox" class="modalBox">
         <div id="keywordListTitle">キーワードリスト</div>
 
         <div id="keywordListContent"></div>
@@ -103,14 +89,10 @@
       </div>
     </div>
 
-    <!-- ==================================================
-  3. タイマー設定ポップアップ
-  ================================================== -->
-    <div id="timerSettingOverlay">
-      <div id="timerSettingBox">
+    <div id="timerSettingOverlay" class="modalOverlay">
+      <div id="timerSettingBox" class="modalBox">
         <div id="timerSettingTitle">タイマー設定</div>
 
-        <!-- 停止中に出す：時間設定エリア -->
         <div id="timerSettingForm">
           <div class="settingRow">
             <label for="workMinutesInput">作業時間（分）</label>
@@ -140,7 +122,6 @@
           </div>
         </div>
 
-        <!-- 作業中・休憩中・一時停止中に出す：操作エリア -->
         <div id="timerActionButtons" style="display: none">
           <div
             id="timerActionModeText"
@@ -170,17 +151,12 @@
       </div>
     </div>
 
-    <!-- ==================================================
-  4. アプリ本体
-  ================================================== -->
     <div id="appContent">
-      <!-- タイトルと日付 -->
       <h1 class="logo">
         🎧nook: Quiet Talk
         <span id="dateText"></span>
       </h1>
 
-      <!-- 画像＋セリフ枠 -->
       <div id="imageArea">
         <img
           src="image_idle.png"
@@ -202,18 +178,14 @@
         </div>
       </div>
 
-      <!-- 音楽本体。srcはJavaScriptで切り替える -->
       <audio id="music"></audio>
 
-      <!-- ベル音 -->
       <audio id="bell" src="bell.mp3"></audio>
       <audio id="seTransform" src="Onoma-Sparkle13-1(Slow-Short).mp3"></audio>
       <audio id="seSuccess" src="Multi_Accent05-1(Low).mp3"></audio>
       <audio id="seFail" src="Short_Accent10-1(Low).mp3"></audio>
 
-      <!-- 左パネルと右パネル -->
       <div id="controlRow">
-        <!-- 左：キーワード入力パネル -->
         <div id="focusPanel" class="panel fade-in">
           <input
             type="text"
@@ -223,7 +195,6 @@
           />
         </div>
 
-        <!-- 右：タイマーパネル -->
         <div
           id="timerPanel"
           class="panel fade-in"
@@ -234,7 +205,6 @@
         </div>
       </div>
 
-      <!-- テーマボタンとビジュアライザー -->
       <div id="buttonRow">
         <div id="buttonGroup">
           <button
@@ -264,80 +234,17 @@
         <div id="trackName">No track</div>
       </div>
 
-      <!-- ==================================================
-⚠ 注意：ここから先を読む人へ
-==================================================
-
-このコードを読んでいるあなたへ。
-
-このアプリは、
-キーワードを探しながら物語を進める体験を前提に作られています。
-
-コードを読むことで、
-・未発見のキーワード
-・物語の構造
-・仕掛けの意図
-
-が分かってしまい、
-本来の体験を大きく損なう可能性があります。
-
-それでも構わない場合は、お読みください。
-
-================================================== -->
-
-      <!-- ==================================================
-    JavaScript
-    アプリの動きを書く場所
-    ================================================== -->
       <script>
-        /* ==================================================
-                                                                 JavaScript 全体の読み方
-                                                                 ==================================================
+        const images = {
+          idle: "image_idle.png",
+          work: "image.png",
+          break: "image_break.png",
+          ending: "image_ending.png",
+        };
 
-                                                                 このスクリプトは、ざっくり次の順番で読めます。
-
-                                                                 1. 基本設定・HTML要素の取得
-                                                                 2. データ定義（音楽・セリフ・キーワード）
-                                                                 3. 状態管理（timerState）
-                                                                 4. 画面表示（テーマ・タイマー表示・画像・通知）
-                                                                 5. 入力処理（キーワード・ボタン）
-                                                                 6. 音楽・ビジュアライザー
-                                                                 7. タイマー本体
-                                                                 8. 初期設定
-
-                                                                 重要：
-                                                                 タイマーの状態は timerState だけを見ます。
-                                                                 旧変数（isRunning / isWorkMode など）は使っていません。
-                                                                 ================================================== */
-
-        /* ==================================================
-                                                                 1. 基本設定
-                                                                 ================================================== */
-
-        /* パスワード機能を使うかどうか
-                                                                 true なら使う
-                                                                 false なら使わない */
-        const USE_PASSWORD = false;
-
-        /* 初期待機画像 */
-        const IDLE_IMAGE = "image_idle.png";
-
-        /* 作業中・休憩中の画像ファイル */
-        const WORK_IMAGE = "image.png";
-        const BREAK_IMAGE = "image_break.png";
-
-        /* パスワード */
-        const APP_PASSWORD = "storycat";
-
-        const ENDING_IMAGE = "image_ending.png";
         const ENDING_BGM = "Nothing.mp3";
 
         const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
-
-        /* ==================================================
-                                                                 2. HTML要素を取得
-                                                                 HTML側の部品をJavaScriptから使えるようにする
-                                                                 ================================================== */
 
         const music = document.getElementById("music");
         const bell = document.getElementById("bell");
@@ -377,10 +284,9 @@
 
         const keywordInput = document.getElementById("keywordInput");
 
-        const passwordInput = document.getElementById("passwordInput");
-        const errorMessage = document.getElementById("errorMessage");
-        const lockScreen = document.getElementById("lockScreen");
         const appContent = document.getElementById("appContent");
+
+        appContent.style.display = "block";
 
         const mainImage = document.getElementById("mainImage");
 
@@ -389,7 +295,7 @@
 
         const visualizer = document.getElementById("visualizer");
 
-        const endingWhiteout = document.getElementById("endingWhiteout");
+        const sceneFade = document.getElementById("sceneFade");
 
         const clearOverlay = document.getElementById("clearOverlay");
         const clearBox = document.getElementById("clearBox");
@@ -404,19 +310,9 @@
         const seFail = document.getElementById("seFail");
         const seTransform = document.getElementById("seTransform");
 
-        /* ==================================================
-                                                                 3. 初期時間設定
-                                                                 ================================================== */
-
-        /* 時間設定（秒） */
         let WORK_TIME = 25 * 60;
         let BREAK_TIME = 5 * 60;
 
-        /* ==================================================
-                                                                 4. 音楽データ
-                                                                 ================================================== */
-
-        /* 再生する曲一覧 */
         const tracks = [
           "Epoch.mp3",
           "Barely.mp3",
@@ -429,1294 +325,17 @@
           "Glass.mp3",
           "Walk.mp3",
         ];
-
-        /* ==================================================
-           5. セリフデータ
-           ================================================== */
       </script>
 
       <script src="js/dialogue-keyword.js"></script>
-
-      <script>
-        /* ==================================================
-  　　　　　6. 状態管理
-  　　　　　================================================== */
-
-        let timerState = {
-          mode: "idle", // idle / work / break
-          isRunning: false,
-          isPaused: false,
-          remainingTime: WORK_TIME,
-          endTime: null,
-        };
-
-        let intervalId = null;
-        let messageIntervalId = null;
-
-        const WORK_MESSAGE_INTERVAL = 5 * 60 * 1000;
-
-        let lastMessageIndex = -1;
-        let currentTrackIndex = -1;
-
-        let currentDialoguePages = null;
-        let currentDialoguePageIndex = 0;
-        let acquiredKeywords = [];
-        let unlockedDialogueKeywords = [];
-        let transformedQuizAnswers = [];
-
-        function getAllKeywords() {
-          const breakKeywords = breakMessages.map((item) => item.keyword);
-          const storyInputKeywords = Object.keys(keywordDialogues);
-          const storyFoundKeywords = Object.values(keywordDialogues)
-            .flatMap((data) => data.keywordsByPage || [])
-            .flat();
-
-          return [
-            ...new Set([
-              ...breakKeywords,
-              ...storyInputKeywords,
-              ...storyFoundKeywords,
-            ]),
-          ];
-        }
-
-        function updateKeywordDot() {
-          const hasUnusedAcquiredKeyword = acquiredKeywords.some(
-            (keyword) =>
-              keywordDialogues[keyword] &&
-              !unlockedDialogueKeywords.includes(keyword),
-          );
-
-          const dot = document.getElementById("keywordDot");
-
-          if (hasUnusedAcquiredKeyword) {
-            dot.style.display = "block";
-          } else {
-            dot.style.display = "none";
-          }
-        }
-
-        /* 通常時の音量 */
-        let normalVolume = 1;
-
-        /* 今日の作業セッション数 */
-        let sessionCount = 0;
-        const SESSION_GOAL = 5;
-
-        /* 前回のセリフ番号を記録しておく */
-        let lastWorkEndIndex = -1;
-        let lastResumeMessageIndex = -1;
-
-        let isEnding = false;
-
-        /* ==================================================
-                                                                7. テーマ設定
-                                                                ================================================== */
-
-        let currentTheme = 0;
-
-        const themes = [
-          {
-            bodyBg: "#ddd2c3",
-            bodyText: "#2f2a24",
-            panelBg: "rgba(255,255,255,0.35)",
-            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-            subText: "#5a4f45",
-            mainText: "#2f2a24",
-            visualizerColor: "#8b6f5a",
-            popupBg: "#e8dfd2",
-            isDark: false,
-          },
-          {
-            bodyBg: "#bfcfda",
-            bodyText: "#24313a",
-            panelBg: "rgba(255,255,255,0.30)",
-            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-            subText: "#4a5c68",
-            mainText: "#24313a",
-            visualizerColor: "#4a90e2",
-            popupBg: "#cfdbe6",
-            isDark: false,
-          },
-          {
-            bodyBg: "#bfcfc3",
-            bodyText: "#2f3d33",
-            panelBg: "rgba(255,255,255,0.30)",
-            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.12)",
-            subText: "#567a63",
-            mainText: "#2f3d33",
-            visualizerColor: "#5f9e7a",
-            popupBg: "#cfe0d5",
-            isDark: false,
-          },
-          {
-            bodyBg: "#2b2f3a",
-            bodyText: "#f2f2f2",
-            panelBg: "rgba(255,255,255,0.08)",
-            panelShadow: "0 6px 16px rgba(0, 0, 0, 0.25)",
-            subText: "#d6dcff",
-            mainText: "#f2f2f2",
-            visualizerColor: "#d6dcff",
-            popupBg: "#2b2f3a",
-            isDark: true,
-          },
-        ];
-
-        /* テーマの色を画面全体に反映する */
-        function applyTheme(theme) {
-          /* ページ全体 */
-          document.body.style.background = theme.bodyBg;
-          document.body.style.color = theme.bodyText;
-
-          /* パネル類 */
-          document.querySelectorAll(".panel").forEach((panel) => {
-            panel.style.background = theme.panelBg;
-            panel.style.boxShadow = theme.panelShadow;
-          });
-
-          /* セリフ枠 */
-          messageBox.style.background = theme.panelBg;
-          messageBox.style.boxShadow = theme.panelShadow;
-
-          /* 補助色テキスト */
-          document.querySelectorAll(".speaker").forEach((el) => {
-            el.style.color = theme.subText;
-          });
-
-          document.getElementById("trackName").style.color = theme.subText;
-          document.getElementById("dateText").style.color = theme.subText;
-          document.getElementById("mode").style.color = theme.subText;
-
-          document.querySelectorAll(".panelTitle").forEach((el) => {
-            el.style.color = theme.subText;
-          });
-
-          /* 本文色 */
-          document.querySelectorAll(".line").forEach((el) => {
-            el.style.color = theme.mainText;
-          });
-
-          document.getElementById("timer").style.color = theme.mainText;
-
-          /* ビジュアライザー */
-          document.querySelectorAll("#visualizer span").forEach((bar) => {
-            bar.style.background = theme.visualizerColor;
-          });
-
-          /* タイマー設定ポップアップ */
-          const timerBox = document.getElementById("timerSettingBox");
-          if (timerBox) {
-            timerBox.style.background = theme.popupBg;
-            timerBox.style.boxShadow = theme.panelShadow;
-            timerBox.style.color = theme.mainText;
-
-            if (theme.isDark) {
-              document.documentElement.style.setProperty(
-                "--popup-button-bg",
-                "#3a4050",
-              );
-              timerBox.classList.add("dark-popup");
-            } else {
-              document.documentElement.style.setProperty(
-                "--popup-button-bg",
-                theme.panelBg,
-              );
-              timerBox.classList.remove("dark-popup");
-            }
-          }
-
-          /* 通知ポップアップ */
-          const noticeBox = document.getElementById("noticeBox");
-          const noticeTextEl = document.getElementById("noticeText");
-
-          if (noticeBox) {
-            noticeBox.style.background = theme.popupBg;
-            noticeBox.style.boxShadow = theme.panelShadow;
-            noticeBox.style.color = theme.mainText;
-          }
-
-          if (noticeTextEl) {
-            noticeTextEl.style.color = theme.mainText;
-          }
-
-          /* クリアポップアップ */
-          if (clearBox) {
-            clearBox.style.background = theme.popupBg;
-            clearBox.style.boxShadow = theme.panelShadow;
-            clearBox.style.color = theme.mainText;
-          }
-
-          if (clearText) {
-            clearText.style.color = theme.mainText;
-          }
-
-          /* クレジットポップアップ */
-          if (creditBox) {
-            creditBox.style.background = theme.popupBg;
-            creditBox.style.boxShadow = theme.panelShadow;
-            creditBox.style.color = theme.mainText;
-
-            if (theme.isDark) {
-              creditBox.classList.add("dark-popup");
-            } else {
-              creditBox.classList.remove("dark-popup");
-            }
-          }
-
-          if (creditText) {
-            creditText.style.color = theme.mainText;
-          }
-
-          if (creditTitle) {
-            creditTitle.style.color = theme.mainText;
-          }
-
-          /* キーワードリストポップアップ */
-          const keywordListBox = document.getElementById("keywordListBox");
-          const keywordListTitle = document.getElementById("keywordListTitle");
-          const keywordListContent =
-            document.getElementById("keywordListContent");
-
-          if (keywordListBox) {
-            keywordListBox.style.background = theme.popupBg;
-            keywordListBox.style.boxShadow = theme.panelShadow;
-            keywordListBox.style.color = theme.mainText;
-
-            if (theme.isDark) {
-              keywordListBox.classList.add("dark-popup");
-            } else {
-              keywordListBox.classList.remove("dark-popup");
-            }
-          }
-
-          if (keywordListTitle) {
-            keywordListTitle.style.color = theme.mainText;
-          }
-
-          if (keywordListContent) {
-            keywordListContent.style.color = theme.mainText;
-          }
-
-          /* CSS変数側にもボタン色を反映 */
-          document.documentElement.style.setProperty(
-            "--button-bg",
-            theme.panelBg,
-          );
-          document.documentElement.style.setProperty(
-            "--button-text",
-            theme.mainText,
-          );
-
-          if (theme.isDark) {
-            document.body.classList.add("dark-theme");
-          } else {
-            document.body.classList.remove("dark-theme");
-          }
-        }
-
-        /* テーマを次の番号へ切り替える */
-        function toggleTheme() {
-          currentTheme = (currentTheme + 1) % themes.length;
-          applyTheme(themes[currentTheme]);
-        }
-
-        /* ==================================================
-                                                                        8. パスワード関連
-                                                                        ================================================== */
-
-        /* パスワードチェック */
-        function checkPassword() {
-          const input = passwordInput.value;
-
-          if (input === APP_PASSWORD) {
-            lockScreen.style.display = "none";
-            appContent.style.display = "block";
-            errorMessage.innerText = "";
-          } else {
-            errorMessage.innerText = "パスワードが違います";
-            passwordInput.value = "";
-            passwordInput.focus();
-          }
-        }
-
-        /* Enterキーでもパスワードを送信できるようにする */
-        passwordInput.addEventListener("keydown", function (event) {
-          if (event.key === "Enter") {
-            checkPassword();
-          }
-        });
-
-        /* パスワード機能をオフにしている場合は、
-                                                                        最初からロック画面を消してアプリ本体を出す */
-        if (!USE_PASSWORD) {
-          lockScreen.style.display = "none";
-          appContent.style.display = "block";
-        }
-
-        /* ==================================================
-                                                                        9. 音量・ベル関連
-                                                                        ================================================== */
-
-        /* 音量調整 */
-        function setVolume(v) {
-          const volume = Number(v);
-
-          /* 通常音量として記録 */
-          normalVolume = volume;
-
-          music.volume = volume;
-          bell.volume = Math.min(volume, 0.6);
-        }
-
-        /* ベル音を鳴らす */
-        function playBell() {
-          bell.currentTime = 0;
-          bell.play().catch(() => {});
-        }
-
-        /* 成功効果音を鳴らす */
-        function playSuccessSE() {
-          seSuccess.currentTime = 0;
-          seSuccess.play().catch(() => {});
-        }
-
-        /* 失敗効果音を鳴らす */
-        function playFailSE() {
-          seFail.currentTime = 0;
-          seFail.play().catch(() => {});
-        }
-
-        function playTransformSE() {
-          seTransform.currentTime = 0;
-          seTransform.play().catch(() => {});
-        }
-
-        /* ==================================================
-                                                                        10. タイマー設定ポップアップ関連
-                                                                        ================================================== */
-
-        /* タイマー設定ポップアップを開く */
-        function openTimerSettings() {
-          if (isEnding) return;
-
-          const overlay = document.getElementById("timerSettingOverlay");
-          const title = document.getElementById("timerSettingTitle");
-          const form = document.getElementById("timerSettingForm");
-          const actions = document.getElementById("timerActionButtons");
-          const actionModeText = document.getElementById("timerActionModeText");
-          const pauseResumeButton =
-            document.getElementById("pauseResumeButton");
-          const finishModeButton = document.getElementById("finishModeButton");
-
-          overlay.style.display = "flex";
-
-          /* 動作中または一時停止中なら、操作ボタンを表示 */
-          if (timerState.isRunning || timerState.isPaused) {
-            title.style.display = "none";
-            form.style.display = "none";
-            actions.style.display = "block";
-
-            if (timerState.mode === "work") {
-              actionModeText.innerText = timerState.isRunning
-                ? "今は作業時間中です"
-                : "作業時間を一時停止中です";
-            } else {
-              actionModeText.innerText = timerState.isRunning
-                ? "今は休憩時間中です"
-                : "休憩時間を一時停止中です";
-            }
-
-            updateTimerActionTime();
-            pauseResumeButton.innerText = timerState.isRunning
-              ? "一時停止"
-              : "再開";
-            finishModeButton.innerText =
-              timerState.mode === "work" ? "作業終了" : "休憩終了";
-          } else {
-            title.style.display = "block";
-            form.style.display = "block";
-            actions.style.display = "none";
-          }
-        }
-
-        /* ポップアップ側のタイマー表示を更新する */
-        function updateTimerActionTime() {
-          const actionTime = document.getElementById("timerActionTime");
-          if (actionTime) {
-            actionTime.innerText = timerDisplay.innerText;
-          }
-        }
-
-        /* タイマー設定ポップアップを閉じる */
-        function closeTimerSettings() {
-          document.getElementById("timerSettingOverlay").style.display = "none";
-          document.getElementById("timerSettingTitle").style.display = "block";
-        }
-
-        /* ポップアップから一時停止 / 再開を切り替える */
-        function togglePauseFromSettings() {
-          if (timerState.isRunning) {
-            pauseTimerOnly();
-            openTimerSettings();
-          } else if (timerState.isPaused) {
-            startTimer(false);
-            closeTimerSettings();
-          }
-        }
-
-        /* ポップアップからリセットする
-                                                                  ※今は呼び出しボタンがないが、残してある関数 */
-        function resetFromSettings() {
-          resetTimer();
-          closeTimerSettings();
-        }
-
-        /* ポップアップから作業終了 / 休憩終了する */
-        function finishFromSettings() {
-          skipCurrentMode();
-          closeTimerSettings();
-        }
-
-        /* 設定した時間でタイマーを開始する */
-        function startFromSettings() {
-          const workMinutes = Number(
-            document.getElementById("workMinutesInput").value,
-          );
-          const breakMinutes = Number(
-            document.getElementById("breakMinutesInput").value,
-          );
-
-          if (workMinutes < 1 || breakMinutes < 1) return;
-
-          /* 入力値を秒に変換 */
-          WORK_TIME = workMinutes * 60;
-          BREAK_TIME = breakMinutes * 60;
-
-          /* 作業モードの初期状態に戻す */
-          timerState.mode = "work";
-          timerState.isRunning = false;
-          timerState.isPaused = false;
-          timerState.remainingTime = WORK_TIME;
-          timerState.endTime = null;
-
-          /* 表示を先に更新 */
-          updateModeDisplay();
-          updateTimerDisplay();
-          updateModeImage();
-
-          /* ポップアップを閉じて開始 */
-          closeTimerSettings();
-          startTimer();
-        }
-
-        /* ==================================================
-           11. タイマー表示関連
-           ================================================== */
-      </script>
-
+      <script src="js/theme.js"></script>
+      <script src="js/audio.js"></script>
+      <script src="js/keyword-system.js"></script>
+      <script src="js/dialogue-ui.js"></script>
       <script src="js/timer.js"></script>
-
-      <script>
-        /* タイマー表示を更新する。
-           timerState.remainingTime（秒）を「分:秒」の形に直して画面へ反映する。 */
-        function updateTimerDisplay() {
-          const min = Math.floor(timerState.remainingTime / 60);
-          const sec = timerState.remainingTime % 60;
-
-          timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
-
-          updateTimerActionTime();
-        }
-
-        /* 作業時間 / 休憩時間 の表示を切り替える */
-        function updateModeDisplay() {
-          if (timerState.mode === "idle") {
-            modeDisplay.innerText = "タイマー設定";
-          } else if (timerState.mode === "work") {
-            modeDisplay.innerText = "作業時間";
-          } else if (timerState.mode === "break") {
-            modeDisplay.innerText = "休憩時間";
-          }
-        }
-
-        /* ==================================================
-           12. 画像切り替え関連
-           ================================================== */
-
-        /* 今のモードに合わせて画像を切り替える */
-        function updateModeImage() {
-          /* 両方のフェードクラスを一旦外す */
-          mainImage.classList.remove("fade-in-long");
-          mainImage.classList.remove("fade-in-short");
-
-          /* 画像を切り替え */
-          mainImage.src = timerState.mode === "work" ? WORK_IMAGE : BREAK_IMAGE;
-
-          /* 強制再描画 */
-          void mainImage.offsetWidth;
-
-          /* 切り替え時は短いフェード */
-          mainImage.classList.add("fade-in-short");
-        }
-
-        /* ==================================================
-                                                                13. 通知表示関連
-                                                                ================================================== */
-
-        /* オーバーレイ通知を表示する */
-        function showNotice(text) {
-          noticeText.innerText = text;
-          noticeOverlay.style.display = "flex";
-        }
-
-        /* オーバーレイを閉じたら、そのまま次のタイマーを開始 */
-        /*
-                                                    作業終了・休憩終了の通知を閉じたあと、次のタイマーを開始する。
-                                                    ここで音量とビジュアライザーも元に戻す。
-                                                    */
-        function closeNoticeAndStartNext() {
-          noticeOverlay.style.display = "none";
-
-          timerState.isPaused = false;
-
-          music.volume = normalVolume;
-          visualizer.classList.remove("low-volume");
-
-          updateModeImage();
-
-          startVisualizer();
-
-          if (timerState.mode === "break") {
-            showRandomMessage();
-            startTimer(false);
-          } else {
-            startTimer(false);
-            showRandomResumeMessage();
-          }
-        }
-
-        /* 通知はオーバーレイだけ使う */
-        function notifyModeChange(text) {
-          showNotice(text);
-          playBell();
-
-          /* 音楽の音量を下げる */
-          music.volume = normalVolume * 0.2;
-
-          /* ビジュアライザーを小さくする */
-          visualizer.classList.add("low-volume");
-        }
-
-        function showClearPopup() {
-          clearOverlay.style.display = "flex";
-          keywordInput.blur();
-        }
-
-        function closeClearPopup() {
-          clearOverlay.style.display = "none";
-        }
-
-        function shareOnX() {
-          const text =
-            "◤　百合ポモドーロタイマー　◢\n━━━━━━━━━━━━━━━\nはじめとまりんの物語を見届けた\n━━━━━━━━━━━━━━━\n\n止まっていた時間が動き出し、\n二人は新たな一歩を踏み出した。\n\n#nookQuietTalk\n";
-          const url = "https://namahage0916-collab.github.io/lofi-app/";
-
-          const shareUrl =
-            "https://twitter.com/intent/tweet?text=" +
-            encodeURIComponent(text) +
-            "&url=" +
-            encodeURIComponent(url);
-
-          window.open(shareUrl, "_blank");
-        }
-
-        function showCreditPopup() {
-          creditOverlay.style.display = "flex";
-          keywordInput.blur();
-        }
-
-        function closeCreditPopup() {
-          creditOverlay.style.display = "none";
-        }
-
-        function showKeywordListPopup() {
-          const overlay = document.getElementById("keywordListOverlay");
-          overlay.style.display = "flex";
-
-          updateKeywordListContent(true);
-
-          keywordInput.blur();
-        }
-
-        function closeKeywordListPopup() {
-          const overlay = document.getElementById("keywordListOverlay");
-          overlay.style.display = "none";
-        }
-
-        function selectKeywordFromList(keyword) {
-          closeKeywordListPopup();
-
-          keywordInput.value = keyword;
-          keywordInput.focus();
-          keywordInput.setSelectionRange(keyword.length, keyword.length);
-        }
-
-        function updateKeywordListContent(withAnimation = false) {
-          const content = document.getElementById("keywordListContent");
-
-          content.innerHTML = keywordListItems
-            .map((item) => {
-              if (item.type === "quiz") {
-                const question = item.question;
-                const answer = item.answer;
-
-                const hasQuestion = acquiredKeywords.includes(question);
-                const hasAnswer = acquiredKeywords.includes(answer);
-
-                if (!hasQuestion && !hasAnswer) {
-                  return `<div class="keywordListItem">🔒？？？</div>`;
-                }
-
-                if (hasQuestion && !hasAnswer) {
-                  return `<div class="keywordListItem">🔒 ${question}</div>`;
-                }
-
-                if (withAnimation && !transformedQuizAnswers.includes(answer)) {
-                  return `
-          <div class="keywordListItem" data-answer="${answer}">
-            🔒 ${question}
-          </div>
-        `;
-                }
-
-                return `<div class="keywordListItem">🔑 ${answer}</div>`;
-              }
-
-              if (item.type === "normal") {
-                const keyword = item.keyword;
-
-                if (acquiredKeywords.includes(keyword)) {
-                  const isActive = unlockedDialogueKeywords.includes(keyword);
-                  const extraClass = isActive ? " active" : "";
-
-                  return `
-          <div class="keywordListItem">🔑
-            <span class="keywordItemText unlocked${extraClass}" onclick="selectKeywordFromList('${keyword}')">
-              ${keyword}
-            </span>
-          </div>
-        `;
-                }
-
-                return `<div class="keywordListItem">🔑？？？</div>`;
-              }
-
-              return "";
-            })
-            .join("");
-
-          if (withAnimation) {
-            const targets = document.querySelectorAll(
-              ".keywordListItem[data-answer]",
-            );
-
-            if (targets.length > 0) {
-              const lastTarget = targets[targets.length - 1];
-
-              lastTarget.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-              });
-
-              // リストを開いてから、少し間を置いて変化開始
-              setTimeout(() => {
-                playTransformSE();
-              }, 650);
-
-              setTimeout(() => {
-                targets.forEach((el) => {
-                  el.classList.add("transforming");
-                });
-
-                setTimeout(() => {
-                  targets.forEach((el) => {
-                    const answer = el.dataset.answer;
-
-                    el.innerHTML = `🔑 ${answer}`;
-
-                    if (!transformedQuizAnswers.includes(answer)) {
-                      transformedQuizAnswers.push(answer);
-                    }
-
-                    el.classList.remove("transforming");
-                    el.classList.add("keyword-appear");
-                  });
-                }, 1000);
-              }, 700);
-            }
-          }
-        }
-
-        /* ==================================================
-                                                                14. セリフ・キーワード関連
-                                                                ================================================== */
-
-        /* 前回と同じ会話を避けながらランダムに選ぶ */
-        function getRandomMessageIndex() {
-          const currentMessages =
-            timerState.mode === "work" ? messages : breakMessages;
-
-          if (currentMessages.length === 1) return 0;
-
-          let randomIndex;
-          do {
-            randomIndex = Math.floor(Math.random() * currentMessages.length);
-          } while (randomIndex === lastMessageIndex);
-
-          return randomIndex;
-        }
-
-        function getRandomBreakMessageIndex() {
-          const candidates = breakMessages
-            .map((message, index) => ({ message, index }))
-            .filter((item) => !acquiredKeywords.includes(item.message.keyword));
-
-          if (candidates.length === 0) {
-            return Math.floor(Math.random() * breakMessages.length);
-          }
-
-          const randomCandidate =
-            candidates[Math.floor(Math.random() * candidates.length)];
-
-          return randomCandidate.index;
-        }
-
-        /* 会話を表示する */
-        let currentKeywordsByPage = null;
-
-        function showDialogue(dialogue, keywordsByPage = null) {
-          currentDialoguePages = Array.isArray(dialogue[0])
-            ? dialogue
-            : [dialogue];
-          currentDialoguePageIndex = 0;
-          currentKeywordsByPage = keywordsByPage;
-
-          showDialoguePage();
-        }
-
-        function showDialoguePage() {
-          const dialogue = currentDialoguePages[currentDialoguePageIndex];
-
-          messageBox.innerHTML = "";
-
-          dialogue.forEach((item) => {
-            const lineBlock = document.createElement("div");
-
-            if (item.speaker.trim() === "") {
-              lineBlock.className = "dialogLine center";
-            } else {
-              lineBlock.className =
-                item.speaker === "まりん"
-                  ? "dialogLine left"
-                  : "dialogLine right";
-            }
-
-            if (item.speaker) {
-              const speakerEl = document.createElement("div");
-              speakerEl.className = "speaker";
-              speakerEl.innerText = item.speaker;
-              lineBlock.appendChild(speakerEl);
-            }
-
-            const textEl = document.createElement("div");
-            textEl.className = "line";
-            textEl.innerHTML = "「" + highlightKeywords(item.text) + "」";
-
-            lineBlock.appendChild(textEl);
-            messageBox.appendChild(lineBlock);
-          });
-
-          function highlightKeywords(text) {
-            // 【〜】で囲まれている部分を丸ごと取得
-            return text.replace(/【(.*?)】/g, (match) => {
-              return `<span class="keyword-highlight">${match}</span>`;
-            });
-          }
-
-          applyTheme(themes[currentTheme]);
-
-          // ★ここが重要
-          const hasMultiplePages = currentDialoguePages.length > 1;
-          const hasNextPage =
-            currentDialoguePageIndex < currentDialoguePages.length - 1;
-
-          if (!hasMultiplePages) {
-            messageBox.classList.remove("has-next");
-            messageBox.classList.remove("has-end");
-          } else if (hasNextPage) {
-            messageBox.classList.add("has-next");
-            messageBox.classList.remove("has-end");
-          } else {
-            messageBox.classList.remove("has-next");
-            messageBox.classList.add("has-end");
-          }
-
-          if (
-            currentKeywordsByPage &&
-            currentKeywordsByPage[currentDialoguePageIndex]
-          ) {
-            currentKeywordsByPage[currentDialoguePageIndex].forEach(
-              (keyword) => {
-                acquireKeyword(keyword);
-              },
-            );
-          }
-        }
-
-        function showKeywordNotice(keyword) {
-          const NOTICE_DURATION = 7000;
-
-          const area = document.getElementById("keywordToastArea");
-
-          const notice = document.createElement("div");
-          notice.className = "keywordNotice";
-          const icon = quizKeywords.includes(keyword) ? "🔒" : "🔑";
-
-          notice.innerText = icon + " " + keyword;
-
-          notice.style.animationDuration = NOTICE_DURATION + "ms";
-
-          area.appendChild(notice);
-
-          setTimeout(() => {
-            notice.remove();
-          }, NOTICE_DURATION);
-        }
-
-        function acquireKeyword(keyword, delayNotice = 0) {
-          if (!keyword) return;
-
-          if (acquiredKeywords.includes(keyword)) return;
-
-          acquiredKeywords.push(keyword);
-
-          setTimeout(() => {
-            showKeywordNotice(keyword);
-          }, delayNotice);
-
-          updateKeywordDot();
-
-          console.log("キーワード取得:", keyword);
-        }
-
-        /* 作業中 / 休憩中の会話を表示する */
-        function showRandomMessage() {
-          const currentMessages =
-            timerState.mode === "work" ? messages : breakMessages;
-          const randomIndex =
-            timerState.mode === "break"
-              ? getRandomBreakMessageIndex()
-              : getRandomMessageIndex();
-
-          lastMessageIndex = randomIndex;
-
-          const selected = currentMessages[randomIndex];
-
-          if (timerState.mode === "break") {
-            showDialogue(selected.dialogue);
-            acquireKeyword(selected.keyword);
-          } else {
-            showDialogue(selected);
-          }
-        }
-
-        /* サイトを開いた直後の会話を表示する */
-        function showIdleMessage() {
-          const randomIndex = Math.floor(Math.random() * idleMessages.length);
-          showDialogue(idleMessages[randomIndex]);
-        }
-
-        /* 5分ごとにセリフを更新するループ開始 */
-        function startMessageLoop() {
-          if (messageIntervalId) return;
-
-          messageIntervalId = setInterval(() => {
-            if (!timerState.isRunning) return;
-
-            // 作業中だけ、5分ごとにセリフを変える
-            if (timerState.mode !== "work") return;
-
-            showRandomMessage();
-          }, WORK_MESSAGE_INTERVAL);
-        }
-
-        /* セリフ更新ループ停止 */
-        function stopMessageLoop() {
-          clearInterval(messageIntervalId);
-          messageIntervalId = null;
-        }
-
-        /* キーワード入力でセリフが出たら、セリフ切り替えタイマーを再スタートさせる */
-        function resetMessageLoop() {
-          stopMessageLoop();
-
-          if (timerState.isRunning) {
-            startMessageLoop();
-          }
-        }
-
-        /* キーワードを比較しやすい形に整える
-                                                                  例：前後の空白を消す、英字を小文字化する */
-        function normalizeKeyword(text) {
-          return text.trim().toLowerCase();
-        }
-
-        /* 入力された語が、どの本来のキーワードに属するか探す */
-        function findKeyword(input) {
-          for (const key in keywordMap) {
-            if (keywordMap[key].includes(input)) {
-              return key;
-            }
-          }
-          return null;
-        }
-
-        /* キーワード入力を判定する */
-        /*
-                                                    キーワード入力欄の中身を判定する。
-                                                    一致するキーワードがあれば対応セリフを表示し、
-                                                    エンディング用キーワードなら特別処理へ進む。
-                                                    */
-        function checkKeyword() {
-          const input = normalizeKeyword(keywordInput.value);
-
-          if (!input) return;
-
-          const key = findKeyword(input);
-
-          if (isEnding && key !== "お別れは笑顔で" && key !== "始まりの物語") {
-            playFailSE();
-            keywordInput.value = "";
-            return;
-          }
-
-          if (key === "また会う日まで") {
-            startEnding();
-          } else if (key === "お別れは笑顔で" && isEnding) {
-            acquireKeyword("お別れは笑顔で"); // ←追加
-            showClearPopup();
-          } else if (key === "始まりの物語" && isEnding) {
-            localStorage.removeItem("endingReached");
-            location.reload();
-          } else if (key && keywordDialogues[key]) {
-            currentActiveKeyword = key;
-            const alreadyUnlockedDialogue =
-              unlockedDialogueKeywords.includes(key);
-            const keywordData = keywordDialogues[key];
-
-            playSuccessSE();
-
-            if (alreadyUnlockedDialogue) {
-              // すでに解放済みなら、演出をスキップしてすぐ会話表示
-              if (Array.isArray(keywordData)) {
-                showDialogue(keywordData);
-              } else {
-                showDialogue(keywordData.dialogue, keywordData.keywordsByPage);
-              }
-            } else {
-              // 初回だけ Dialogue Unlocked 演出を出す
-              unlockedDialogueKeywords.push(key);
-              updateKeywordDot();
-
-              acquireKeyword(key, 2000);
-              showKeywordFoundEffect();
-
-              setTimeout(() => {
-                if (Array.isArray(keywordData)) {
-                  showDialogue(keywordData);
-                } else {
-                  showDialogue(
-                    keywordData.dialogue,
-                    keywordData.keywordsByPage,
-                  );
-                }
-              }, 1400);
-            }
-
-            resetMessageLoop();
-          } else {
-            playFailSE();
-          }
-
-          if (key) {
-            keywordInput.blur();
-          }
-
-          keywordInput.value = "";
-        }
-
-        /* Enterキーでキーワード判定 */
-        function handleKeywordEnter(event) {
-          if (event.key === "Enter") {
-            checkKeyword();
-          }
-        }
-
-        /* 作業再開時のセリフをランダム表示する */
-        function showRandomResumeMessage() {
-          if (resumeMessages.length === 1) {
-            lastResumeMessageIndex = 0;
-            showDialogue(resumeMessages[0]);
-            return;
-          }
-
-          let randomIndex;
-
-          do {
-            randomIndex = Math.floor(Math.random() * resumeMessages.length);
-          } while (randomIndex === lastResumeMessageIndex);
-
-          lastResumeMessageIndex = randomIndex;
-          showDialogue(resumeMessages[randomIndex]);
-        }
-
-        /* ==================================================
-                                                            15. 曲関連
-                                                            ================================================== */
-
-        /* 前回と同じ曲を避けながらランダムに選ぶ */
-        function getRandomTrackIndex() {
-          if (tracks.length === 1) return 0;
-
-          let randomIndex;
-          do {
-            randomIndex = Math.floor(Math.random() * tracks.length);
-          } while (randomIndex === currentTrackIndex);
-
-          return randomIndex;
-        }
-
-        /* 曲名表示を更新する */
-        function updateTrackName(index) {
-          const trackName = tracks[index].replace(".mp3", "");
-          trackNameDisplay.innerText = trackName;
-        }
-
-        /* ランダムな曲を再生する */
-        function playRandomTrack() {
-          const randomIndex = getRandomTrackIndex();
-          currentTrackIndex = randomIndex;
-          music.src = tracks[randomIndex];
-          updateTrackName(randomIndex);
-          music.play().catch(() => {});
-          startVisualizer();
-        }
-
-        /* 曲が終わったら次の曲へ */
-        music.addEventListener("ended", () => {
-          if (timerState.isRunning || timerState.isPaused) {
-            playRandomTrack();
-          }
-        });
-
-        /* ==================================================
-                                                              16. ビジュアライザー関連
-                                                              ================================================== */
-
-        /* ビジュアライザー開始 */
-        function startVisualizer() {
-          visualizer.classList.remove("paused");
-        }
-
-        /* ビジュアライザー停止 */
-        function stopVisualizer() {
-          visualizer.classList.add("paused");
-        }
-
-        /* ==================================================
-                                                              17. エンディング処理
-                                                              ================================================== */
-
-        /*
-                                                    エンディング演出を開始する。
-                                                    タイマーを止め、白フェード、エンディング画像、エンディングBGMへ切り替える。
-                                                    */
-        function startEnding() {
-          localStorage.setItem("endingReached", "true");
-          isEnding = true;
-          acquireKeyword("また会う日まで", 7000);
-          acquireKeyword("お別れは笑顔で", 9000);
-
-          const timerPanel = document.getElementById("timerPanel");
-          timerPanel.style.cursor = "default";
-          timerPanel.style.pointerEvents = "none";
-
-          /* タイマーとセリフ更新を止める */
-          clearInterval(intervalId);
-          intervalId = null;
-          stopMessageLoop();
-
-          timerState.isRunning = false;
-          timerState.isPaused = false;
-          timerState.endTime = null;
-
-          /* 通常BGMを停止 */
-          music.pause();
-          music.currentTime = 0;
-
-          stopVisualizer();
-          trackNameDisplay.innerText = "Nothing";
-
-          /* 入力欄を閉じる */
-          keywordInput.blur();
-
-          /* 白くする */
-          endingWhiteout.classList.add("active");
-
-          /* 完全に白くなってから、見えない裏側で画像とセリフを切り替える */
-          setTimeout(() => {
-            mainImage.src = ENDING_IMAGE;
-            showDialogue(endingDialogue);
-          }, WHITEOUT_DURATION + 300);
-
-          /* 白い画面を少し保ってから戻す */
-          setTimeout(() => {
-            endingWhiteout.classList.remove("active");
-            applyTheme(themes[currentTheme]);
-          }, WHITEOUT_DURATION + 1300);
-
-          /* 白が戻り始めるタイミングでBGM開始 */
-          setTimeout(() => {
-            music.src = ENDING_BGM;
-            music.currentTime = 0;
-            music.volume = normalVolume;
-            music.muted = false;
-            music.loop = true;
-
-            trackNameDisplay.innerText = "Nothing";
-
-            music
-              .play()
-              .then(() => {
-                startVisualizer();
-              })
-              .catch(() => {
-                stopVisualizer();
-              });
-          }, WHITEOUT_DURATION + 1300);
-        }
-
-        /* ==================================================
-                                                          20. 補助表示関連
-                                                          ================================================== */
-
-        /* 今日の日付を表示する */
-        function updateDate() {
-          const now = new Date();
-
-          const year = now.getFullYear();
-          const month = String(now.getMonth() + 1).padStart(2, "0");
-          const day = String(now.getDate()).padStart(2, "0");
-
-          const week = ["日", "月", "火", "水", "木", "金", "土"];
-          const dayOfWeek = week[now.getDay()];
-
-          const text = `${year}/${month}/${day}（${dayOfWeek}）`;
-
-          document.getElementById("dateText").innerText = text;
-        }
-
-        /* 今日の集中メーターを更新する
-                                                          今は左パネルを別用途に使っているが、機能自体は残してある */
-        function updateFocusDisplay() {
-          const focusMeter = document.getElementById("focusMeter");
-          if (!focusMeter) return;
-
-          const filled = "■".repeat(Math.min(sessionCount, SESSION_GOAL));
-          const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
-
-          focusMeter.innerText = filled + empty;
-        }
-
-        /* ==================================================
-                                                          21. ページ表示状態の変化
-                                                          ================================================== */
-
-        /* タブに戻ってきた時に時間表示を更新 */
-        document.addEventListener("visibilitychange", () => {
-          if (timerState.isRunning) {
-            tickTimer();
-          }
-        });
-
-        /* ==================================================
-                                                            22. 初期設定
-                                                            ページを開いた直後に一度だけ実行する
-                                                            ================================================== */
-
-        /* ベル音の初期音量 */
-        bell.volume = 0.5;
-
-        /* 初回表示を画面に反映 */
-        updateModeDisplay();
-        updateTimerDisplay();
-        updateFocusDisplay();
-        updateDate();
-
-        showIdleMessage();
-        mainImage.src = IDLE_IMAGE;
-
-        applyTheme(themes[currentTheme]);
-
-        if (localStorage.getItem("endingReached") === "true") {
-          isEnding = true;
-
-          mainImage.src = ENDING_IMAGE;
-          showDialogue(endingDialogue);
-
-          music.src = ENDING_BGM;
-          music.volume = normalVolume;
-          music.loop = true;
-          trackNameDisplay.innerText = "Nothing";
-
-          document.body.addEventListener(
-            "click",
-            () => {
-              music
-                .play()
-                .then(() => {
-                  startVisualizer();
-                })
-                .catch(() => {});
-            },
-            { once: true },
-          );
-
-          const timerPanel = document.getElementById("timerPanel");
-          timerPanel.style.cursor = "default";
-          timerPanel.style.pointerEvents = "none";
-
-          stopVisualizer();
-        }
-
-        function showKeywordFoundEffect() {
-          const effect = document.getElementById("keywordFoundEffect");
-
-          if (!effect) return;
-
-          effect.classList.remove("show");
-
-          void effect.offsetWidth;
-
-          effect.classList.add("show");
-
-          setTimeout(() => {
-            effect.classList.remove("show");
-          }, 2000);
-        }
-
-        updateKeywordDot();
-      </script>
+      <script src="js/popup.js"></script>
+      <script src="js/ending.js"></script>
+      <script src="js/main.js"></script>
     </div>
   </body>
 </html>

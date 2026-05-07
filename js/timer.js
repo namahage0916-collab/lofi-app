@@ -1,6 +1,4 @@
 /* 作業終了 / 休憩終了時の処理 */
-/*作業時間または休憩時間が終わったときの処理。
-                                                              作業→休憩、休憩→作業に切り替える中心処理。*/
 function finishCurrentMode() {
   stopTimerForNotice();
   timerState.isPaused = false;
@@ -29,16 +27,11 @@ function finishCurrentMode() {
   updateModeDisplay();
   updateTimerDisplay();
 }
-/* ==================================================
-                                                            19. タイマー本体
-                                                            ================================================== */
 
-/* 残り時間を計算して表示する */
-/*
-                                                    タイマーの心臓部。
-                                                    現在時刻と終了予定時刻から、残り時間を毎回計算する。
-                                                    ブラウザが一時停止してもズレにくい。
-                                                    */
+/* ==================================================
+   19. タイマー本体
+   ================================================== */
+
 function tickTimer() {
   if (!timerState.isRunning || timerState.endTime === null) return;
 
@@ -54,10 +47,6 @@ function tickTimer() {
 }
 
 /* タイマー開始 */
-/*
-                                                    タイマーを開始・再開する。
-                                                    終了予定時刻 endTime を作って、tickTimer() を定期実行する。
-                                                    */
 function startTimer(showMessage = true) {
   if (timerState.isRunning) return;
 
@@ -85,8 +74,8 @@ function startTimer(showMessage = true) {
   intervalId = setInterval(tickTimer, 250);
 }
 
-/* タイマー停止 */
-function stopTimer() {
+/* タイマー停止系の共通処理 */
+function stopTimerCore({ pauseMusic = true, pausedState = false } = {}) {
   clearInterval(intervalId);
   intervalId = null;
 
@@ -96,48 +85,35 @@ function stopTimer() {
   }
 
   timerState.isRunning = false;
+  timerState.isPaused = pausedState;
   timerState.endTime = null;
 
-  music.pause();
+  if (pauseMusic) {
+    music.pause();
+    stopVisualizer();
+  }
+
   stopMessageLoop();
-  stopVisualizer();
   updateTimerDisplay();
 }
 
-/* 時間切れ時専用の停止
-                                                          タイマーは止めるが、音楽は止めない */
+/* タイマー停止 */
+function stopTimer() {
+  stopTimerCore({ pauseMusic: true, pausedState: false });
+}
+
+/* タイマーは止めるが、音楽は止めない */
 function stopTimerForNotice() {
-  clearInterval(intervalId);
-  intervalId = null;
-
-  if (timerState.isRunning && timerState.endTime !== null) {
-    const diffMs = timerState.endTime - Date.now();
-    timerState.remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-  }
-
-  timerState.isRunning = false;
-  timerState.endTime = null;
-
-  /* 音楽は止めない */
-  stopMessageLoop();
-  updateTimerDisplay();
+  stopTimerCore({ pauseMusic: false, pausedState: false });
 }
 
 /* 今のモードを強制終了する */
-/*
-                                                    「作業終了」「休憩終了」ボタン用。
-                                                    終了予定時刻を今にして、自然な時間切れとして処理する。
-                                                    */
 function skipCurrentMode() {
   timerState.endTime = Date.now();
   tickTimer();
 }
 
 /* タイマーと音楽を初期状態に戻す */
-/*
-                                                    タイマーと音楽を初期状態に戻す。
-                                                    現在は通常画面へのリセット用として残している。
-                                                    */
 function resetTimer() {
   stopTimer();
 
@@ -156,7 +132,7 @@ function resetTimer() {
   updateTimerDisplay();
   updateFocusDisplay();
   showIdleMessage();
-  mainImage.src = IDLE_IMAGE;
+  mainImage.src = images.idle;
 
   music.pause();
   music.currentTime = 0;
@@ -171,23 +147,7 @@ function resetTimer() {
 }
 
 /* 一時停止
-                                                          タイマー・音楽・ビジュアライザーを止める */
+   タイマー・音楽・ビジュアライザーを止める */
 function pauseTimerOnly() {
-  clearInterval(intervalId);
-  intervalId = null;
-
-  if (timerState.isRunning && timerState.endTime !== null) {
-    const diffMs = timerState.endTime - Date.now();
-    timerState.remainingTime = Math.max(0, Math.ceil(diffMs / 1000));
-  }
-
-  timerState.isRunning = false;
-  timerState.isPaused = true;
-  timerState.endTime = null;
-
-  music.pause();
-  stopMessageLoop();
-  stopVisualizer();
-
-  updateTimerDisplay();
+  stopTimerCore({ pauseMusic: true, pausedState: true });
 }
