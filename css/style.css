@@ -1090,6 +1090,10 @@ body.dark-theme .keywordItemText.unlocked.active {
   }
 }
 
+.line {
+  background: red;
+}
+
 @media (max-width: 380px) {
   .line {
     font-size: 16px;
