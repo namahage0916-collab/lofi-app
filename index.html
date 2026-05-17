@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nook: Quiet Talk</title>
+    <meta name="robots" content="noindex" />
+
+    <meta property="og:title" content="nook: Quiet Talk" />
+    <meta
+      property="og:description"
+      content="幼なじみ二人の会話を見守る百合ポモドーロタイマー。"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://namahage0916-collab.github.io/lofi-app/"
+    />
+    <meta
+      property="og:image"
+      content="https://namahage0916-collab.github.io/lofi-app/image.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div id="loadingScreen">
+      <div id="loadingInner">
+        <div class="loadingLine loadingLineTop"></div>
+
+        <div id="loadingLogo">nook</div>
+        <div id="loadingText">Quiet Talk</div>
+
+        <div class="loadingLine loadingLineBottom"></div>
+      </div>
+    </div>
+
+    <div id="appContent" class="app-hidden">
+      <div id="keywordToastArea"></div>
+
+      <div id="dialogueUnlockedEffect">
+        <div id="dialogueUnlockedBox">
+          <div class="unlockLine unlockLineTop"></div>
+          <div id="dialogueUnlockedText">Dialogue Unlocked</div>
+          <div class="unlockLine unlockLineBottom"></div>
+        </div>
+      </div>
+
+      <div id="sceneFade"></div>
+
+      <div id="clearLineEffect">
+        <div id="clearLineBox">
+          <div class="clearLine clearLineTop"></div>
+          <div id="clearLineText">
+            You witnessed<br />
+            their quiet days
+          </div>
+          <div class="clearLine clearLineBottom"></div>
+        </div>
+      </div>
+
+      <div id="noticeOverlay" class="modalOverlay">
+        <div id="noticeBox" class="modalBox">
+          <div id="noticeText"></div>
+          <button onclick="closeNoticeAndStartNext()">閉じる</button>
+        </div>
+      </div>
+
+      <div id="clearOverlay" class="modalOverlay">
+        <div id="clearBox" class="modalBox">
+          <div id="clearText">
+            二人の物語を見届けていただき<br />ありがとうございました。<br /><br />
+            同じ場所にはいられなくても<br />はじめとまりんの時間は<br />確かにここにありました。<br /><br /><br />
+            物語を最初から読むキーワード<br />【始まりの物語】
+          </div>
+          <button onclick="shareOnX()">クリア報告をXにシェアする</button>
+          <button onclick="closeClearPopup()">閉じる</button>
+        </div>
+      </div>
+
+      <div id="creditOverlay" class="modalOverlay">
+        <div id="creditBox" class="modalBox">
+          <div id="creditTitle">クレジット</div>
+
+          <div id="creditText">
+            <strong>制作</strong><br />
+            兎月竜之介<br />
+            X：@usaginabe<br /><br />
+
+            <strong>音楽</strong><br />
+            RYU ITO<br />
+            https://ryu110.com/<br /><br />
+
+            <strong>効果音</strong><br />
+            OtoLogic<br />
+            https://otologic.jp/<br /><br />
+
+            <strong>イラスト</strong><br />
+            使用イラスト：ここに作者名を記載
+          </div>
+
+          <button onclick="closeCreditPopup()">閉じる</button>
+        </div>
+      </div>
+
+      <div id="keywordListOverlay" class="modalOverlay">
+        <div id="keywordListBox" class="modalBox">
+          <div id="keywordListTitle">キーワードリスト</div>
+
+          <div id="keywordListContent"></div>
+
+          <button onclick="closeKeywordListPopup()">閉じる</button>
+        </div>
+      </div>
+
+      <div id="timerSettingOverlay" class="modalOverlay">
+        <div id="timerSettingBox" class="modalBox">
+          <div id="timerSettingTitle">タイマー設定</div>
+
+          <div id="timerSettingForm">
+            <div class="settingRow">
+              <label for="workMinutesInput">作業時間（分）</label>
+              <input
+                type="number"
+                id="workMinutesInput"
+                min="1"
+                max="180"
+                value="25"
+              />
+              <select id="workMinutesPicker" class="mobileTimePicker">
+                <option value="5">5分</option>
+                <option value="10">10分</option>
+                <option value="15">15分</option>
+                <option value="20">20分</option>
+                <option value="25" selected>25分</option>
+                <option value="30">30分</option>
+                <option value="45">45分</option>
+                <option value="60">60分</option>
+              </select>
+            </div>
+
+            <div class="settingRow">
+              <label for="breakMinutesInput">休憩時間（分）</label>
+              <input
+                type="number"
+                id="breakMinutesInput"
+                min="1"
+                max="60"
+                value="5"
+              />
+              <select id="breakMinutesPicker" class="mobileTimePicker">
+                <option value="1">1分</option>
+                <option value="3">3分</option>
+                <option value="5" selected>5分</option>
+                <option value="10">10分</option>
+                <option value="15">15分</option>
+                <option value="20">20分</option>
+                <option value="30">30分</option>
+              </select>
+            </div>
+
+            <div class="timerSettingButtons">
+              <button onclick="startFromSettings()">開始</button>
+              <button onclick="closeTimerSettings()">閉じる</button>
+            </div>
+          </div>
+
+          <div id="timerActionButtons" style="display: none">
+            <div
+              id="timerActionModeText"
+              style="margin-bottom: 10px; font-size: 18px"
+            ></div>
+
+            <div
+              id="timerActionTime"
+              style="font-size: 42px; font-weight: bold; margin-bottom: 18px"
+            >
+              25:00
+            </div>
+
+            <div class="timerActionButtonList">
+              <button
+                id="pauseResumeButton"
+                onclick="togglePauseFromSettings()"
+              >
+                一時停止
+              </button>
+              <button id="finishModeButton" onclick="finishFromSettings()">
+                作業終了
+              </button>
+            </div>
+
+            <div class="timerCloseRow">
+              <button onclick="closeTimerSettings()">閉じる</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="appMain">
+        <h1 class="logo">
+          🎧nook: Quiet Talk
+          <span id="dateText"></span>
+        </h1>
+
+        <div id="mainGlassFrame">
+          <div id="imageArea">
+            <img
+              src="image_idle.png"
+              id="mainImage"
+              class="fade-in-long"
+              alt="ドット絵イラスト"
+            />
+
+            <div id="messageBox" class="fade-in">
+              <div id="leftMessageBlock" class="dialogLine left">
+                <div id="leftMessageName" class="speaker">まりん</div>
+                <div id="leftMessage" class="line"></div>
+              </div>
+
+              <div id="rightMessageBlock" class="dialogLine right">
+                <div id="rightMessageName" class="speaker">はじめ</div>
+                <div id="rightMessage" class="line"></div>
+              </div>
+            </div>
+          </div>
+
+          <audio id="music"></audio>
+
+          <audio id="bell" src="bell.mp3"></audio>
+          <audio
+            id="seTransform"
+            src="Onoma-Sparkle13-1(Slow-Short).mp3"
+          ></audio>
+          <audio id="seSuccess" src="Multi_Accent05-1(Low).mp3"></audio>
+          <audio id="seFail" src="Short_Accent10-1(Low).mp3"></audio>
+
+          <div id="controlRow">
+            <div
+              id="timerPanel"
+              class="panel fade-in"
+              onclick="openTimerSettings()"
+            >
+              <div id="mode">タイマー設定</div>
+              <div id="timer">25:00</div>
+            </div>
+
+            <input
+              type="text"
+              id="keywordInput"
+              placeholder="キーワードを入力..."
+              onkeydown="handleKeywordEnter(event)"
+            />
+          </div>
+
+          <div id="buttonRow">
+            <div id="buttonGroup">
+              <button
+                id="keywordButton"
+                class="fade-in keyword-button"
+                onclick="showKeywordListPopup()"
+              >
+                <svg
+                  class="buttonIcon keyIcon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <circle cx="16.2" cy="7.8" r="4.2"></circle>
+                  <path d="M13.2 10.8L5.2 18.8"></path>
+                  <path d="M7.8 16.2L4.2 12.6"></path>
+                  <path d="M5.2 18.8L2.2 15.8"></path>
+                </svg>
+                <span
+                  id="keywordDot"
+                  class="keyword-dot"
+                  style="display: none"
+                ></span>
+              </button>
+
+              <button class="fade-in" onclick="toggleTheme()">
+                <svg
+                  class="buttonIcon moonIcon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79"
+                  ></path>
+                </svg>
+              </button>
+
+              <button class="fade-in infoButton" onclick="showCreditPopup()">
+                ⓘ
+              </button>
+            </div>
+          </div>
+
+          <div id="musicBar">
+            <div id="trackInfo">
+              <div id="trackMeta">
+                <div id="trackName"></div>
+                <div id="trackGenre">Now playing</div>
+              </div>
+            </div>
+
+            <div id="visualizer" class="paused">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          const images = {
+            idle: "image_idle.png",
+            work: "image.png",
+            break: "image_break.png",
+            ending: "image_ending.png",
+          };
+
+          const ENDING_BGM = "Nothing.mp3";
+
+          const WHITEOUT_DURATION = 4000; // ms（CSSと同じ）
+
+          const music = document.getElementById("music");
+          const bell = document.getElementById("bell");
+
+          const modeDisplay = document.getElementById("mode");
+          const timerDisplay = document.getElementById("timer");
+          const trackNameDisplay = document.getElementById("trackName");
+
+          const leftMessageBlock = document.getElementById("leftMessageBlock");
+          const rightMessageBlock =
+            document.getElementById("rightMessageBlock");
+
+          const messageBox = document.getElementById("messageBox");
+
+          messageBox.addEventListener("click", () => {
+            if (!currentDialoguePages) return;
+
+            const hasMultiplePages = currentDialoguePages.length > 1;
+            const hasNextPage =
+              currentDialoguePageIndex < currentDialoguePages.length - 1;
+
+            if (!hasMultiplePages) return;
+
+            if (hasNextPage) {
+              currentDialoguePageIndex++;
+            } else {
+              currentDialoguePageIndex = 0;
+            }
+
+            showDialoguePage();
+          });
+
+          const leftMessageName = document.getElementById("leftMessageName");
+          const rightMessageName = document.getElementById("rightMessageName");
+
+          const leftMessage = document.getElementById("leftMessage");
+          const rightMessage = document.getElementById("rightMessage");
+
+          const keywordInput = document.getElementById("keywordInput");
+
+          const appContent = document.getElementById("appContent");
+
+          appContent.style.display = "block";
+
+          const mainImage = document.getElementById("mainImage");
+
+          const noticeOverlay = document.getElementById("noticeOverlay");
+          const noticeText = document.getElementById("noticeText");
+
+          const visualizer = document.getElementById("visualizer");
+
+          const sceneFade = document.getElementById("sceneFade");
+
+          const clearOverlay = document.getElementById("clearOverlay");
+          const clearBox = document.getElementById("clearBox");
+          const clearText = document.getElementById("clearText");
+
+          const creditOverlay = document.getElementById("creditOverlay");
+          const creditBox = document.getElementById("creditBox");
+          const creditText = document.getElementById("creditText");
+          const creditTitle = document.getElementById("creditTitle");
+
+          const seSuccess = document.getElementById("seSuccess");
+          const seFail = document.getElementById("seFail");
+          const seTransform = document.getElementById("seTransform");
+
+          let WORK_TIME = 25 * 60;
+          let BREAK_TIME = 5 * 60;
+
+          const tracks = [
+            "Epoch.mp3",
+            "Barely.mp3",
+            "Notion.mp3",
+            "Reflection.mp3",
+            "Woozy.mp3",
+            "Cozy.mp3",
+            "Fake.mp3",
+            "Yawn.mp3",
+            "Glass.mp3",
+            "Walk.mp3",
+          ];
+        </script>
+
+        <script src="js/dialogue-keyword.js"></script>
+        <script src="js/theme.js"></script>
+        <script src="js/audio.js"></script>
+
+        <script src="js/keyword-core.js"></script>
+        <script src="js/keyword-effects.js"></script>
+        <script src="js/keyword-list.js"></script>
+
+        <script src="js/dialogue-ui.js"></script>
+        <script src="js/timer.js"></script>
+        <script src="js/popup.js"></script>
+        <script src="js/ending.js"></script>
+        <script src="js/main.js"></script>
+      </div>
+    </div>
+  </body>
+</html>

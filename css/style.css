@@ -1,0 +1,1887 @@
+/* ==================================================
+  0. CSS変数
+  ================================================== */
+:root {
+  --button-bg: rgba(255, 255, 255, 0.3);
+  --button-text: #24313a;
+  --popup-button-bg: rgba(255, 255, 255, 0.3);
+
+  --panel-bg: rgba(255, 255, 255, 0.12);
+  --panel-hover-bg: rgba(255, 255, 255, 0.18);
+  --panel-active-bg: rgba(255, 255, 255, 0.24);
+  --timer-display-color: rgba(255, 248, 230, 0.9);
+
+  --space: 8px;
+  --section-gap: 12px;
+}
+
+/* ==================================================
+  1. ページ全体
+  ================================================== */
+
+body {
+  background:
+    linear-gradient(rgba(221, 210, 195, 0.4), rgba(221, 210, 195, 0.4)),
+    url("background_beige.png") center / cover no-repeat fixed;
+
+  color: #2f2a24;
+  text-align: center;
+
+  font-family: "Zen Kaku Gothic New", sans-serif;
+
+  font-weight: 300;
+
+  padding-top: 32px;
+  margin: 0;
+}
+
+h1 {
+  font-size: 28px;
+  font-family: "Cormorant Garamond", serif;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+h1 span {
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  opacity: 0.8;
+}
+
+/* ==================================================
+  2. ボタン・入力系
+  ================================================== */
+
+button {
+  font-size: 20px;
+  padding: 10px 20px;
+  margin: 10px;
+
+  border-radius: 10px;
+  border: none;
+
+  background: var(--button-bg);
+  color: var(--button-text);
+
+  cursor: pointer;
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+button:hover {
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+}
+
+button:active {
+  background: var(--panel-active-bg);
+  transform: scale(0.99);
+}
+
+.dark-popup button:hover,
+body.dark-theme button:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.dark-popup button:active,
+body.dark-theme button:active {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+#clearBox button {
+  font-size: 18px;
+  white-space: nowrap;
+  text-align: center;
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+
+  box-sizing: border-box;
+}
+
+input[type="range"] {
+  width: 200px;
+}
+
+/* キーワード入力欄 */
+#keywordInput {
+  width: 100%;
+  box-sizing: border-box;
+
+  font-size: 16px;
+  padding: 14px 22px;
+
+  border-radius: 999px;
+  color: var(--button-text);
+
+  outline: none;
+  background: rgba(0, 0, 0, 0.08);
+
+  border: 1px solid rgba(255, 245, 210, 0.22);
+
+  box-shadow:
+    0 0 0 1px rgba(255, 245, 210, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#keywordInput::placeholder {
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: rgba(255, 248, 230, 0.48);
+}
+
+#keywordInput:focus {
+  background: rgba(255, 248, 220, 0.09);
+  border-color: rgba(255, 240, 200, 0.34);
+
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.22),
+    0 0 24px rgba(255, 230, 180, 0.08);
+}
+
+/* ==================================================
+   メインガラスフレーム
+================================================== */
+
+#mainGlassFrame {
+  width: min(96%, 440px);
+  margin: 0 auto;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* ==================================================
+  3. レイアウト系
+  ================================================== */
+
+/* キーワード入力欄・タイマーパネルの並び */
+#controlRow {
+  width: 96%;
+
+  margin: var(--section-gap) auto 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+/* 下部ボタン */
+#buttonRow {
+  margin: var(--section-gap) auto 0;
+
+  width: 96%;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 0;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  box-sizing: border-box;
+}
+
+#buttonGroup {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+#buttonGroup button {
+  flex: 1;
+  margin: 0;
+
+  font-size: 13px;
+  padding: 10px 6px;
+  white-space: nowrap;
+
+  background: var(--panel-bg);
+  color: var(--button-text);
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease,
+    border-color 0.2s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#buttonGroup button:hover {
+  background: var(--panel-hover-bg);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+}
+
+#buttonGroup button:active {
+  background: var(--panel-active-bg);
+  transform: scale(0.98);
+}
+
+.buttonIcon {
+  width: 28px;
+  height: 28px;
+
+  stroke: var(--timer-display-color);
+  fill: none;
+
+  opacity: 0.86;
+}
+
+.keyIcon {
+  width: 30px;
+  height: 30px;
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.moonIcon {
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.infoButton {
+  font-size: 26px !important;
+  font-weight: 600;
+  color: var(--timer-display-color);
+  opacity: 0.82;
+  line-height: 1;
+  transform: translateY(2px);
+}
+
+/* ==================================================
+  4. 画像・セリフ表示
+  ================================================== */
+
+/* メイン画像 */
+#mainImage {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  opacity: 1;
+  filter: none;
+}
+
+#messageBox {
+  position: relative;
+  cursor: default;
+
+  width: 96%;
+  margin: 0px auto 0;
+
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  background: var(--panel-bg);
+  border-radius: 12px;
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#messageBox.has-next,
+#messageBox.has-end {
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+#messageBox.has-next:hover,
+#messageBox.has-end:hover {
+  background: rgba(255, 248, 220, 0.06) !important;
+
+  border-color: rgba(255, 240, 200, 0.18);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(255, 230, 180, 0.04) !important;
+}
+
+#messageBox.has-next:active,
+#messageBox.has-end:active {
+  background: var(--panel-active-bg) !important;
+  transform: scale(0.99);
+}
+
+#messageBox.has-next::after {
+  content: "▶";
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  font-size: 14px;
+  opacity: 0.75;
+  animation: nextArrowBlink 1.2s ease-in-out infinite;
+}
+
+#messageBox.has-end::after {
+  content: "↺";
+  position: absolute;
+  right: 14px;
+  bottom: 4px;
+  font-size: 20px;
+  opacity: 0.75;
+  animation: nextArrowBlink 1.2s ease-in-out infinite;
+}
+
+@keyframes nextArrowBlink {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateX(0);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: translateX(3px);
+  }
+}
+
+.keywordNoticeArea {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+@keyframes keywordNoticeFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* 会話行 */
+.dialogLine {
+  margin-bottom: 4px;
+  margin-top: 0;
+}
+
+/* 最後の会話行は下余白なし */
+.dialogLine:last-child {
+  margin-bottom: 0;
+}
+
+.dialogLine.center {
+  text-align: center;
+}
+
+.dialogLine.left {
+  text-align: left;
+  padding-left: 12px;
+}
+
+.dialogLine.right {
+  text-align: right;
+  padding-right: 12px;
+}
+
+.speaker {
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #b8c0ff;
+  margin-bottom: 0px;
+}
+
+.line {
+  font-size: 17px;
+  letter-spacing: 0.01em;
+  max-width: 100%;
+  line-height: 1.65;
+  color: rgba(255, 248, 240, 0.86);
+  display: inline-block;
+  min-height: 32px;
+}
+
+.dialogLine {
+  animation: dialogueFadeIn 0.8s ease forwards;
+}
+
+@keyframes dialogueFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* タイトル横の日付表示 */
+#dateText {
+  font-size: 16px;
+  margin-left: 12px;
+  color: rgba(255, 248, 230, 0.72);
+  opacity: 1;
+  letter-spacing: 0.08em;
+}
+
+/* ==================================================
+  5. パネル表示
+  左パネル / タイマーパネル
+  ================================================== */
+
+.panel {
+  position: relative;
+  flex: none;
+  min-width: 0;
+  box-sizing: border-box;
+  background: var(--panel-bg);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#timerPanel {
+  height: 150px;
+  text-align: left;
+  padding: 20px 34px;
+  border: 1px solid rgba(255, 245, 210, 0.26);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+#timerPanel::after {
+  content: "▶";
+
+  position: absolute;
+  right: 38px;
+  top: 50%;
+
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  font-size: 34px;
+  padding-left: 5px;
+
+  background: var(--timer-display-color);
+  color: rgba(24, 32, 28, 0.92);
+
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+#timerPanel.running::after {
+  content: "❚❚";
+
+  font-size: 24px;
+
+  padding-left: 0;
+}
+
+.panelTitle {
+  font-size: 20px;
+
+  font-weight: 500;
+
+  color: rgba(255, 248, 240, 0.96);
+
+  letter-spacing: 0.04em;
+}
+
+/* タイマーパネルにマウスを乗せたとき */
+#timerPanel:hover {
+  background: rgba(255, 248, 220, 0.08) !important;
+
+  border-color: rgba(255, 240, 200, 0.34);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.28),
+    0 0 20px rgba(255, 230, 180, 0.06) !important;
+}
+
+/* タイマーパネルを押したとき */
+#timerPanel:active {
+  background: var(--panel-active-bg) !important;
+  transform: scale(0.99);
+}
+
+body.dark-theme #messageBox.has-next:hover,
+body.dark-theme #messageBox.has-end:hover {
+  background: var(--panel-hover-bg) !important;
+}
+
+body.dark-theme #timerPanel:hover {
+  background: var(--panel-hover-bg) !important;
+}
+
+/* モード表示 */
+#mode {
+  font-size: 20px;
+  margin-top: 0;
+  color: #d6dcff;
+}
+
+/* タイマー本体の数字 */
+#timer {
+  color: var(--timer-display-color);
+  font-size: 64px;
+  line-height: 1;
+  margin-top: -6px;
+
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+/* ==================================================
+   共通オーバーレイ
+   ================================================== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+  box-sizing: border-box;
+
+  background: rgba(8, 12, 10, 0.62);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+/* ==================================================
+   共通ポップアップBOX
+   ================================================== */
+
+.modalBox {
+  background: #2b2b44;
+  color: #ffffff;
+
+  width: 90%;
+  max-width: 460px;
+
+  border-radius: 16px;
+  padding: 28px 24px;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  animation: modalFloatIn 0.35s ease;
+}
+
+#keywordListBox {
+  max-width: 520px;
+  max-height: 80vh;
+  overflow: visible;
+}
+
+#clearText,
+#noticeText,
+#creditText,
+#keywordListContent {
+  color: rgba(255, 248, 230, 0.86);
+}
+
+#keywordListContent {
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+
+  height: 300px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-left: 12px;
+  padding-right: 8px;
+
+  box-sizing: border-box;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+#keywordListContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+#keywordListContent::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+}
+
+#keywordListContent::-webkit-scrollbar-thumb {
+  background: rgba(255, 240, 200, 0.18);
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 245, 210, 0.08);
+}
+
+#keywordListContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 240, 200, 0.28);
+}
+
+#clearText {
+  font-size: 15px;
+  line-height: 1.85;
+  margin-bottom: 22px;
+  letter-spacing: 0.03em;
+}
+
+#noticeText {
+  font-size: 18px;
+  line-height: 1.75;
+  margin-bottom: 22px;
+  white-space: pre-line;
+  letter-spacing: 0.04em;
+}
+
+#creditTitle,
+#keywordListTitle {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: rgba(255, 248, 220, 0.86);
+  letter-spacing: 0.08em;
+}
+
+#creditText {
+  font-size: 14px;
+  line-height: 1.9;
+  text-align: left;
+  margin-bottom: 22px;
+  letter-spacing: 0.03em;
+}
+
+.keywordListItem {
+  display: block;
+
+  white-space: nowrap;
+
+  padding: 4px 8px;
+  margin-bottom: 4px;
+
+  border-radius: 10px;
+
+  color: rgba(255, 248, 230, 0.82);
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.keywordListItem:hover {
+  background: rgba(255, 248, 220, 0.06);
+}
+
+.keywordListItem:active {
+  transform: scale(0.98);
+}
+
+/* ==================================================
+  8. フェードインアニメーション
+  ================================================== */
+
+/* フェードイン用クラス */
+.fade-in {
+  animation: fadeIn 1.5s ease-in;
+}
+
+/* 初回表示用（ゆっくり） */
+.fade-in-long {
+  animation: fadeIn 1.5s ease-in;
+}
+
+/* 切り替え用（少し速い） */
+.fade-in-short {
+  animation: fadeIn 0.6s ease-in;
+}
+
+/* フェードインの動き */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================================================
+  9. 音楽表示エリア
+  ================================================== */
+
+/* 音楽バー全体 */
+#musicBar {
+  width: 100%;
+
+  margin: calc(var(--section-gap) + 4px) auto 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding: 12px 14px;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  border: 1px solid rgba(255, 245, 210, 0.1);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-sizing: border-box;
+}
+
+/* ビジュアライザー本体 */
+#visualizer {
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 4px;
+
+  height: 30px;
+
+  margin-right: 0;
+
+  flex-shrink: 0;
+}
+
+/* 棒1本ごとの見た目 */
+#visualizer span {
+  width: 4px;
+  height: 6px;
+
+  background: rgba(255, 240, 210, 0.72);
+
+  border-radius: 2px;
+
+  animation-name: bounce;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* 棒ごとに開始タイミングを少しずらす */
+#visualizer span:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+#visualizer span:nth-child(2) {
+  animation-delay: 0s;
+}
+
+#visualizer span:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+#visualizer span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+#visualizer span:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+/* 停止中は棒を動かさない */
+#visualizer.paused span {
+  animation: none;
+  height: 6px;
+}
+
+/* 音量が下がっているときは小さく動かす */
+#visualizer.low-volume span {
+  animation-name: bounce-low;
+}
+
+/* 曲情報全体 */
+#trackInfo {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+}
+
+/* 曲名・ジャンル */
+#trackMeta {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 2px;
+
+  min-width: 0;
+}
+
+/* 曲名 */
+#trackName {
+  font-size: 16px;
+
+  margin-top: 0;
+
+  color: #d6dcff;
+
+  letter-spacing: 0.04em;
+
+  white-space: nowrap;
+}
+
+/* ジャンル */
+#trackGenre {
+  font-size: 11px;
+
+  color: rgba(255, 248, 230, 0.42);
+
+  letter-spacing: 0.08em;
+}
+
+/* 棒が伸び縮みする通常の動き */
+@keyframes bounce {
+  0%,
+  100% {
+    height: 6px;
+  }
+
+  50% {
+    height: 18px;
+  }
+}
+
+/* 通知中の小さい動き */
+@keyframes bounce-low {
+  0%,
+  100% {
+    height: 6px;
+  }
+
+  50% {
+    height: 14px;
+  }
+}
+
+/* ==================================================
+  10. タイマー設定ポップアップ
+  ================================================== */
+
+#timerSettingBox {
+  border-radius: 22px;
+  padding: 26px 22px;
+
+  background: rgba(20, 32, 26, 0.68);
+
+  border: 1px solid rgba(255, 245, 210, 0.16);
+
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.42),
+    0 0 36px rgba(255, 230, 180, 0.06);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.modalBox button {
+  box-sizing: border-box;
+  min-width: 0;
+
+  margin: 0;
+  padding: 11px 14px;
+
+  font-size: 15px;
+  letter-spacing: 0.04em;
+
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff8e6;
+
+  border: 1px solid rgba(255, 245, 210, 0.16);
+
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.18),
+    inset 0 0 14px rgba(255, 255, 255, 0.02);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+@keyframes modalFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalBox button:hover {
+  background: rgba(255, 248, 220, 0.12);
+  border-color: rgba(255, 240, 200, 0.34);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.24),
+    0 0 24px rgba(255, 230, 180, 0.08);
+}
+
+.modalBox button:active {
+  background: rgba(255, 248, 220, 0.16);
+  transform: scale(0.98);
+}
+
+/* ポップアップタイトル */
+#timerSettingTitle {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  margin-bottom: 22px;
+
+  color: rgba(255, 248, 220, 0.84);
+}
+
+/* 1行ごとの入力エリア */
+.settingRow {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* ラベル */
+.settingRow label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* 入力欄 */
+.settingRow input {
+  width: 100%;
+  box-sizing: border-box;
+
+  font-size: 17px;
+  padding: 12px 14px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 245, 210, 0.14);
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff8e6;
+
+  outline: none;
+
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.03),
+    0 6px 16px rgba(0, 0, 0, 0.14);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mobileTimePicker {
+  display: none;
+}
+
+.settingRow input:focus {
+  background: rgba(255, 248, 220, 0.08);
+
+  border-color: rgba(255, 240, 200, 0.32);
+
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.22),
+    0 0 24px rgba(255, 230, 180, 0.08);
+}
+
+/* タイマー設定フォーム内のボタン */
+.timerSettingButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.timerSettingButtons button {
+  flex: 1;
+  text-align: center;
+}
+
+/* 作業中・休憩中の操作エリア全体 */
+#timerActionButtons {
+  width: 100%;
+}
+
+/* 作業中・休憩中の操作ボタン */
+.timerActionButtonList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 操作ボタン本体 */
+.timerActionButtonList button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* 閉じるボタンの行 */
+.timerCloseRow {
+  width: 100%;
+  margin-top: 14px;
+}
+
+/* 閉じるボタン */
+.timerCloseRow button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ==================================================
+  11. エンディング演出
+  ================================================== */
+
+#endingWhiteout {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20000;
+  transition: opacity 4s ease;
+}
+
+#endingWhiteout.active {
+  opacity: 1;
+}
+
+#keywordToastArea {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 15000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* PCでは通知をアプリ幅に合わせる */
+@media (min-width: 1024px) {
+  #keywordToastArea {
+    right: calc((100vw - 600px) / 2 + 20px);
+  }
+}
+
+.keywordNotice {
+  font-size: 15px;
+
+  font-weight: 500;
+
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: rgba(18, 28, 24, 0.82);
+
+  color: rgba(255, 248, 230, 0.96);
+
+  border: 1px solid rgba(255, 245, 210, 0.18);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(255, 230, 180, 0.05);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  letter-spacing: 0.03em;
+}
+
+.keywordNotice .keyword-highlight {
+  color: #ff7272;
+
+  font-weight: 700;
+
+  text-shadow: 0 0 6px rgba(255, 120, 120, 0.22);
+}
+
+.keyword-highlight {
+  color: #d9c27a;
+
+  font-weight: 450;
+
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.45),
+    0 0 6px rgba(255, 220, 140, 0.12);
+}
+
+.keywordItemText.unlocked {
+  cursor: pointer;
+  color: #3f6f9f;
+  text-decoration: underline;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.keywordItemText.unlocked:hover {
+  color: #2f5f8f;
+  opacity: 0.9;
+}
+
+.keywordItemText.unlocked.active {
+  color: #7a4f9f;
+}
+
+body.dark-theme .keywordItemText.unlocked {
+  color: #8ab4ff;
+}
+
+.keywordListItem.unlocked:active {
+  transform: translateX(3px) scale(0.97);
+}
+
+.keywordItemText {
+  display: inline;
+}
+
+.keywordItemText.unlocked.active {
+  color: #a070d6; /* 紫 */
+}
+
+body.dark-theme .keywordItemText.unlocked.active {
+  color: #c59cff; /* ダーク用の少し明るい紫 */
+}
+
+/* キーワードボタン用の赤い点 */
+.keyword-button {
+  position: relative;
+}
+
+.keyword-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+}
+
+.transforming {
+  animation: keywordTransform 1s ease forwards;
+}
+
+@keyframes keywordTransform {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.keyword-appear {
+  animation: keywordAppear 0.8s ease forwards;
+}
+
+@keyframes keywordAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#sceneFade {
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 4s ease;
+  z-index: 9998;
+}
+
+#sceneFade.active {
+  opacity: 0.85;
+}
+
+#sceneFade.white {
+  background: white;
+}
+
+#sceneFade.white.active {
+  opacity: 1;
+}
+
+#sceneFade.black {
+  background: black;
+}
+
+#sceneFade.black.active {
+  opacity: 1;
+}
+
+/* ==================================================
+  12. スマホ向け調整
+  ================================================== */
+@media (max-width: 768px) {
+  /* ページ全体 */
+  body {
+    padding-top: 12px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  #dateText {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 14px;
+  }
+
+  /* レイアウト幅 */
+  #imageArea {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  #controlRow {
+    width: 96%;
+    max-width: none;
+
+    margin: 18px auto 0;
+    gap: 16px;
+  }
+
+  #buttonRow {
+    width: 96%;
+    max-width: none;
+
+    margin: 20px auto 0;
+  }
+
+  #imageArea {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 0;
+
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  /* メイン画像 */
+  #mainImage {
+    border-radius: 12px;
+  }
+
+  /* セリフ表示 */
+  #messageBox {
+    min-height: 134px;
+    padding: 14px 8px;
+  }
+
+  #messageBox.has-next::after {
+    right: 8px;
+    bottom: 2px;
+  }
+
+  #messageBox.has-end::after {
+    right: 8px;
+    bottom: -2px;
+  }
+
+  .dialogLine.left,
+  .dialogLine.right {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .line {
+    font-size: 17px;
+    letter-spacing: -0.03em;
+    line-height: 1.6;
+  }
+
+  #keywordInput {
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+
+  /* タイマー */
+  #timer {
+    font-size: 64px;
+    margin-top: -4px;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+  }
+
+  #mode {
+    font-size: 18px;
+
+    letter-spacing: 0.04em;
+
+    margin-bottom: 0;
+  }
+
+  #visualizer {
+    margin-left: 4px;
+    gap: 3px;
+    height: 24px;
+  }
+
+  #visualizer span {
+    width: 3px;
+  }
+
+  #trackName {
+    font-size: 13px;
+    opacity: 0.62;
+    letter-spacing: 0.03em;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .settingRow input[type="number"] {
+    display: none;
+  }
+
+  .mobileTimePicker {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    font-size: 17px;
+    padding: 12px 14px;
+
+    border-radius: 14px;
+    border: 1px solid rgba(255, 245, 210, 0.14);
+
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff8e6;
+
+    outline: none;
+  }
+}
+
+.mobileTimePicker {
+  color: var(--button-text);
+}
+
+@media (max-width: 380px) {
+  .line {
+    font-size: 16px;
+    max-width: 100%;
+  }
+
+  #messageBox {
+    padding: 15px 12px;
+  }
+
+  #clearBox button {
+    font-size: 16px;
+    padding: 10px 12px;
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 769px) {
+  #timerPanel {
+    padding-left: 42px;
+    padding-right: 42px;
+  }
+
+  #timerPanel::after {
+    right: 68px;
+  }
+
+  #mode,
+  #timer {
+    margin-left: 18px;
+  }
+}
+
+/* ==================================================
+  13. SVG装飾
+  ================================================== */
+
+/* ==================================================
+  14. ローディング画面
+  ================================================== */
+
+.app-hidden {
+  visibility: hidden;
+}
+
+.app-show {
+  visibility: visible;
+}
+
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 30000;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background:
+    linear-gradient(rgba(18, 28, 24, 0.68), rgba(18, 28, 24, 0.68)),
+    url("background_komorebi_dark.png") center / cover no-repeat fixed;
+
+  color: #f3eedc;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
+}
+
+#loadingScreen.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#loadingLogo {
+  font-size: 42px;
+  text-shadow: 0 0 18px rgba(255, 240, 200, 0.08);
+  letter-spacing: 0.08em;
+  font-family: serif;
+}
+
+#loadingText {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.72;
+  letter-spacing: 0.28em;
+}
+
+@keyframes loadingFloat {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+.float-in {
+  animation: floatIn 1.2s ease forwards;
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#loadingInner {
+  width: min(72vw, 360px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loadingLine {
+  width: 100%;
+  height: 1px;
+  background: rgba(232, 217, 168, 0.42);
+  transform: scaleX(0);
+}
+
+.loadingLineTop {
+  margin-bottom: 18px;
+  transform-origin: right;
+  animation: loadingLineGrow 1.8s ease forwards;
+}
+
+.loadingLineBottom {
+  margin-top: 18px;
+  transform-origin: left;
+  animation: loadingLineGrow 1.8s ease forwards;
+}
+
+@keyframes loadingLineGrow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ==================================================
+  15. 対応セリフ解放演出
+  ================================================== */
+
+#dialogueUnlockedEffect {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(8, 12, 10, 0.68);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#dialogueUnlockedEffect.show {
+  animation: unlockOverlayFade 2.4s ease forwards;
+}
+
+#dialogueUnlockedBox {
+  width: min(78vw, 520px);
+  text-align: center;
+  color: #fff8f0;
+}
+
+#dialogueUnlockedText {
+  text-shadow:
+    0 0 18px rgba(255, 248, 240, 0.12),
+    0 0 42px rgba(255, 230, 180, 0.08);
+  margin: 16px 0;
+  font-size: clamp(24px, 5vw, 42px);
+  letter-spacing: 0.08em;
+  font-family: serif;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+#dialogueUnlockedEffect.show #dialogueUnlockedText {
+  animation: unlockTextFade 2.4s ease forwards;
+}
+
+.unlockLine {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 248, 240, 0.8);
+  transform: scaleX(0);
+}
+
+.unlockLineTop {
+  transform-origin: right;
+}
+
+.unlockLineBottom {
+  transform-origin: left;
+}
+
+#dialogueUnlockedEffect.show .unlockLine {
+  animation: unlockLineGrow 2.4s ease forwards;
+}
+
+@keyframes unlockOverlayFade {
+  0% {
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  78% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes unlockTextFade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  28% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  42% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  78% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes unlockLineGrow {
+  0% {
+    transform: scaleX(0);
+  }
+
+  65% {
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* ==================================================
+  16. クリア演出
+  ================================================== */
+
+#clearLineEffect {
+  position: fixed;
+  inset: 0;
+  z-index: 20001;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+#clearLineEffect.show {
+  animation: clearLineEffectFade 4s ease forwards;
+}
+
+#clearLineBox {
+  width: min(78vw, 520px);
+  text-align: center;
+  color: #2f2a24;
+}
+
+#clearLineText {
+  margin: 16px 0;
+  font-size: clamp(22px, 5vw, 40px);
+  letter-spacing: 0.08em;
+  font-family: serif;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+#clearLineEffect.show #clearLineText {
+  animation: clearLineTextFade 4s ease forwards;
+}
+
+.clearLine {
+  width: 100%;
+  height: 1px;
+  background: rgba(47, 42, 36, 0.55);
+  transform: scaleX(0);
+}
+
+.clearLineTop {
+  transform-origin: right;
+}
+
+.clearLineBottom {
+  transform-origin: left;
+}
+
+#clearLineEffect.show .clearLine {
+  animation: clearLineGrow 4s ease forwards;
+}
+
+@keyframes clearLineEffectFade {
+  0% {
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  78% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes clearLineTextFade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  30% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  78% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes clearLineGrow {
+  0% {
+    transform: scaleX(0);
+  }
+
+  65% {
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
