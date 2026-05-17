@@ -47,17 +47,9 @@ function closeTimerSettings() {
 }
 
 function startFromSettings() {
-  const isMobile = window.innerWidth <= 768;
-
-  const workMinutes = Number(
-    document.getElementById(isMobile ? "workMinutesPicker" : "workMinutesInput")
-      .value,
-  );
-
+  const workMinutes = Number(document.getElementById("workMinutesInput").value);
   const breakMinutes = Number(
-    document.getElementById(
-      isMobile ? "breakMinutesPicker" : "breakMinutesInput",
-    ).value,
+    document.getElementById("breakMinutesInput").value,
   );
 
   if (workMinutes < 1 || breakMinutes < 1) return;

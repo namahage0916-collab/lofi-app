@@ -12,7 +12,7 @@ const KEYWORD_NOTICE_DURATION = 7000;
 // ==================================================
 const AFTER_ERO_DARK_WAIT = 2200;
 const AFTER_ERO_FADE_OUT_DELAY = 1200;
-const AFTER_ERO_KEYWORD_NOTICE_DELAY = 7000;
+const AFTER_ERO_KEYWORD_NOTICE_DELAY = 10000;
 
 // ==================================================
 // クイズ変化演出

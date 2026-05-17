@@ -24,6 +24,8 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -138,16 +140,6 @@
                 max="180"
                 value="25"
               />
-              <select id="workMinutesPicker" class="mobileTimePicker">
-                <option value="5">5分</option>
-                <option value="10">10分</option>
-                <option value="15">15分</option>
-                <option value="20">20分</option>
-                <option value="25" selected>25分</option>
-                <option value="30">30分</option>
-                <option value="45">45分</option>
-                <option value="60">60分</option>
-              </select>
             </div>
 
             <div class="settingRow">
@@ -159,15 +151,6 @@
                 max="60"
                 value="5"
               />
-              <select id="breakMinutesPicker" class="mobileTimePicker">
-                <option value="1">1分</option>
-                <option value="3">3分</option>
-                <option value="5" selected>5分</option>
-                <option value="10">10分</option>
-                <option value="15">15分</option>
-                <option value="20">20分</option>
-                <option value="30">30分</option>
-              </select>
             </div>
 
             <div class="timerSettingButtons">
@@ -268,7 +251,7 @@
             <div id="buttonGroup">
               <button
                 id="keywordButton"
-                class="fade-in keyword-button"
+                class="fade-in keyword-button glassPanel glassHover"
                 onclick="showKeywordListPopup()"
               >
                 <svg

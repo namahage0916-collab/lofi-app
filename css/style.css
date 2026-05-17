@@ -176,6 +176,43 @@ input[type="range"] {
 }
 
 /* ==================================================
+  ガラス共通スタイル
+  ================================================== */
+
+.glassPanel {
+  background: var(--panel-bg);
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.glassHover {
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease,
+    border-color 0.2s ease;
+}
+
+.glassHover:hover {
+  background: var(--panel-hover-bg);
+
+  border-color: rgba(255, 255, 255, 0.24);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+}
+
+.glassHover:active {
+  background: var(--panel-active-bg);
+
+  transform: scale(0.98);
+}
+
+/* ==================================================
   3. レイアウト系
   ================================================== */
 
@@ -225,38 +262,12 @@ input[type="range"] {
   font-size: 13px;
   padding: 10px 6px;
   white-space: nowrap;
-
-  background: var(--panel-bg);
   color: var(--button-text);
-
-  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 14px;
-
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.1s ease,
-    border-color 0.2s ease;
 
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#buttonGroup button:hover {
-  background: var(--panel-hover-bg);
-  border-color: rgba(255, 255, 255, 0.24);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
-}
-
-#buttonGroup button:active {
-  background: var(--panel-active-bg);
-  transform: scale(0.98);
 }
 
 .buttonIcon {
@@ -374,47 +385,12 @@ input[type="range"] {
   animation: nextArrowBlink 1.2s ease-in-out infinite;
 }
 
-@keyframes nextArrowBlink {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: translateX(0);
-  }
-
-  50% {
-    opacity: 0.9;
-    transform: translateX(3px);
-  }
-}
-
 .keywordNoticeArea {
   margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
-}
-
-@keyframes keywordNoticeFade {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  10% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  90% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
 }
 
 /* 会話行 */
@@ -462,18 +438,6 @@ input[type="range"] {
 
 .dialogLine {
   animation: dialogueFadeIn 0.8s ease forwards;
-}
-
-@keyframes dialogueFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* タイトル横の日付表示 */
@@ -777,19 +741,6 @@ body.dark-theme #timerPanel:hover {
   animation: fadeIn 0.6s ease-in;
 }
 
-/* フェードインの動き */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ==================================================
   9. 音楽表示エリア
   ================================================== */
@@ -924,30 +875,6 @@ body.dark-theme #timerPanel:hover {
   letter-spacing: 0.08em;
 }
 
-/* 棒が伸び縮みする通常の動き */
-@keyframes bounce {
-  0%,
-  100% {
-    height: 6px;
-  }
-
-  50% {
-    height: 18px;
-  }
-}
-
-/* 通知中の小さい動き */
-@keyframes bounce-low {
-  0%,
-  100% {
-    height: 6px;
-  }
-
-  50% {
-    height: 14px;
-  }
-}
-
 /* ==================================================
   10. タイマー設定ポップアップ
   ================================================== */
@@ -997,18 +924,6 @@ body.dark-theme #timerPanel:hover {
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.1s ease;
-}
-
-@keyframes modalFloatIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 .modalBox button:hover {
@@ -1074,10 +989,6 @@ body.dark-theme #timerPanel:hover {
     background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-}
-
-.mobileTimePicker {
-  display: none;
 }
 
 .settingRow input:focus {
@@ -1179,15 +1090,12 @@ body.dark-theme #timerPanel:hover {
 
 .keywordNotice {
   font-size: 15px;
-
   font-weight: 500;
 
   padding: 10px 16px;
-
   border-radius: 999px;
 
   background: rgba(18, 28, 24, 0.82);
-
   color: rgba(255, 248, 230, 0.96);
 
   border: 1px solid rgba(255, 245, 210, 0.18);
@@ -1200,6 +1108,10 @@ body.dark-theme #timerPanel:hover {
   -webkit-backdrop-filter: blur(12px);
 
   letter-spacing: 0.03em;
+
+  animation-name: keywordNoticeFade;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
 }
 
 .keywordNotice .keyword-highlight {
@@ -1278,32 +1190,8 @@ body.dark-theme .keywordItemText.unlocked.active {
   animation: keywordTransform 1s ease forwards;
 }
 
-@keyframes keywordTransform {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-}
-
 .keyword-appear {
   animation: keywordAppear 0.8s ease forwards;
-}
-
-@keyframes keywordAppear {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 #sceneFade {
@@ -1335,196 +1223,6 @@ body.dark-theme .keywordItemText.unlocked.active {
 #sceneFade.black.active {
   opacity: 1;
 }
-
-/* ==================================================
-  12. スマホ向け調整
-  ================================================== */
-@media (max-width: 768px) {
-  /* ページ全体 */
-  body {
-    padding-top: 12px;
-  }
-
-  h1 {
-    font-size: 22px;
-    margin-bottom: 10px;
-  }
-
-  #dateText {
-    display: inline-block;
-    margin-left: 8px;
-    font-size: 14px;
-  }
-
-  /* レイアウト幅 */
-  #imageArea {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-  }
-
-  #controlRow {
-    width: 96%;
-    max-width: none;
-
-    margin: 18px auto 0;
-    gap: 16px;
-  }
-
-  #buttonRow {
-    width: 96%;
-    max-width: none;
-
-    margin: 20px auto 0;
-  }
-
-  #imageArea {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto 0;
-
-    overflow: hidden;
-    border-radius: 18px;
-  }
-
-  /* メイン画像 */
-  #mainImage {
-    border-radius: 12px;
-  }
-
-  /* セリフ表示 */
-  #messageBox {
-    min-height: 134px;
-    padding: 14px 8px;
-  }
-
-  #messageBox.has-next::after {
-    right: 8px;
-    bottom: 2px;
-  }
-
-  #messageBox.has-end::after {
-    right: 8px;
-    bottom: -2px;
-  }
-
-  .dialogLine.left,
-  .dialogLine.right {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .line {
-    font-size: 17px;
-    letter-spacing: -0.03em;
-    line-height: 1.6;
-  }
-
-  #keywordInput {
-    font-size: 16px;
-    padding: 10px 12px;
-  }
-
-  /* タイマー */
-  #timer {
-    font-size: 64px;
-    margin-top: -4px;
-    line-height: 0.95;
-    letter-spacing: 0.01em;
-  }
-
-  #mode {
-    font-size: 18px;
-
-    letter-spacing: 0.04em;
-
-    margin-bottom: 0;
-  }
-
-  #visualizer {
-    margin-left: 4px;
-    gap: 3px;
-    height: 24px;
-  }
-
-  #visualizer span {
-    width: 3px;
-  }
-
-  #trackName {
-    font-size: 13px;
-    opacity: 0.62;
-    letter-spacing: 0.03em;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-@media (max-width: 768px) {
-  .settingRow input[type="number"] {
-    display: none;
-  }
-
-  .mobileTimePicker {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-
-    font-size: 17px;
-    padding: 12px 14px;
-
-    border-radius: 14px;
-    border: 1px solid rgba(255, 245, 210, 0.14);
-
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff8e6;
-
-    outline: none;
-  }
-}
-
-.mobileTimePicker {
-  color: var(--button-text);
-}
-
-@media (max-width: 380px) {
-  .line {
-    font-size: 16px;
-    max-width: 100%;
-  }
-
-  #messageBox {
-    padding: 15px 12px;
-  }
-
-  #clearBox button {
-    font-size: 16px;
-    padding: 10px 12px;
-    max-width: 300px;
-  }
-}
-
-@media (min-width: 769px) {
-  #timerPanel {
-    padding-left: 42px;
-    padding-right: 42px;
-  }
-
-  #timerPanel::after {
-    right: 68px;
-  }
-
-  #mode,
-  #timer {
-    margin-left: 18px;
-  }
-}
-
-/* ==================================================
-  13. SVG装飾
-  ================================================== */
 
 /* ==================================================
   14. ローディング画面
@@ -1578,33 +1276,8 @@ body.dark-theme .keywordItemText.unlocked.active {
   letter-spacing: 0.28em;
 }
 
-@keyframes loadingFloat {
-  0%,
-  100% {
-    opacity: 0.65;
-    transform: translateY(0);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translateY(-4px);
-  }
-}
-
 .float-in {
   animation: floatIn 1.2s ease forwards;
-}
-
-@keyframes floatIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 #loadingInner {
@@ -1631,16 +1304,6 @@ body.dark-theme .keywordItemText.unlocked.active {
   margin-top: 18px;
   transform-origin: left;
   animation: loadingLineGrow 1.8s ease forwards;
-}
-
-@keyframes loadingLineGrow {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
 }
 
 /* ==================================================
@@ -1709,65 +1372,6 @@ body.dark-theme .keywordItemText.unlocked.active {
   animation: unlockLineGrow 2.4s ease forwards;
 }
 
-@keyframes unlockOverlayFade {
-  0% {
-    opacity: 0;
-  }
-
-  18% {
-    opacity: 1;
-  }
-
-  78% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes unlockTextFade {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  28% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  42% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  78% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-
-@keyframes unlockLineGrow {
-  0% {
-    transform: scaleX(0);
-  }
-
-  65% {
-    transform: scaleX(1);
-  }
-
-  100% {
-    transform: scaleX(1);
-  }
-}
-
 /* ==================================================
   16. クリア演出
   ================================================== */
@@ -1825,63 +1429,4 @@ body.dark-theme .keywordItemText.unlocked.active {
 
 #clearLineEffect.show .clearLine {
   animation: clearLineGrow 4s ease forwards;
-}
-
-@keyframes clearLineEffectFade {
-  0% {
-    opacity: 0;
-  }
-
-  18% {
-    opacity: 1;
-  }
-
-  78% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes clearLineTextFade {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  30% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  45% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  78% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-
-@keyframes clearLineGrow {
-  0% {
-    transform: scaleX(0);
-  }
-
-  65% {
-    transform: scaleX(1);
-  }
-
-  100% {
-    transform: scaleX(1);
-  }
 }

@@ -304,16 +304,6 @@ function applyTheme(theme) {
   applyButtonVariables(theme);
 
   // ==================================================
-  // スマホ picker
-  // ==================================================
-
-  document.querySelectorAll(".mobileTimePicker").forEach((picker) => {
-    picker.style.background = theme.popupBg;
-    picker.style.color = theme.mainText;
-    picker.style.border = "1px solid rgba(255,255,255,0.18)";
-  });
-
-  // ==================================================
   // ダークテーマ
   // ==================================================
 

@@ -1,0 +1,158 @@
+/* ==================================================
+  画面サイズごとの調整
+  ================================================== */
+@media (max-width: 768px) {
+  /* ページ全体 */
+  body {
+    padding-top: 12px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  #dateText {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 14px;
+  }
+
+  /* レイアウト幅 */
+  #imageArea {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  #controlRow {
+    width: 96%;
+    max-width: none;
+
+    margin: 18px auto 0;
+    gap: 16px;
+  }
+
+  #buttonRow {
+    width: 96%;
+    max-width: none;
+
+    margin: 20px auto 0;
+  }
+
+  #imageArea {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 0;
+
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  /* メイン画像 */
+  #mainImage {
+    border-radius: 12px;
+  }
+
+  /* セリフ表示 */
+  #messageBox {
+    min-height: 134px;
+    padding: 14px 8px;
+  }
+
+  #messageBox.has-next::after {
+    right: 8px;
+    bottom: 2px;
+  }
+
+  #messageBox.has-end::after {
+    right: 8px;
+    bottom: -2px;
+  }
+
+  .dialogLine.left,
+  .dialogLine.right {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .line {
+    font-size: 17px;
+    letter-spacing: -0.03em;
+    line-height: 1.6;
+  }
+
+  #keywordInput {
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+
+  /* タイマー */
+  #timer {
+    font-size: 64px;
+    margin-top: -4px;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+  }
+
+  #mode {
+    font-size: 18px;
+
+    letter-spacing: 0.04em;
+
+    margin-bottom: 0;
+  }
+
+  #visualizer {
+    margin-left: 4px;
+    gap: 3px;
+    height: 24px;
+  }
+
+  #visualizer span {
+    width: 3px;
+  }
+
+  #trackName {
+    font-size: 13px;
+    opacity: 0.62;
+    letter-spacing: 0.03em;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .line {
+    font-size: 16px;
+    max-width: 100%;
+  }
+
+  #messageBox {
+    padding: 15px 12px;
+  }
+
+  #clearBox button {
+    font-size: 16px;
+    padding: 10px 12px;
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 769px) {
+  #timerPanel {
+    padding-left: 42px;
+    padding-right: 42px;
+  }
+
+  #timerPanel::after {
+    right: 68px;
+  }
+
+  #mode,
+  #timer {
+    margin-left: 18px;
+  }
+}
