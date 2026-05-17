@@ -201,6 +201,13 @@ async function checkKeyword() {
   keywordInput.value = "";
 }
 
+function handleKeywordEnter(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    checkKeyword();
+  }
+}
+
 function showKeywordDialogue(keywordData) {
   if (Array.isArray(keywordData)) {
     showDialogue(keywordData);
