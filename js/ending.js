@@ -133,7 +133,7 @@ function startEnding() {
   setTimeout(() => {
     music.src = ENDING_BGM;
     music.currentTime = 0;
-    music.volume = normalVolume;
+    applyMusicVolume();
     music.muted = false;
     music.loop = true;
 

@@ -93,7 +93,7 @@
 
       <div id="creditOverlay" class="modalOverlay">
         <div id="creditBox" class="modalBox">
-          <div id="creditTitle">クレジット</div>
+          <div id="creditTitle" class="modalTitle">クレジット</div>
 
           <div id="creditText">
             <strong>制作</strong><br />
@@ -116,9 +116,41 @@
         </div>
       </div>
 
+      <div id="volumeOverlay" class="modalOverlay">
+        <div id="volumeBox" class="modalBox">
+          <div id="volumeTitle" class="modalTitle">音量設定</div>
+
+          <div class="volumeSettingRow">
+            <label for="musicVolumeSlider">Music</label>
+
+            <input
+              type="range"
+              id="musicVolumeSlider"
+              min="0"
+              max="100"
+              value="50"
+            />
+          </div>
+
+          <div class="volumeSettingRow">
+            <label for="seVolumeSlider">SE</label>
+
+            <input
+              type="range"
+              id="seVolumeSlider"
+              min="0"
+              max="100"
+              value="50"
+            />
+          </div>
+
+          <button onclick="closeVolumePopup()">閉じる</button>
+        </div>
+      </div>
+
       <div id="keywordListOverlay" class="modalOverlay">
         <div id="keywordListBox" class="modalBox">
-          <div id="keywordListTitle">キーワードリスト</div>
+          <div id="keywordListTitle" class="modalTitle">キーワードリスト</div>
 
           <div id="keywordListContent"></div>
 
@@ -128,7 +160,7 @@
 
       <div id="timerSettingOverlay" class="modalOverlay">
         <div id="timerSettingBox" class="modalBox">
-          <div id="timerSettingTitle">タイマー設定</div>
+          <div id="timerSettingTitle" class="modalTitle">タイマー設定</div>
 
           <div id="timerSettingForm">
             <div class="settingRow">
@@ -287,6 +319,23 @@
               </button>
 
               <button
+                id="volumeButton"
+                class="fade-in volumeButton glassPanel glassHover"
+                type="button"
+                onclick="showVolumePopup()"
+              >
+                <svg
+                  class="buttonIcon volumeIcon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
+                  <path d="M16 8.5a5 5 0 0 1 0 7"></path>
+                  <path d="M18.5 6a8 8 0 0 1 0 12"></path>
+                </svg>
+              </button>
+
+              <button
                 class="fade-in infoButton glassPanel glassHover"
                 onclick="showCreditPopup()"
               >
@@ -435,9 +484,15 @@
           const creditText = document.getElementById("creditText");
           const creditTitle = document.getElementById("creditTitle");
 
+          const volumeOverlay = document.getElementById("volumeOverlay");
+
           const seSuccess = document.getElementById("seSuccess");
           const seFail = document.getElementById("seFail");
           const seTransform = document.getElementById("seTransform");
+
+          const musicVolumeSlider =
+            document.getElementById("musicVolumeSlider");
+          const seVolumeSlider = document.getElementById("seVolumeSlider");
 
           let WORK_TIME = 25 * 60;
           let BREAK_TIME = 5 * 60;

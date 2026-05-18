@@ -1,34 +1,61 @@
-let normalVolume = 1;
+const MUSIC_BASE_VOLUME = 0.3;
+const SE_MASTER_VOLUME = 0.5;
+
+let musicVolume = 0.5;
+let seVolume = 0.5;
+
+const SE_BASE_VOLUMES = {
+  bell: 0.5,
+  success: 0.9,
+  fail: 1.0,
+  transform: 1.0,
+};
 
 const recordIcon = document.querySelector(".recordIcon");
 
-function setVolume(v) {
-  const volume = Number(v);
+function applyMusicVolume() {
+  music.volume = MUSIC_BASE_VOLUME * musicVolume;
+}
 
-  normalVolume = volume;
+function setMusicVolume(v) {
+  musicVolume = Number(v);
+  applyMusicVolume();
+}
 
-  music.volume = volume;
-  bell.volume = Math.min(volume, 0.6);
+musicVolumeSlider.addEventListener("input", () => {
+  const value = Number(musicVolumeSlider.value) / 100;
+
+  musicVolume = value;
+
+  applyMusicVolume();
+});
+
+seVolumeSlider.addEventListener("input", () => {
+  seVolume = Number(seVolumeSlider.value) / 100;
+});
+
+function playSE(audio, baseVolume = 1.0) {
+  audio.currentTime = 0;
+
+  audio.volume = baseVolume * SE_MASTER_VOLUME * seVolume;
+
+  audio.play().catch(() => {});
 }
 
 function playBell() {
-  bell.currentTime = 0;
-  bell.play().catch(() => {});
+  playSE(bell, SE_BASE_VOLUMES.bell);
 }
 
 function playSuccessSE() {
-  seSuccess.currentTime = 0;
-  seSuccess.play().catch(() => {});
+  playSE(seSuccess, SE_BASE_VOLUMES.success);
 }
 
 function playFailSE() {
-  seFail.currentTime = 0;
-  seFail.play().catch(() => {});
+  playSE(seFail, SE_BASE_VOLUMES.fail);
 }
 
 function playTransformSE() {
-  seTransform.currentTime = 0;
-  seTransform.play().catch(() => {});
+  playSE(seTransform, SE_BASE_VOLUMES.transform);
 }
 
 function getRandomTrackIndex() {
@@ -51,6 +78,7 @@ function playRandomTrack() {
   const randomIndex = getRandomTrackIndex();
   currentTrackIndex = randomIndex;
   music.src = tracks[randomIndex];
+  applyMusicVolume();
   updateTrackName(randomIndex);
   music.play().catch(() => {});
   startVisualizer();

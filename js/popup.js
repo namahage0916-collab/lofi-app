@@ -1,3 +1,16 @@
+function openPopup(overlay) {
+  if (!overlay) return;
+
+  overlay.style.display = "flex";
+  keywordInput.blur();
+}
+
+function closePopup(overlay) {
+  if (!overlay) return;
+
+  overlay.style.display = "none";
+}
+
 function showNotice(text) {
   noticeText.innerText = text;
   noticeOverlay.style.display = "flex";
@@ -8,7 +21,7 @@ function closeNoticeAndStartNext() {
 
   timerState.isPaused = false;
 
-  music.volume = normalVolume;
+  applyMusicVolume();
 
   updateModeImage();
 
@@ -27,7 +40,7 @@ function notifyModeChange(text) {
   showNotice(text);
   playBell();
 
-  music.volume = normalVolume * 0.2;
+  music.volume = Math.max(MUSIC_BASE_VOLUME * musicVolume * 0.4, 0.03);
 }
 
 function showClearPopup() {
@@ -42,7 +55,7 @@ function showClearPopup() {
 }
 
 function closeClearPopup() {
-  clearOverlay.style.display = "none";
+  closePopup(clearOverlay);
 }
 
 function shareOnX() {
@@ -60,24 +73,31 @@ function shareOnX() {
 }
 
 function showCreditPopup() {
-  creditOverlay.style.display = "flex";
-  keywordInput.blur();
+  openPopup(creditOverlay);
 }
 
 function closeCreditPopup() {
-  creditOverlay.style.display = "none";
+  closePopup(creditOverlay);
+}
+
+function showVolumePopup() {
+  openPopup(volumeOverlay);
+}
+
+function closeVolumePopup() {
+  closePopup(volumeOverlay);
 }
 
 function showKeywordListPopup() {
   const overlay = document.getElementById("keywordListOverlay");
-  overlay.style.display = "flex";
+
+  openPopup(overlay);
 
   updateKeywordListContent(true);
-
-  keywordInput.blur();
 }
 
 function closeKeywordListPopup() {
   const overlay = document.getElementById("keywordListOverlay");
-  overlay.style.display = "none";
+
+  closePopup(overlay);
 }

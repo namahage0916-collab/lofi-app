@@ -136,7 +136,7 @@ function restoreEndingIfNeeded() {
   showDialogue(endingDialogue);
 
   music.src = ENDING_BGM;
-  music.volume = normalVolume;
+  applyMusicVolume();
   music.loop = true;
   trackNameDisplay.innerText = "Nothing";
 
@@ -165,8 +165,6 @@ function restoreEndingIfNeeded() {
    ================================================== */
 
 function initApp() {
-  bell.volume = 0.5;
-
   updateModeDisplay();
   updateTimerDisplay();
   updateFocusDisplay();

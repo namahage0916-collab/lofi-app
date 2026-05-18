@@ -243,7 +243,7 @@ function resetTimer() {
   trackNameDisplay.innerText = "No track";
   noticeOverlay.style.display = "none";
 
-  music.volume = normalVolume;
+  applyMusicVolume();
 }
 
 /* 一時停止

@@ -6,7 +6,7 @@
   --button-text: #24313a;
   --popup-button-bg: rgba(255, 255, 255, 0.3);
 
-  --panel-bg: rgba(255, 255, 255, 0.12);
+  --panel-bg: rgba(255, 255, 255, 0.03);
   --panel-hover-bg: rgba(255, 255, 255, 0.18);
   --panel-active-bg: rgba(255, 255, 255, 0.24);
 
@@ -318,11 +318,12 @@ input[type="range"] {
 
 .infoButton {
   font-size: 26px !important;
-  font-weight: 600;
+  font-weight: 800;
   color: var(--timer-display-color);
-  opacity: 0.82;
+  opacity: 0.9;
   line-height: 1;
-  transform: translateY(2px);
+  transform: translateY(1px);
+  text-shadow: 0 0 1px rgba(255, 248, 230, 0.3);
 }
 
 /* ==================================================
@@ -700,8 +701,7 @@ input[type="range"] {
   letter-spacing: 0.04em;
 }
 
-#creditTitle,
-#keywordListTitle {
+.modalTitle {
   font-size: 20px;
   margin-bottom: 20px;
   color: rgba(255, 248, 220, 0.86);
@@ -788,6 +788,44 @@ input[type="range"] {
   -webkit-backdrop-filter: blur(10px);
 
   box-sizing: border-box;
+}
+
+.volumeSettingRow {
+  width: 100%;
+  max-width: 280px;
+
+  margin: 0 auto 18px;
+
+  text-align: left;
+}
+
+.volumeSettingRow label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+
+.volumeSettingRow input[type="range"] {
+  display: block;
+
+  width: 100%;
+  margin: 0;
+}
+
+#volumeBox button {
+  margin-top: 12px;
+}
+
+.volumeIcon {
+  width: 30px;
+  height: 30px;
+
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ビジュアライザー本体 */

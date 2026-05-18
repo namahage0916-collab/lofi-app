@@ -23,7 +23,6 @@ const themes = [
     bodyBg:
       "linear-gradient(rgba(22, 34, 28, 0.58), rgba(22, 34, 28, 0.58)), url('background_beige.png') center / cover no-repeat fixed",
     bodyText: "#f3eedc",
-    panelBg: "rgba(255,255,255,0.03)",
     subText: "#d8caa8",
     mainText: "#fff8e6",
     visualizerColor: "#e8d9a8",
@@ -34,7 +33,6 @@ const themes = [
   {
     bodyBg: "url('background.png') center / cover no-repeat fixed",
     bodyText: "#f2f2f2",
-    panelBg: "rgba(255,255,255,0.12)",
     subText: "#d6dcff",
     mainText: "#ffffff",
     visualizerColor: "#d6dcff",
@@ -46,7 +44,6 @@ const themes = [
     bodyBg:
       "linear-gradient(rgba(8,10,16,0.72), rgba(8,10,16,0.72)), url('background_midnight.png') center / cover no-repeat fixed",
     bodyText: "#f2f4ff",
-    panelBg: "rgba(255,255,255,0.08)",
     subText: "#aeb8d8",
     mainText: "#ffffff",
     visualizerColor: "#d6dcff",
@@ -160,16 +157,6 @@ function applyCssVariables(theme) {
 
   root.style.setProperty("--panel-bg", theme.panelBg);
 
-  root.style.setProperty(
-    "--panel-hover-bg",
-    theme.panelHoverBg || theme.panelBg,
-  );
-
-  root.style.setProperty(
-    "--panel-active-bg",
-    theme.panelActiveBg || theme.panelBg,
-  );
-
   root.style.setProperty("--timer-display-color", theme.mainText);
 
   root.style.setProperty("--button-bg", theme.panelBg);
@@ -270,11 +257,13 @@ function applyTheme(theme) {
 
   applyPopupById("creditBox", theme);
   applyElementTextColor("creditText", theme.mainText);
-  applyElementTextColor("creditTitle", theme.mainText);
 
   applyPopupById("keywordListBox", theme);
-  applyElementTextColor("keywordListTitle", theme.mainText);
   applyElementTextColor("keywordListContent", theme.mainText);
+
+  applyPopupById("volumeBox", theme);
+
+  applyTextColor(".modalTitle", theme.mainText);
 }
 
 // ==================================================
