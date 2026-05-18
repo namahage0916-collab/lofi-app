@@ -61,27 +61,15 @@
   }
 }
 
-/* 棒が伸び縮みする通常の動き */
+/* 棒が伸び縮みする動き */
 @keyframes bounce {
   0%,
   100% {
-    height: 6px;
+    height: 7px;
   }
 
   50% {
-    height: 18px;
-  }
-}
-
-/* 通知中の小さい動き */
-@keyframes bounce-low {
-  0%,
-  100% {
-    height: 6px;
-  }
-
-  50% {
-    height: 14px;
+    height: 24px;
   }
 }
 
@@ -271,5 +259,15 @@
   50% {
     opacity: 1;
     transform: translateY(-4px);
+  }
+}
+
+@keyframes recordSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -271,7 +271,10 @@
                 ></span>
               </button>
 
-              <button class="fade-in" onclick="toggleTheme()">
+              <button
+                class="fade-in glassPanel glassHover"
+                onclick="toggleTheme()"
+              >
                 <svg
                   class="buttonIcon moonIcon"
                   viewBox="0 0 24 24"
@@ -283,7 +286,10 @@
                 </svg>
               </button>
 
-              <button class="fade-in infoButton" onclick="showCreditPopup()">
+              <button
+                class="fade-in infoButton glassPanel glassHover"
+                onclick="showCreditPopup()"
+              >
                 ⓘ
               </button>
             </div>
@@ -292,8 +298,57 @@
           <div id="musicBar">
             <div id="trackInfo">
               <div id="trackMeta">
-                <div id="trackName"></div>
-                <div id="trackGenre">Now playing</div>
+                <svg
+                  class="recordIcon"
+                  viewBox="0 0 512 512"
+                  aria-hidden="true"
+                >
+                  <g>
+                    <path
+                      class="recordDisc"
+                      d="M256,0C114.6,0,0,114.6,0,256c0,141.4,114.6,256,256,256
+      c141.4,0,256-114.6,256-256C512,114.6,397.4,0,256,0z
+      M256,287c-17.1,0-31-13.9-31-31c0-17.1,13.9-31,31-31
+      c17.1,0,31,13.9,31,31C287,273.1,273.1,287,256,287z"
+                    />
+
+                    <path
+                      class="recordShadow"
+                      d="M256,118.2c-76.1,0-137.8,61.6-137.8,137.8
+      S179.9,393.8,256,393.8S393.8,332.1,393.8,256
+      S332.1,118.2,256,118.2z
+      M256,294.5c-21.2,0-38.5-17.3-38.5-38.5
+      c0-21.2,17.3-38.5,38.5-38.5
+      c21.3,0,38.5,17.3,38.5,38.5
+      C294.5,277.2,277.2,294.5,256,294.5z"
+                    />
+
+                    <path
+                      class="recordLabel"
+                      d="M256,145.1c-61.2,0-110.8,49.6-110.8,110.8
+      S194.7,366.9,256,366.9S366.9,317.2,366.9,256
+      S317.2,145.1,256,145.1z
+      M256,287c-17.1,0-31-13.9-31-31
+      c0-17.1,13.9-31,31-31
+      c17.1,0,31,13.9,31,31
+      C287,273.1,273.1,287,256,287z"
+                    />
+
+                    <ellipse
+                      class="recordReflection"
+                      transform="matrix(0.866 -0.5 0.5 0.866 -29.8579 85.7764)"
+                      cx="145.1"
+                      cy="98.6"
+                      rx="46.4"
+                      ry="34.5"
+                    />
+                  </g>
+                </svg>
+
+                <div id="trackText">
+                  <div id="trackName">No track</div>
+                  <div id="trackGenre">Now playing</div>
+                </div>
               </div>
             </div>
 

@@ -1,5 +1,7 @@
 let normalVolume = 1;
 
+const recordIcon = document.querySelector(".recordIcon");
+
 function setVolume(v) {
   const volume = Number(v);
 
@@ -52,6 +54,7 @@ function playRandomTrack() {
   updateTrackName(randomIndex);
   music.play().catch(() => {});
   startVisualizer();
+  recordIcon.style.animationPlayState = "running";
 }
 
 music.addEventListener("ended", () => {
@@ -62,8 +65,12 @@ music.addEventListener("ended", () => {
 
 function startVisualizer() {
   visualizer.classList.remove("paused");
+
+  recordIcon.style.animationPlayState = "running";
 }
 
 function stopVisualizer() {
   visualizer.classList.add("paused");
+
+  recordIcon.style.animationPlayState = "paused";
 }

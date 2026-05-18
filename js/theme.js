@@ -15,8 +15,6 @@ let currentTheme = 0;
 // mainText         : メイン文字色
 // visualizerColor  : ビジュアライザー色
 // popupBg          : ポップアップ背景色
-// isDark           : ダークテーマ判定
-// isTransparent    : 透明テーマ判定
 // ==================================================
 
 const themes = [
@@ -25,14 +23,11 @@ const themes = [
     bodyBg:
       "linear-gradient(rgba(22, 34, 28, 0.58), rgba(22, 34, 28, 0.58)), url('background_beige.png') center / cover no-repeat fixed",
     bodyText: "#f3eedc",
-    panelBg: "rgba(255,255,255,0.12)",
-    panelShadow: "0 10px 32px rgba(0,0,0,0.28)",
+    panelBg: "rgba(255,255,255,0.03)",
     subText: "#d8caa8",
     mainText: "#fff8e6",
     visualizerColor: "#e8d9a8",
     popupBg: "rgba(35, 46, 38, 0.62)",
-    isDark: true,
-    isTransparent: true,
   },
 
   // 夜の雨テーマ
@@ -40,13 +35,10 @@ const themes = [
     bodyBg: "url('background.png') center / cover no-repeat fixed",
     bodyText: "#f2f2f2",
     panelBg: "rgba(255,255,255,0.12)",
-    panelShadow: "0 8px 24px rgba(0,0,0,0.25)",
     subText: "#d6dcff",
     mainText: "#ffffff",
     visualizerColor: "#d6dcff",
     popupBg: "rgba(20,20,30,0.45)",
-    isDark: true,
-    isTransparent: true,
   },
 
   // 真夜中テーマ
@@ -55,13 +47,10 @@ const themes = [
       "linear-gradient(rgba(8,10,16,0.72), rgba(8,10,16,0.72)), url('background_midnight.png') center / cover no-repeat fixed",
     bodyText: "#f2f4ff",
     panelBg: "rgba(255,255,255,0.08)",
-    panelShadow: "0 10px 32px rgba(0,0,0,0.42)",
     subText: "#aeb8d8",
     mainText: "#ffffff",
     visualizerColor: "#d6dcff",
     popupBg: "rgba(18,20,30,0.58)",
-    isDark: true,
-    isTransparent: true,
   },
 ];
 
@@ -72,22 +61,10 @@ const themes = [
 function applyPanelStyle(el, theme) {
   if (!el) return;
 
-  el.style.background = theme.panelBg;
-  el.style.boxShadow = theme.panelShadow;
-
-  // ==================================================
-  // 透明テーマ時のガラス表現
-  // ==================================================
-
-  if (theme.isTransparent) {
-    el.style.backdropFilter = "blur(12px)";
-    el.style.webkitBackdropFilter = "blur(12px)";
-    el.style.border = "1px solid rgba(255,255,255,0.18)";
-  } else {
-    el.style.backdropFilter = "";
-    el.style.webkitBackdropFilter = "";
-    el.style.border = "";
-  }
+  el.style.boxShadow = "var(--panel-shadow)";
+  el.style.border = "var(--glass-border)";
+  el.style.backdropFilter = "blur(12px)";
+  el.style.webkitBackdropFilter = "blur(12px)";
 }
 
 // ==================================================
@@ -111,24 +88,12 @@ function applyPopupStyle(el, theme) {
   if (!el) return;
 
   el.style.background = theme.popupBg;
-  el.style.boxShadow = theme.panelShadow;
+  el.style.boxShadow = "var(--panel-shadow)";
+  el.style.border = "var(--glass-border)";
   el.style.color = theme.mainText;
 
-  if (theme.isTransparent) {
-    el.style.backdropFilter = "blur(16px)";
-    el.style.webkitBackdropFilter = "blur(16px)";
-    el.style.border = "1px solid rgba(255,255,255,0.18)";
-  } else {
-    el.style.backdropFilter = "";
-    el.style.webkitBackdropFilter = "";
-    el.style.border = "";
-  }
-
-  if (theme.isDark) {
-    el.classList.add("dark-popup");
-  } else {
-    el.classList.remove("dark-popup");
-  }
+  el.style.backdropFilter = "blur(16px)";
+  el.style.webkitBackdropFilter = "blur(16px)";
 }
 
 // ==================================================
@@ -181,24 +146,52 @@ function applyBodyStyle(theme) {
   document.body.style.background = theme.bodyBg;
   document.body.style.color = theme.bodyText;
 
-  if (theme.isTransparent) {
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.backgroundAttachment = "fixed";
-  } else {
-    document.body.style.backgroundSize = "";
-    document.body.style.backgroundPosition = "";
-    document.body.style.backgroundAttachment = "";
-  }
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundAttachment = "fixed";
 }
 
 // ==================================================
-// 通常ボタン用CSS変数
+// CSS変数へテーマ値を適用
 // ==================================================
 
-function applyButtonVariables(theme) {
-  document.documentElement.style.setProperty("--button-bg", theme.panelBg);
-  document.documentElement.style.setProperty("--button-text", theme.mainText);
+function applyCssVariables(theme) {
+  const root = document.documentElement;
+
+  root.style.setProperty("--panel-bg", theme.panelBg);
+
+  root.style.setProperty(
+    "--panel-hover-bg",
+    theme.panelHoverBg || theme.panelBg,
+  );
+
+  root.style.setProperty(
+    "--panel-active-bg",
+    theme.panelActiveBg || theme.panelBg,
+  );
+
+  root.style.setProperty("--timer-display-color", theme.mainText);
+
+  root.style.setProperty("--button-bg", theme.panelBg);
+
+  root.style.setProperty("--button-text", theme.mainText);
+
+  root.style.setProperty("--keyword-link-color", theme.keywordLinkColor);
+
+  root.style.setProperty(
+    "--keyword-link-active-color",
+    theme.keywordLinkActiveColor,
+  );
+
+  root.style.setProperty(
+    "--keyword-link-hover-color",
+    theme.keywordLinkHoverColor,
+  );
+
+  root.style.setProperty(
+    "--keyword-link-active-hover-color",
+    theme.keywordLinkActiveHoverColor,
+  );
 }
 
 // ==================================================
@@ -206,26 +199,10 @@ function applyButtonVariables(theme) {
 // ==================================================
 
 function applyPopupButtonVariables(theme) {
-  if (theme.isDark) {
-    document.documentElement.style.setProperty("--popup-button-bg", "#3a4050");
-  } else {
-    document.documentElement.style.setProperty(
-      "--popup-button-bg",
-      theme.panelBg,
-    );
-  }
-}
-
-// ==================================================
-// bodyにダークテーマclass適用
-// ==================================================
-
-function applyDarkThemeClass(theme) {
-  if (theme.isDark) {
-    document.body.classList.add("dark-theme");
-  } else {
-    document.body.classList.remove("dark-theme");
-  }
+  document.documentElement.style.setProperty(
+    "--popup-button-bg",
+    theme.panelBg,
+  );
 }
 
 // ==================================================
@@ -238,6 +215,12 @@ function applyTheme(theme) {
   // ==================================================
 
   applyBodyStyle(theme);
+
+  // ==================================================
+  // CSS変数
+  // ==================================================
+
+  applyCssVariables(theme);
 
   // ==================================================
   // パネル
@@ -257,10 +240,6 @@ function applyTheme(theme) {
   applyElementTextColor("dateText", theme.subText);
   applyElementTextColor("mode", theme.subText);
   applyElementTextColor("timer", theme.mainText);
-  document.documentElement.style.setProperty(
-    "--timer-display-color",
-    theme.mainText,
-  );
 
   // ==================================================
   // ビジュアライザー
@@ -296,18 +275,6 @@ function applyTheme(theme) {
   applyPopupById("keywordListBox", theme);
   applyElementTextColor("keywordListTitle", theme.mainText);
   applyElementTextColor("keywordListContent", theme.mainText);
-
-  // ==================================================
-  // ボタン
-  // ==================================================
-
-  applyButtonVariables(theme);
-
-  // ==================================================
-  // ダークテーマ
-  // ==================================================
-
-  applyDarkThemeClass(theme);
 }
 
 // ==================================================

@@ -114,13 +114,14 @@
   }
 
   #trackName {
-    font-size: 13px;
-    opacity: 0.62;
-    letter-spacing: 0.03em;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 17px;
+    margin-top: 0;
+    color: rgba(255, 248, 240, 0.92);
+    letter-spacing: 0.05em;
     white-space: nowrap;
+    font-weight: 400;
+    text-shadow: 0 0 10px rgba(255, 240, 200, 0.06);
+    min-height: 20px;
   }
 }
 

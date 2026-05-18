@@ -9,7 +9,20 @@
   --panel-bg: rgba(255, 255, 255, 0.12);
   --panel-hover-bg: rgba(255, 255, 255, 0.18);
   --panel-active-bg: rgba(255, 255, 255, 0.24);
+
   --timer-display-color: rgba(255, 248, 230, 0.9);
+
+  --title-glow: 0 0 10px rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --panel-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+
+  --keyword-link-color: #9ec5ff;
+  --keyword-link-active-color: #d7b8ff;
+  --keyword-link-hover-color: #c6ddff;
+  --keyword-link-active-hover-color: #f0e6ff;
+
+  --panel-hover-bg: rgba(255, 255, 255, 0.1);
+  --panel-active-bg: rgba(255, 255, 255, 0.14);
 
   --space: 8px;
   --section-gap: 12px;
@@ -75,23 +88,12 @@ button {
 }
 
 button:hover {
-  background: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+  background: var(--panel-hover-bg);
 }
 
 button:active {
   background: var(--panel-active-bg);
   transform: scale(0.99);
-}
-
-.dark-popup button:hover,
-body.dark-theme button:hover {
-  background: rgba(255, 255, 255, 0.24);
-}
-
-.dark-popup button:active,
-body.dark-theme button:active {
-  background: rgba(255, 255, 255, 0.16);
 }
 
 #clearBox button {
@@ -182,7 +184,7 @@ input[type="range"] {
 .glassPanel {
   background: var(--panel-bg);
 
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: var(--glass-border);
 
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 
@@ -270,6 +272,26 @@ input[type="range"] {
   justify-content: center;
 }
 
+#buttonGroup button.glassPanel {
+  background: var(--panel-bg);
+
+  border: var(--glass-border);
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#buttonGroup button.glassPanel:hover {
+  background: var(--panel-hover-bg);
+  border: var(--glass-border);
+}
+
+#buttonGroup button.glassPanel:active {
+  background: var(--panel-active-bg);
+}
+
 .buttonIcon {
   width: 28px;
   height: 28px;
@@ -332,7 +354,7 @@ input[type="range"] {
 
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: var(--glass-border);
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -350,9 +372,9 @@ input[type="range"] {
 
 #messageBox.has-next:hover,
 #messageBox.has-end:hover {
-  background: rgba(255, 248, 220, 0.06) !important;
+  background: var(--panel-hover-bg) !important;
 
-  border-color: rgba(255, 240, 200, 0.18);
+  background: var(--panel-hover-bg) !important;
 
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.28),
@@ -426,6 +448,12 @@ input[type="range"] {
   margin-bottom: 0px;
 }
 
+.speaker,
+#trackName,
+#timerSettingTitle {
+  text-shadow: var(--title-glow);
+}
+
 .line {
   font-size: 17px;
   letter-spacing: 0.01em;
@@ -471,7 +499,7 @@ input[type="range"] {
   height: 150px;
   text-align: left;
   padding: 20px 34px;
-  border: 1px solid rgba(255, 245, 210, 0.26);
+  border: var(--glass-border);
   cursor: pointer;
   transition:
     background 0.2s ease,
@@ -529,7 +557,7 @@ input[type="range"] {
 
 /* タイマーパネルにマウスを乗せたとき */
 #timerPanel:hover {
-  background: rgba(255, 248, 220, 0.08) !important;
+  background: var(--panel-hover-bg) !important;
 
   border-color: rgba(255, 240, 200, 0.34);
 
@@ -542,15 +570,6 @@ input[type="range"] {
 #timerPanel:active {
   background: var(--panel-active-bg) !important;
   transform: scale(0.99);
-}
-
-body.dark-theme #messageBox.has-next:hover,
-body.dark-theme #messageBox.has-end:hover {
-  background: var(--panel-hover-bg) !important;
-}
-
-body.dark-theme #timerPanel:hover {
-  background: var(--panel-hover-bg) !important;
 }
 
 /* モード表示 */
@@ -761,9 +780,9 @@ body.dark-theme #timerPanel:hover {
 
   border-radius: 18px;
 
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--panel-bg);
 
-  border: 1px solid rgba(255, 245, 210, 0.1);
+  border: var(--glass-border);
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -828,11 +847,6 @@ body.dark-theme #timerPanel:hover {
   height: 6px;
 }
 
-/* 音量が下がっているときは小さく動かす */
-#visualizer.low-volume span {
-  animation-name: bounce-low;
-}
-
 /* 曲情報全体 */
 #trackInfo {
   display: flex;
@@ -844,12 +858,52 @@ body.dark-theme #timerPanel:hover {
 /* 曲名・ジャンル */
 #trackMeta {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.recordIcon {
+  width: 30px;
+  height: 30px;
+
+  opacity: 0.72;
+
+  flex-shrink: 0;
+
+  animation: recordSpin 6s linear infinite;
+}
+
+.recordIcon {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  animation: recordSpin 6s linear infinite;
+  animation-play-state: paused;
+}
+
+.recordDisc {
+  fill: rgba(36, 42, 38, 0.92);
+}
+
+.recordShadow {
+  fill: rgba(0, 0, 0, 0.24);
+}
+
+.recordLabel {
+  fill: rgba(214, 188, 120, 0.88);
+}
+
+.recordReflection {
+  fill: rgba(255, 255, 255, 0.22);
+}
+
+#trackText {
+  display: flex;
   flex-direction: column;
-
   align-items: flex-start;
-
-  gap: 2px;
-
   min-width: 0;
 }
 
@@ -1134,7 +1188,7 @@ body.dark-theme #timerPanel:hover {
 
 .keywordItemText.unlocked {
   cursor: pointer;
-  color: #3f6f9f;
+  color: var(--keyword-link-color);
   text-decoration: underline;
   transition:
     color 0.2s ease,
@@ -1142,16 +1196,16 @@ body.dark-theme #timerPanel:hover {
 }
 
 .keywordItemText.unlocked:hover {
-  color: #2f5f8f;
-  opacity: 0.9;
+  color: var(--keyword-link-hover-color);
+  opacity: 1;
+}
+
+.keywordItemText.unlocked.active:hover {
+  color: var(--keyword-link-active-hover-color);
 }
 
 .keywordItemText.unlocked.active {
-  color: #7a4f9f;
-}
-
-body.dark-theme .keywordItemText.unlocked {
-  color: #8ab4ff;
+  color: var(--keyword-link-active-color);
 }
 
 .keywordListItem.unlocked:active {
@@ -1160,14 +1214,6 @@ body.dark-theme .keywordItemText.unlocked {
 
 .keywordItemText {
   display: inline;
-}
-
-.keywordItemText.unlocked.active {
-  color: #a070d6; /* 紫 */
-}
-
-body.dark-theme .keywordItemText.unlocked.active {
-  color: #c59cff; /* ダーク用の少し明るい紫 */
 }
 
 /* キーワードボタン用の赤い点 */

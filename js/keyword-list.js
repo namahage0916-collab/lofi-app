@@ -37,9 +37,9 @@ function updateKeywordListContent(withAnimation = false) {
 
         if (hasQuestion && !hasAnswer) {
           return `
-  <div class="keywordListItem">
+  <div class="keywordListItem unlocked" onclick="showQuizHint('${question}')">
     🔒
-    <span class="keywordItemText unlocked" onclick="showQuizHint('${question}')">
+    <span class="keywordItemText unlocked">
       ${question}
     </span>
   </div>
@@ -55,12 +55,11 @@ function updateKeywordListContent(withAnimation = false) {
         }
 
         return `
-  <div class="keywordListItem">🔑
-    <span class="keywordItemText unlocked active"
-      onclick="selectKeywordFromList('${answer}')">
-      ${answer}
-    </span>
-  </div>
+<div class="keywordListItem unlocked" onclick="selectKeywordFromList('${answer}')">🔑
+  <span class="keywordItemText unlocked active">
+    ${answer}
+  </span>
+</div>
 `;
       }
 
@@ -75,12 +74,12 @@ function updateKeywordListContent(withAnimation = false) {
           const extraClass = isActive ? " active" : "";
 
           return `
-          <div class="keywordListItem">🔑
-            <span class="keywordItemText unlocked${extraClass}" onclick="selectKeywordFromList('${keyword}')">
-              ${keyword}
-            </span>
-          </div>
-        `;
+<div class="keywordListItem unlocked" onclick="selectKeywordFromList('${keyword}')">🔑
+  <span class="keywordItemText unlocked${extraClass}">
+    ${keyword}
+  </span>
+</div>
+`;
         }
 
         return `<div class="keywordListItem">🔑？？？</div>`;
@@ -117,11 +116,14 @@ function updateKeywordListContent(withAnimation = false) {
 
             el.innerHTML = `
   🔑
-  <span class="keywordItemText unlocked active"
-    onclick="selectKeywordFromList('${answer}')">
+  <span class="keywordItemText unlocked active">
     ${answer}
   </span>
 `;
+
+            el.onclick = () => {
+              selectKeywordFromList(answer);
+            };
 
             if (!transformedQuizAnswers.includes(answer)) {
               transformedQuizAnswers.push(answer);

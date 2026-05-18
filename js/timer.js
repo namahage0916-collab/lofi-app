@@ -204,7 +204,13 @@ function stopTimerForNotice() {
 
 /* 今のモードを強制終了する */
 function skipCurrentMode() {
+  if (timerState.isPaused) {
+    timerState.isRunning = true;
+    timerState.isPaused = false;
+  }
+
   timerState.endTime = Date.now();
+
   tickTimer();
 }
 
@@ -237,7 +243,6 @@ function resetTimer() {
   trackNameDisplay.innerText = "No track";
   noticeOverlay.style.display = "none";
 
-  visualizer.classList.remove("low-volume");
   music.volume = normalVolume;
 }
 

@@ -9,7 +9,6 @@ function closeNoticeAndStartNext() {
   timerState.isPaused = false;
 
   music.volume = normalVolume;
-  visualizer.classList.remove("low-volume");
 
   updateModeImage();
 
@@ -29,8 +28,6 @@ function notifyModeChange(text) {
   playBell();
 
   music.volume = normalVolume * 0.2;
-
-  visualizer.classList.add("low-volume");
 }
 
 function showClearPopup() {
