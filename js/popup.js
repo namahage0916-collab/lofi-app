@@ -25,8 +25,6 @@ function closeNoticeAndStartNext() {
 
   updateModeImage();
 
-  startVisualizer();
-
   if (timerState.mode === "break") {
     showRandomMessage();
     startTimer(false);

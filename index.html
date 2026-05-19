@@ -271,12 +271,23 @@
               <div id="timer">25:00</div>
             </div>
 
-            <input
-              type="text"
-              id="keywordInput"
-              placeholder="キーワードを入力..."
-              onkeydown="handleKeywordEnter(event)"
-            />
+            <div id="keywordInputWrap">
+              <input
+                type="text"
+                id="keywordInput"
+                placeholder="キーワードを入力..."
+                onkeydown="handleKeywordEnter(event)"
+              />
+
+              <button
+                id="keywordSubmitButton"
+                type="button"
+                onclick="submitKeywordFromButton()"
+                aria-label="キーワードを送信"
+              >
+                ➜
+              </button>
+            </div>
           </div>
 
           <div id="buttonRow">

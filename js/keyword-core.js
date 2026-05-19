@@ -208,6 +208,10 @@ function handleKeywordEnter(event) {
   }
 }
 
+function submitKeywordFromButton() {
+  checkKeyword();
+}
+
 function showKeywordDialogue(keywordData) {
   if (Array.isArray(keywordData)) {
     showDialogue(keywordData);

@@ -371,15 +371,19 @@ input[type="range"] {
     transform 0.1s ease;
 }
 
-#messageBox.has-next:hover,
-#messageBox.has-end:hover {
-  background: var(--panel-hover-bg) !important;
+@media (hover: hover) and (pointer: fine) {
+  #messageBox.has-next:hover,
+  #messageBox.has-end:hover {
+    background: var(--panel-hover-bg) !important;
 
-  background: var(--panel-hover-bg) !important;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.28),
+      0 0 18px rgba(255, 230, 180, 0.04) !important;
+  }
 
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.28),
-    0 0 18px rgba(255, 230, 180, 0.04) !important;
+  .keywordListItem:hover {
+    background: rgba(255, 248, 220, 0.06);
+  }
 }
 
 #messageBox.has-next:active,
@@ -731,10 +735,6 @@ input[type="range"] {
   transition:
     background 0.2s ease,
     transform 0.1s ease;
-}
-
-.keywordListItem:hover {
-  background: rgba(255, 248, 220, 0.06);
 }
 
 .keywordListItem:active {
@@ -1226,8 +1226,12 @@ input[type="range"] {
 
 .keywordItemText.unlocked {
   cursor: pointer;
-  color: var(--keyword-link-color);
+
+  color: var(--keyword-link-color) !important;
+  -webkit-text-fill-color: var(--keyword-link-color);
+
   text-decoration: underline;
+
   transition:
     color 0.2s ease,
     opacity 0.2s ease;
@@ -1243,7 +1247,8 @@ input[type="range"] {
 }
 
 .keywordItemText.unlocked.active {
-  color: var(--keyword-link-active-color);
+  color: var(--keyword-link-active-color) !important;
+  -webkit-text-fill-color: var(--keyword-link-active-color);
 }
 
 .keywordListItem.unlocked:active {
@@ -1513,4 +1518,78 @@ input[type="range"] {
 
 #clearLineEffect.show .clearLine {
   animation: clearLineGrow 4s ease forwards;
+}
+
+/* ==================================================
+  17. キーワード送信ボタン
+  ================================================== */
+
+#keywordInputWrap {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+
+  height: 52px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 245, 210, 0.22);
+
+  box-shadow:
+    0 0 0 1px rgba(255, 245, 210, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#keywordInputWrap #keywordInput {
+  flex: 1;
+
+  width: auto;
+  height: 100%;
+
+  border: none;
+  border-radius: 0;
+
+  background: transparent;
+  box-shadow: none;
+
+  padding: 0 18px 0 22px;
+
+  color: var(--button-text);
+}
+
+#keywordSubmitButton {
+  width: 54px;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-left: 1px solid rgba(255, 245, 210, 0.18);
+  border-radius: 0;
+
+  background: rgba(255, 248, 220, 0.08);
+  color: rgba(255, 248, 230, 0.86);
+
+  box-shadow: none;
+
+  font-size: 18px;
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+#keywordSubmitButton:hover {
+  background: rgba(255, 248, 220, 0.14);
+}
+
+#keywordSubmitButton:active {
+  background: rgba(255, 248, 220, 0.2);
+  transform: none;
 }
