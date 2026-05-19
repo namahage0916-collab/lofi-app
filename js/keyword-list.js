@@ -22,6 +22,20 @@ function showHintNotice(hint) {
   showToastNotice("💡 " + hint, HINT_NOTICE_DURATION);
 }
 
+function showLockedKeywordHint(sourceType) {
+  if (sourceType === "break") {
+    showHintNotice("休憩中の会話から入手できます");
+    return;
+  }
+
+  if (sourceType === "dialogue") {
+    showHintNotice("別のキーワードで読める会話から入手できます");
+    return;
+  }
+
+  showHintNotice("まだ入手していないキーワードです");
+}
+
 // ==================================================
 // キーワードリスト
 // ==================================================
@@ -38,7 +52,20 @@ function updateKeywordListContent(withAnimation = false) {
         const hasAnswer = acquiredKeywords.includes(answer);
 
         if (!hasQuestion && !hasAnswer) {
-          return `<div class="keywordListItem">🔒？？？</div>`;
+          const sourceType = breakMessages.some(
+            (msg) => msg.keyword === question,
+          )
+            ? "break"
+            : "dialogue";
+
+          return `
+<div
+  class="keywordListItem locked"
+  onclick="showLockedKeywordHint('${sourceType}')"
+>
+  🔒？？？
+</div>
+`;
         }
 
         if (hasQuestion && !hasAnswer) {
@@ -91,7 +118,17 @@ function updateKeywordListContent(withAnimation = false) {
 `;
         }
 
-        return `<div class="keywordListItem">🔑？？？</div>`;
+        const sourceType = breakMessages.some(
+          (message) => message.keyword === keyword,
+        )
+          ? "break"
+          : "dialogue";
+
+        return `
+<div class="keywordListItem locked" onclick="showLockedKeywordHint('${sourceType}')">
+  🔑？？？
+</div>
+`;
       }
 
       return "";
