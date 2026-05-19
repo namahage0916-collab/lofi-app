@@ -1227,8 +1227,7 @@ input[type="range"] {
 .keywordItemText.unlocked {
   cursor: pointer;
 
-  color: var(--keyword-link-color) !important;
-  -webkit-text-fill-color: var(--keyword-link-color);
+  color: var(--keyword-link-color);
 
   text-decoration: underline;
 
@@ -1247,8 +1246,7 @@ input[type="range"] {
 }
 
 .keywordItemText.unlocked.active {
-  color: var(--keyword-link-active-color) !important;
-  -webkit-text-fill-color: var(--keyword-link-active-color);
+  color: var(--keyword-link-active-color);
 }
 
 .keywordListItem.unlocked:active {
@@ -1256,7 +1254,7 @@ input[type="range"] {
 }
 
 .keywordItemText {
-  display: inline-block;
+  display: inline;
 }
 
 /* キーワードボタン用の赤い点 */
@@ -1592,4 +1590,28 @@ input[type="range"] {
 #keywordSubmitButton:active {
   background: rgba(255, 248, 220, 0.2);
   transform: none;
+}
+
+.keywordSubmitIcon {
+  width: 21px;
+  height: 21px;
+
+  fill: rgba(255, 248, 230, 0.86);
+
+  opacity: 0.9;
+
+  transform: translate(-3px, 2px);
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease;
+}
+
+#keywordSubmitButton:hover .keywordSubmitIcon {
+  opacity: 1;
+  transform: translate(-2px, 1px);
+}
+
+#keywordSubmitButton:active .keywordSubmitIcon {
+  transform: translate(-2px, 2px) scale(0.94);
 }
