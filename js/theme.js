@@ -181,6 +181,27 @@ function applyPopupButtonVariables(theme) {
 
 function applyTheme(theme) {
   // ==================================================
+  // ボタン装飾
+  // ==================================================
+  document.body.classList.remove(
+    "theme-komorebi",
+    "theme-rain",
+    "theme-midnight",
+  );
+
+  if (theme === themes[0]) {
+    document.body.classList.add("theme-komorebi");
+  }
+
+  if (theme === themes[1]) {
+    document.body.classList.add("theme-rain");
+  }
+
+  if (theme === themes[2]) {
+    document.body.classList.add("theme-midnight");
+  }
+
+  // ==================================================
   // 背景
   // ==================================================
 

@@ -95,12 +95,19 @@
     letter-spacing: 0.01em;
   }
 
+  #timerPanel::before {
+    right: -1px;
+  }
+
   #mode {
     font-size: 18px;
 
     letter-spacing: 0.04em;
 
     margin-bottom: 0;
+
+    top: 4px;
+    margin-left: 0;
   }
 
   #visualizer {
@@ -135,6 +142,13 @@
     padding: 15px 12px;
   }
 
+  #messageBox::before {
+    width: 24px;
+    height: 24px;
+
+    bottom: 6px;
+  }
+
   #clearBox button {
     font-size: 16px;
     padding: 10px 12px;
@@ -154,6 +168,6 @@
 
   #mode,
   #timer {
-    margin-left: 18px;
+    margin-left: 14px;
   }
 }
