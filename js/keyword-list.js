@@ -1,4 +1,10 @@
 function selectKeywordFromList(keyword) {
+  if (!viewedKeywords.includes(keyword)) {
+    viewedKeywords.push(keyword);
+  }
+
+  updateKeywordDot();
+
   closeKeywordListPopup();
 
   keywordInput.value = keyword;
@@ -72,12 +78,15 @@ function updateKeywordListContent(withAnimation = false) {
             keyword === "めちゃくちゃのぐちゃぐちゃ" ||
             keyword === "また会う日まで";
           const extraClass = isActive ? " active" : "";
+          const isNew = !isActive;
 
           return `
 <div class="keywordListItem unlocked" onclick="selectKeywordFromList('${keyword}')">🔑
   <span class="keywordItemText unlocked${extraClass}">
     ${keyword}
   </span>
+
+  ${isNew ? '<span class="keywordNewBadge">NEW</span>' : ""}
 </div>
 `;
         }

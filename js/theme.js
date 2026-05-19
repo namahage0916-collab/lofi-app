@@ -162,23 +162,6 @@ function applyCssVariables(theme) {
   root.style.setProperty("--button-bg", theme.panelBg);
 
   root.style.setProperty("--button-text", theme.mainText);
-
-  root.style.setProperty("--keyword-link-color", theme.keywordLinkColor);
-
-  root.style.setProperty(
-    "--keyword-link-active-color",
-    theme.keywordLinkActiveColor,
-  );
-
-  root.style.setProperty(
-    "--keyword-link-hover-color",
-    theme.keywordLinkHoverColor,
-  );
-
-  root.style.setProperty(
-    "--keyword-link-active-hover-color",
-    theme.keywordLinkActiveHoverColor,
-  );
 }
 
 // ==================================================

@@ -1,6 +1,7 @@
 let acquiredKeywords = [];
 let unlockedDialogueKeywords = [];
 let transformedQuizAnswers = [];
+let viewedKeywords = [];
 
 // ==================================================
 // 通知演出
