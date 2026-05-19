@@ -1256,7 +1256,7 @@ input[type="range"] {
 }
 
 .keywordItemText {
-  display: inline;
+  display: inline-block;
 }
 
 /* キーワードボタン用の赤い点 */
