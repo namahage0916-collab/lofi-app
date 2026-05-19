@@ -86,6 +86,12 @@ function playRandomTrack() {
 }
 
 music.addEventListener("ended", () => {
+  if (noticeOverlay.style.display === "flex") {
+    playRandomTrack();
+    music.volume = Math.max(MUSIC_BASE_VOLUME * musicVolume * 0.4, 0.03);
+    return;
+  }
+
   if (timerState.isRunning || timerState.isPaused) {
     playRandomTrack();
   }
