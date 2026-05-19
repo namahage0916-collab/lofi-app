@@ -2,6 +2,7 @@ let acquiredKeywords = [];
 let unlockedDialogueKeywords = [];
 let transformedQuizAnswers = [];
 let viewedKeywords = [];
+let lastAcquiredKeyword = null;
 
 // ==================================================
 // 通知演出
@@ -90,6 +91,7 @@ function acquireKeyword(keyword, delayNotice = 0) {
   if (acquiredKeywords.includes(keyword)) return;
 
   acquiredKeywords.push(keyword);
+  lastAcquiredKeyword = keyword;
 
   setTimeout(() => {
     showKeywordNotice(keyword);

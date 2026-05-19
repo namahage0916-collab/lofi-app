@@ -1,3 +1,14 @@
+// ==================================================
+// エンディング演出設定
+// ==================================================
+
+const ENDING_TIMING = {
+  clearTextDuration: 9000, // "You witnessed..." の表示時間
+  imageDelay: 300, // エンディング画像・セリフ表示
+  keyword1Delay: 9200, // 「また会う日まで」通知
+  keyword2Delay: 11200, // 「お別れは笑顔で」通知
+};
+
 function playSceneFade({
   color = "black",
 
@@ -81,12 +92,15 @@ function startEnding() {
   localStorage.setItem("endingReached", "true");
   isEnding = true;
 
-  const ENDING_CLEAR_TEXT_DURATION = 7600;
-  const ENDING_KEYWORD_1_DELAY = WHITEOUT_DURATION + 7800;
-  const ENDING_KEYWORD_2_DELAY = WHITEOUT_DURATION + 9800;
+  acquireKeyword(
+    "また会う日まで",
+    WHITEOUT_DURATION + ENDING_TIMING.keyword1Delay,
+  );
 
-  acquireKeyword("また会う日まで", ENDING_KEYWORD_1_DELAY);
-  acquireKeyword("お別れは笑顔で", ENDING_KEYWORD_2_DELAY);
+  acquireKeyword(
+    "お別れは笑顔で",
+    WHITEOUT_DURATION + ENDING_TIMING.keyword2Delay,
+  );
 
   const timerPanel = document.getElementById("timerPanel");
   timerPanel.style.cursor = "default";
@@ -119,7 +133,7 @@ function startEnding() {
   setTimeout(() => {
     mainImage.src = images.ending;
     showDialogue(endingDialogue);
-  }, WHITEOUT_DURATION + 300);
+  }, WHITEOUT_DURATION + ENDING_TIMING.imageDelay);
 
   setTimeout(() => {
     sceneFade.classList.remove("active");
@@ -128,7 +142,7 @@ function startEnding() {
       sceneFade.classList.remove("white");
     }, WHITEOUT_DURATION);
     applyTheme(themes[currentTheme]);
-  }, WHITEOUT_DURATION + 5200);
+  }, WHITEOUT_DURATION + ENDING_TIMING.clearTextDuration);
 
   setTimeout(() => {
     music.src = ENDING_BGM;
@@ -147,7 +161,7 @@ function startEnding() {
       .catch(() => {
         stopVisualizer();
       });
-  }, WHITEOUT_DURATION + 5200);
+  }, WHITEOUT_DURATION + ENDING_TIMING.clearTextDuration);
 }
 
 function showClearLineEffect() {
@@ -163,5 +177,5 @@ function showClearLineEffect() {
 
   setTimeout(() => {
     effect.classList.remove("show");
-  }, 7600);
+  }, ENDING_TIMING.clearTextDuration);
 }

@@ -87,10 +87,6 @@ button {
     transform 0.1s ease;
 }
 
-button:hover {
-  background: var(--panel-hover-bg);
-}
-
 button:active {
   background: var(--panel-active-bg);
   transform: scale(0.99);
@@ -200,14 +196,6 @@ input[type="range"] {
     border-color 0.2s ease;
 }
 
-.glassHover:hover {
-  background: var(--panel-hover-bg);
-
-  border-color: rgba(255, 255, 255, 0.24);
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
-}
-
 .glassHover:active {
   background: var(--panel-active-bg);
 
@@ -283,11 +271,6 @@ input[type="range"] {
   -webkit-backdrop-filter: blur(10px);
 }
 
-#buttonGroup button.glassPanel:hover {
-  background: var(--panel-hover-bg);
-  border: var(--glass-border);
-}
-
 #buttonGroup button.glassPanel:active {
   background: var(--panel-active-bg);
 }
@@ -353,7 +336,7 @@ input[type="range"] {
   background: var(--panel-bg);
   border-radius: 12px;
 
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 18px -6px rgba(0, 0, 0, 0.28);
 
   border: var(--glass-border);
 
@@ -558,17 +541,6 @@ input[type="range"] {
   color: rgba(255, 248, 240, 0.96);
 
   letter-spacing: 0.04em;
-}
-
-/* タイマーパネルにマウスを乗せたとき */
-#timerPanel:hover {
-  background: var(--panel-hover-bg) !important;
-
-  border-color: rgba(255, 240, 200, 0.34);
-
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.28),
-    0 0 20px rgba(255, 230, 180, 0.06) !important;
 }
 
 /* タイマーパネルを押したとき */
@@ -1477,7 +1449,15 @@ input[type="range"] {
 }
 
 #clearLineEffect.show {
-  animation: clearLineEffectFade 4s ease forwards;
+  animation: clearLineEffectFade 8s ease forwards;
+}
+
+#clearLineEffect.show #clearLineText {
+  animation: clearLineTextFade 8s ease forwards;
+}
+
+#clearLineEffect.show .clearLine {
+  animation: clearLineGrow 8s ease forwards;
 }
 
 #clearLineBox {
@@ -1495,10 +1475,6 @@ input[type="range"] {
   transform: translateY(8px);
 }
 
-#clearLineEffect.show #clearLineText {
-  animation: clearLineTextFade 4s ease forwards;
-}
-
 .clearLine {
   width: 100%;
   height: 1px;
@@ -1512,10 +1488,6 @@ input[type="range"] {
 
 .clearLineBottom {
   transform-origin: left;
-}
-
-#clearLineEffect.show .clearLine {
-  animation: clearLineGrow 4s ease forwards;
 }
 
 /* ==================================================
@@ -1583,10 +1555,6 @@ input[type="range"] {
   flex-shrink: 0;
 }
 
-#keywordSubmitButton:hover {
-  background: rgba(255, 248, 220, 0.14);
-}
-
 #keywordSubmitButton:active {
   background: rgba(255, 248, 220, 0.2);
   transform: none;
@@ -1607,11 +1575,48 @@ input[type="range"] {
     opacity 0.2s ease;
 }
 
-#keywordSubmitButton:hover .keywordSubmitIcon {
-  opacity: 1;
-  transform: translate(-2px, 1px);
-}
-
 #keywordSubmitButton:active .keywordSubmitIcon {
   transform: translate(-2px, 2px) scale(0.94);
+}
+
+/* ==================================================
+  18. ホバー関係
+  ================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    background: var(--panel-hover-bg);
+  }
+
+  .glassHover:hover {
+    background: var(--panel-hover-bg);
+
+    border-color: rgba(255, 255, 255, 0.24);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+  }
+
+  #buttonGroup button.glassPanel:hover {
+    background: var(--panel-hover-bg);
+    border: var(--glass-border);
+  }
+
+  #timerPanel:hover {
+    background: var(--panel-hover-bg) !important;
+
+    border-color: rgba(255, 240, 200, 0.34);
+
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.28),
+      0 0 20px rgba(255, 230, 180, 0.06) !important;
+  }
+
+  #keywordSubmitButton:hover {
+    background: rgba(255, 248, 220, 0.14);
+  }
+
+  #keywordSubmitButton:hover .keywordSubmitIcon {
+    opacity: 1;
+    transform: translate(-2px, 1px);
+  }
 }

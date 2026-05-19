@@ -43,7 +43,7 @@ function updateKeywordListContent(withAnimation = false) {
 
         if (hasQuestion && !hasAnswer) {
           return `
-  <div class="keywordListItem unlocked" onclick="showQuizHint('${question}')">
+  <div class="keywordListItem unlocked" data-keyword="${question}" onclick="showQuizHint('${question}')">
     🔒
     <span class="keywordItemText unlocked">
       ${question}
@@ -81,7 +81,7 @@ function updateKeywordListContent(withAnimation = false) {
           const isNew = !isActive;
 
           return `
-<div class="keywordListItem unlocked" onclick="selectKeywordFromList('${keyword}')">🔑
+<div class="keywordListItem unlocked" data-keyword="${keyword}" onclick="selectKeywordFromList('${keyword}')">🔑
   <span class="keywordItemText unlocked${extraClass}">
     ${keyword}
   </span>
@@ -143,6 +143,19 @@ function updateKeywordListContent(withAnimation = false) {
           });
         }, QUIZ_TRANSFORM_COMPLETE_DELAY);
       }, QUIZ_TRANSFORM_START_DELAY);
+    }
+  }
+
+  if (withAnimation && lastAcquiredKeyword) {
+    const target = document.querySelector(
+      `.keywordListItem[data-keyword="${lastAcquiredKeyword}"]`,
+    );
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }
   }
 }
