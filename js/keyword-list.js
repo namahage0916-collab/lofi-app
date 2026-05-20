@@ -1,6 +1,9 @@
+// keyword-list.js
+
 function selectKeywordFromList(keyword) {
   if (!viewedKeywords.includes(keyword)) {
     viewedKeywords.push(keyword);
+    saveKeywordProgress();
   }
 
   updateKeywordDot();
@@ -29,7 +32,7 @@ function showLockedKeywordHint(sourceType) {
   }
 
   if (sourceType === "dialogue") {
-    showHintNotice("別のキーワードで読める会話から入手できます");
+    showHintNotice("別のキーワードで読む会話から入手できます");
     return;
   }
 
@@ -100,20 +103,13 @@ function updateKeywordListContent(withAnimation = false) {
         const keyword = item.keyword;
 
         if (acquiredKeywords.includes(keyword)) {
-          const isActive =
-            unlockedDialogueKeywords.includes(keyword) ||
-            keyword === "めちゃくちゃのぐちゃぐちゃ" ||
-            keyword === "また会う日まで";
+          const isActive = unlockedDialogueKeywords.includes(keyword);
           const extraClass = isActive ? " active" : "";
           const isNew = !isActive;
 
           return `
-<div class="keywordListItem unlocked" data-keyword="${keyword}" onclick="selectKeywordFromList('${keyword}')">🔑
-  <span class="keywordItemText unlocked${extraClass}">
-    ${keyword}
-  </span>
-
-  ${isNew ? '<span class="keywordNewBadge">NEW</span>' : ""}
+<div class="keywordListItem unlocked" data-keyword="${keyword}" onclick="selectKeywordFromList('${keyword}')">
+  🔑<span class="keywordItemText unlocked${extraClass}">${keyword}</span>${isNew ? '<span class="keywordNewBadge">NEW</span>' : ""}
 </div>
 `;
         }
@@ -173,6 +169,7 @@ function updateKeywordListContent(withAnimation = false) {
 
             if (!transformedQuizAnswers.includes(answer)) {
               transformedQuizAnswers.push(answer);
+              saveKeywordProgress();
             }
 
             el.classList.remove("transforming");
@@ -183,7 +180,11 @@ function updateKeywordListContent(withAnimation = false) {
     }
   }
 
-  if (withAnimation && lastAcquiredKeyword) {
+  if (
+    withAnimation &&
+    lastAcquiredKeyword &&
+    document.querySelectorAll(".keywordListItem[data-answer]").length === 0
+  ) {
     const target = document.querySelector(
       `.keywordListItem[data-keyword="${lastAcquiredKeyword}"]`,
     );

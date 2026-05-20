@@ -1,8 +1,42 @@
+// keyword-core.js
 let acquiredKeywords = [];
 let unlockedDialogueKeywords = [];
 let transformedQuizAnswers = [];
 let viewedKeywords = [];
 let lastAcquiredKeyword = null;
+
+// ==================================================
+// キーワードの保存
+// ==================================================
+
+function saveKeywordProgress() {
+  localStorage.setItem("acquiredKeywords", JSON.stringify(acquiredKeywords));
+  localStorage.setItem(
+    "unlockedDialogueKeywords",
+    JSON.stringify(unlockedDialogueKeywords),
+  );
+  localStorage.setItem(
+    "transformedQuizAnswers",
+    JSON.stringify(transformedQuizAnswers),
+  );
+  localStorage.setItem("viewedKeywords", JSON.stringify(viewedKeywords));
+}
+
+function loadKeywordProgress() {
+  acquiredKeywords = JSON.parse(
+    localStorage.getItem("acquiredKeywords") || "[]",
+  );
+
+  unlockedDialogueKeywords = JSON.parse(
+    localStorage.getItem("unlockedDialogueKeywords") || "[]",
+  );
+
+  transformedQuizAnswers = JSON.parse(
+    localStorage.getItem("transformedQuizAnswers") || "[]",
+  );
+
+  viewedKeywords = JSON.parse(localStorage.getItem("viewedKeywords") || "[]");
+}
 
 // ==================================================
 // 通知演出
@@ -92,6 +126,7 @@ function acquireKeyword(keyword, delayNotice = 0) {
 
   acquiredKeywords.push(keyword);
   lastAcquiredKeyword = keyword;
+  saveKeywordProgress();
 
   setTimeout(() => {
     showKeywordNotice(keyword);
@@ -126,6 +161,16 @@ function handleSpecialKeyword(key) {
       AFTER_ERO_KEYWORD_NOTICE_DELAY,
     );
     playRepeatedAfterEroTalkEffect();
+    return true;
+  }
+
+  if (key === "キーワード全取得") {
+    acquireAllTestKeywords();
+    return true;
+  }
+
+  if (key === "テストリセット") {
+    resetStoryToBeginning();
     return true;
   }
 
@@ -183,6 +228,7 @@ async function checkKeyword() {
       }
     } else {
       unlockedDialogueKeywords.push(key);
+      saveKeywordProgress();
       updateKeywordDot();
 
       showDialogueUnlockedEffect();
@@ -221,4 +267,20 @@ function showKeywordDialogue(keywordData) {
   } else {
     showDialogue(keywordData.dialogue, getKeywordsByPage(keywordData));
   }
+}
+
+function acquireAllTestKeywords() {
+  keywordListItems.forEach((item) => {
+    if (item.type === "quiz") {
+      acquireKeyword(item.question);
+      return;
+    }
+
+    if (item.type === "normal") {
+      acquireKeyword(item.keyword);
+    }
+  });
+
+  updateKeywordDot();
+  saveKeywordProgress();
 }

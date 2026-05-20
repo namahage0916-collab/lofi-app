@@ -1,3 +1,5 @@
+// main.js
+
 /* ==================================================
    1. アプリ全体の状態
    ================================================== */
@@ -163,6 +165,7 @@ function restoreEndingIfNeeded() {
    ================================================== */
 
 function initApp() {
+  loadKeywordProgress();
   updateModeDisplay();
   updateTimerDisplay();
   updateFocusDisplay();

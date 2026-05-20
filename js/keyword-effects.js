@@ -69,6 +69,11 @@ async function resetStoryToBeginning() {
   localStorage.removeItem("endingReached");
   localStorage.removeItem("afterEroTalkCount");
 
+  localStorage.removeItem("acquiredKeywords");
+  localStorage.removeItem("unlockedDialogueKeywords");
+  localStorage.removeItem("transformedQuizAnswers");
+  localStorage.removeItem("viewedKeywords");
+
   location.reload();
 }
 

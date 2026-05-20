@@ -492,6 +492,8 @@ const keywordMap = {
   ],
 
   茶道部: ["茶道部", "さどうぶ", "茶道", "さどう"],
+  キーワード全取得: ["キーワード全取得", "きーわーどぜんしゅとく"],
+  テストリセット: ["テストリセット", "てすとりせっと"],
 };
 
 const quizData = {
@@ -733,7 +735,7 @@ const keywordDialogues = {
       ],
       [
         { speaker: "まりん", text: "惜しい。それはインディ・ジョーンズ" },
-        { speaker: "まりん", text: "私の専門は『大昔の生物』だからね" },
+        { speaker: "まりん", text: "私の専門は『大昔の生き物』だからね" },
       ],
     ],
   },
@@ -913,7 +915,7 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "私のドーナッツは高く付くからね" },
       ],
       [
-        { speaker: "まりん", text: "あー、今年の誕プレなんだろう？" },
+        { speaker: "まりん", text: "今年の誕プレなんだろう……？" },
         { speaker: "まりん", text: "図鑑かな？　ロックハンマーかな？" },
       ],
       [
@@ -1016,7 +1018,7 @@ const keywordDialogues = {
         { speaker: "まりん", text: "すまんな。モテてすまんな" },
       ],
       [
-        { speaker: "まりん", text: "でも、私にもルールはあるからね" },
+        { speaker: "まりん", text: "でも、私にも節度はあるからね" },
         { speaker: "まりん", text: "基本、ほっぺにしかしないし……" },
       ],
       [
@@ -1824,7 +1826,7 @@ const keywordDialogues = {
       ],
       [
         { speaker: "はじめ", text: "まりんが一番に言ってくれたよね" },
-        { speaker: "はじめ", text: "私は眼鏡が似合ってるって……" },
+        { speaker: "はじめ", text: "私には眼鏡が似合ってるって……" },
       ],
       [
         { speaker: "まりん", text: "ほほーう。小２の私、やるね" },
@@ -1832,7 +1834,7 @@ const keywordDialogues = {
       ],
       [
         { speaker: "まりん", text: "はじめも可愛いとこ、ありますなぁ" },
-        { speaker: "まりん", text: "だから言いたくなかったのに……" },
+        { speaker: "はじめ", text: "だから言いたくなかったのに……" },
       ],
     ],
   },
@@ -1909,7 +1911,7 @@ const keywordDialogues = {
         { speaker: "まりん", text: "でも、ひとつだけ悩みがあって……" },
       ],
       [
-        { speaker: "まりん", text: "私が遠出するたび胃がヤバいみたい" },
+        { speaker: "まりん", text: "私が海外行くたび胃がヤバいみたい" },
         { speaker: "はじめ", text: "その気持ちはわかる" },
       ],
     ],
@@ -2055,7 +2057,7 @@ const keywordDialogues = {
       ],
       [
         { speaker: "はじめ", text: "うーん……正解は……" },
-        { speaker: "まりん", text: "茶道部で正解っ！" },
+        { speaker: "はじめ", text: "茶道部で正解っ！" },
       ],
       [
         { speaker: "まりん", text: "はじめは甘い物が大好き" },

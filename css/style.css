@@ -1,3 +1,5 @@
+/* style.css
+
 /* ==================================================
   0. CSS変数
   ================================================== */
@@ -111,7 +113,6 @@ input[type="range"] {
   width: 200px;
 }
 
-/* キーワード入力欄 */
 #keywordInput {
   width: 100%;
   box-sizing: border-box;
@@ -515,6 +516,11 @@ input[type="range"] {
   -webkit-backdrop-filter: blur(10px);
 }
 
+#timerPanel.ending-clear {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 #timerPanel::before {
   content: "";
 
@@ -764,6 +770,10 @@ body.theme-midnight #messageBox::before {
   background: rgba(255, 240, 200, 0.28);
 }
 
+.keywordNewBadge {
+  margin-left: 6px;
+}
+
 #clearText {
   font-size: 15px;
   line-height: 1.85;
@@ -796,6 +806,8 @@ body.theme-midnight #messageBox::before {
 
 .keywordListItem {
   display: block;
+
+  cursor: pointer;
 
   white-space: nowrap;
 
