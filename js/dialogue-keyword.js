@@ -527,7 +527,7 @@ const quizData = {
 
   どこになにをした: {
     answer: "唇にキスをした",
-    hint: "まりんが『どこになにをした』ことで\n喧嘩になったか答えましょう",
+    hint: "まりんが『どこになにをした』ことが喧嘩の原因か答えましょう",
   },
 
   ナントカ商店: {
@@ -537,7 +537,7 @@ const quizData = {
 
   誰: {
     answer: "織田万里杏音",
-    hint: "交通事故で亡くなった人を\nフルネームで答えましょう",
+    hint: "『交通事故で亡くなった人』をフルネームで答えましょう",
   },
 
   はじめの名前: {
@@ -562,7 +562,7 @@ const quizData = {
 
   私の好きな漫画っぽく言ってよ: {
     answer: "お前はもう死んでいる",
-    hint: "まりんの好きな漫画のセリフで事実を伝えましょう",
+    hint: "『まりんの好きな漫画のセリフ』で事実を伝えましょう",
   },
 };
 
@@ -732,8 +732,8 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "……こ、考古学？" },
       ],
       [
-        { speaker: "まりん", text: "惜しい！" },
-        { speaker: "まりん", text: "それはインディ・ジョーンズね" },
+        { speaker: "まりん", text: "惜しい。それはインディ・ジョーンズ" },
+        { speaker: "まりん", text: "私の専門は『大昔の生物』だからね" },
       ],
     ],
   },
@@ -2213,14 +2213,15 @@ const repeatedAfterEroDialogues = [
 ];
 
 const endingDialogue = [
-  { speaker: "　", text: "クリアおつかれさまでした" },
-  { speaker: "　", text: "最後のキーワード【お別れは笑顔で】" },
+  { speaker: "はじめ", text: "さようなら、まりん" },
+  { speaker: "はじめ", text: "また会う日まで……" },
 ];
 
 const specialKeywordListItems = [
   "めちゃくちゃのぐちゃぐちゃ",
   "また会う日まで",
   "お別れは笑顔で",
+  "始まりの物語",
 ];
 
 const rawKeywordListItems = [

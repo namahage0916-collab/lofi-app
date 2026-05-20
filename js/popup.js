@@ -49,6 +49,10 @@ function showClearPopup() {
     unlockedDialogueKeywords.push("お別れは笑顔で");
   }
 
+  if (!acquiredKeywords.includes("始まりの物語")) {
+    acquireKeyword("始まりの物語");
+  }
+
   updateKeywordDot();
 }
 

@@ -16,6 +16,9 @@
   --glass-border: 1px solid rgba(255, 255, 255, 0.1);
   --panel-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
 
+  --keyword-active-color: #d9c27a;
+  --keyword-glow-color: rgba(255, 220, 140, 0.12);
+
   --keyword-link-color: #9ec5ff;
   --keyword-link-active-color: #d7b8ff;
   --keyword-link-hover-color: #c6ddff;
@@ -595,12 +598,12 @@ body.theme-midnight #messageBox::before {
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
 
   z-index: 2;
+}
 
-  #timerPanel #mode,
-  #timerPanel #timer {
-    position: relative;
-    z-index: 1;
-  }
+#timerPanel #mode,
+#timerPanel #timer {
+  position: relative;
+  z-index: 1;
 }
 
 #timerPanel.running::after {
@@ -704,6 +707,22 @@ body.theme-midnight #messageBox::before {
 #creditText,
 #keywordListContent {
   color: rgba(255, 248, 230, 0.86);
+}
+
+#creditText a {
+  color: var(--keyword-link-color);
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+#creditText a:hover {
+  color: var(--keyword-link-hover-color);
+
+  opacity: 1;
 }
 
 #keywordListContent {
@@ -1270,13 +1289,13 @@ body.theme-midnight #messageBox::before {
 }
 
 .keyword-highlight {
-  color: #d9c27a;
+  color: var(--keyword-active-color);
 
   font-weight: 450;
 
   text-shadow:
     0 0 1px rgba(0, 0, 0, 0.45),
-    0 0 6px rgba(255, 220, 140, 0.12);
+    0 0 6px var(--keyword-glow-color);
 }
 
 .keywordItemText.unlocked {
@@ -1702,4 +1721,51 @@ body.theme-midnight #messageBox::before {
     opacity: 1;
     transform: translate(-2px, 1px);
   }
+}
+
+/* ==================================================
+  19. タイマーパネル・エンディング変化
+  ================================================== */
+
+#timerClearText {
+  display: none;
+
+  position: relative;
+  z-index: 3;
+
+  height: 100%;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  text-align: center;
+
+  color: var(--timer-display-color);
+
+  font-size: 17px;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+}
+
+#timerPanel.ending-clear::before,
+#timerPanel.ending-clear::after {
+  display: none;
+}
+
+.endingKeyword {
+  color: var(--keyword-active-color);
+
+  font-weight: 500;
+
+  text-shadow: 0 0 8px var(--keyword-glow-color);
+}
+
+#timerPanel.ending-clear #mode,
+#timerPanel.ending-clear #timer {
+  display: none;
+}
+
+#timerPanel.ending-clear #timerClearText {
+  display: flex;
 }

@@ -125,6 +125,8 @@ function startEnding() {
   sceneFade.classList.add("active");
 
   setTimeout(() => {
+    showEndingTimerPanel();
+
     if (typeof showClearLineEffect === "function") {
       showClearLineEffect();
     }
@@ -178,4 +180,14 @@ function showClearLineEffect() {
   setTimeout(() => {
     effect.classList.remove("show");
   }, ENDING_TIMING.clearTextDuration);
+}
+
+function showEndingTimerPanel() {
+  const timerPanel = document.getElementById("timerPanel");
+
+  if (!timerPanel) return;
+
+  timerPanel.classList.add("ending-clear");
+  timerPanel.style.cursor = "default";
+  timerPanel.style.pointerEvents = "none";
 }

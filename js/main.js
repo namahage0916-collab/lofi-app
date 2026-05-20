@@ -132,6 +132,8 @@ function restoreEndingIfNeeded() {
 
   isEnding = true;
 
+  showEndingTimerPanel();
+
   mainImage.src = images.ending;
   showDialogue(endingDialogue);
 
@@ -152,10 +154,6 @@ function restoreEndingIfNeeded() {
     },
     { once: true },
   );
-
-  const timerPanel = document.getElementById("timerPanel");
-  timerPanel.style.cursor = "default";
-  timerPanel.style.pointerEvents = "none";
 
   stopVisualizer();
 }
