@@ -5,37 +5,27 @@ let transformedQuizAnswers = [];
 let viewedKeywords = [];
 let lastAcquiredKeyword = null;
 
+const KEYWORD_STORAGE_KEYS = {
+  acquiredKeywords: "acquiredKeywords",
+  unlockedDialogueKeywords: "unlockedDialogueKeywords",
+  transformedQuizAnswers: "transformedQuizAnswers",
+  viewedKeywords: "viewedKeywords",
+};
+
 // ==================================================
 // キーワードの保存
 // ==================================================
 
 function saveKeywordProgress() {
-  localStorage.setItem("acquiredKeywords", JSON.stringify(acquiredKeywords));
-  localStorage.setItem(
-    "unlockedDialogueKeywords",
-    JSON.stringify(unlockedDialogueKeywords),
-  );
-  localStorage.setItem(
-    "transformedQuizAnswers",
-    JSON.stringify(transformedQuizAnswers),
-  );
-  localStorage.setItem("viewedKeywords", JSON.stringify(viewedKeywords));
+  Object.entries(KEYWORD_STORAGE_KEYS).forEach(([key, storageKey]) => {
+    localStorage.setItem(storageKey, JSON.stringify(window[key]));
+  });
 }
 
 function loadKeywordProgress() {
-  acquiredKeywords = JSON.parse(
-    localStorage.getItem("acquiredKeywords") || "[]",
-  );
-
-  unlockedDialogueKeywords = JSON.parse(
-    localStorage.getItem("unlockedDialogueKeywords") || "[]",
-  );
-
-  transformedQuizAnswers = JSON.parse(
-    localStorage.getItem("transformedQuizAnswers") || "[]",
-  );
-
-  viewedKeywords = JSON.parse(localStorage.getItem("viewedKeywords") || "[]");
+  Object.entries(KEYWORD_STORAGE_KEYS).forEach(([key, storageKey]) => {
+    window[key] = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  });
 }
 
 // ==================================================
@@ -169,6 +159,11 @@ function handleSpecialKeyword(key) {
     return true;
   }
 
+  if (key === "雑談キーワード") {
+    acquireChatTestKeywords();
+    return true;
+  }
+
   if (key === "テストリセット") {
     resetStoryToBeginning();
     return true;
@@ -194,17 +189,22 @@ async function checkKeyword() {
 
   const key = findKeyword(input);
 
+  let isSuccess = false;
+
   if (isEnding && key !== "お別れは笑顔で" && key !== "始まりの物語") {
-    playFailSE();
     keywordInput.value = "";
+    playFailSE();
     return;
   }
 
   if (handleSpecialKeyword(key)) {
-    // 特殊キーワード処理済み
+    isSuccess = true;
   } else if (key === "始まりの物語" && isEnding) {
+    isSuccess = true;
     await resetStoryToBeginning();
   } else if (key && keywordDialogues[key]) {
+    isSuccess = true;
+
     currentActiveKeyword = key;
 
     // 自力でキーワード入力した場合、そのキーワード自体も取得済みにする
@@ -221,11 +221,7 @@ async function checkKeyword() {
     playSuccessSE();
 
     if (alreadyUnlockedDialogue) {
-      if (Array.isArray(keywordData)) {
-        showDialogue(keywordData);
-      } else {
-        showDialogue(keywordData.dialogue, getKeywordsByPage(keywordData));
-      }
+      showKeywordDialogue(keywordData);
     } else {
       unlockedDialogueKeywords.push(key);
       saveKeywordProgress();
@@ -239,12 +235,14 @@ async function checkKeyword() {
     }
 
     resetMessageLoop();
-  } else {
-    playFailSE();
   }
 
   if (key) {
     keywordInput.blur();
+  }
+
+  if (!isSuccess) {
+    playFailSE();
   }
 
   keywordInput.value = "";
@@ -267,6 +265,15 @@ function showKeywordDialogue(keywordData) {
   } else {
     showDialogue(keywordData.dialogue, getKeywordsByPage(keywordData));
   }
+}
+
+function acquireChatTestKeywords() {
+  breakMessages.forEach((item) => {
+    acquireKeyword(item.keyword);
+  });
+
+  updateKeywordDot();
+  saveKeywordProgress();
 }
 
 function acquireAllTestKeywords() {

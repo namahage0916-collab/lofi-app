@@ -1,3 +1,4 @@
+// dialogue-keyword.js
 /* サイトを開いた直後専用のセリフ */
 const idleMessages = [
   [
@@ -268,13 +269,21 @@ const keywordMap = {
     "じゅういがくぶ",
   ],
 
+  古生物: ["古生物", "こせいぶつ"],
+
   古生物学者: [
     "古生物学者",
     "こせいぶつがくしゃ",
-    "古生物学",
-    "こせいぶつがく",
     "古生物学部",
     "こせいぶつがくぶ",
+    "古生物の学者",
+    "こせいぶつのがくしゃ",
+    "古生物の博士",
+    "こせいぶつのはかせ",
+    "古生物の教授",
+    "こせいぶつのきょうじゅ",
+    "古生物の研究",
+    "こせいぶつのけんきゅう",
   ],
 
   小柴教授: ["小柴教授", "こしばきょうじゅ", "小柴", "こしば"],
@@ -493,6 +502,7 @@ const keywordMap = {
 
   茶道部: ["茶道部", "さどうぶ", "茶道", "さどう"],
   キーワード全取得: ["キーワード全取得", "きーわーどぜんしゅとく"],
+  雑談キーワード: ["雑談キーワード", "ざつだんきーわーど"],
   テストリセット: ["テストリセット", "てすとりせっと"],
 };
 
@@ -510,6 +520,11 @@ const quizData = {
   はじめの夢: {
     answer: "獣医",
     hint: "はじめの将来の夢を答えましょう",
+  },
+
+  大昔の生き物: {
+    answer: "古生物",
+    hint: "まりんの好きな『大昔の生き物』をなんと呼ぶか答えましょう",
   },
 
   まりんの夢: {
@@ -656,7 +671,7 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "誰視点のコメント？" },
       ],
       [
-        { speaker: "まりん", text: "いい大学を狙うことしたと？" },
+        { speaker: "まりん", text: "で、いい大学を狙うことにしたの？" },
         { speaker: "はじめ", text: "まあね" },
       ],
       [
@@ -706,7 +721,7 @@ const keywordDialogues = {
   獣医: {
     dialogue: [
       [
-        { speaker: "まりん", text: "つまり動物病院に通ううちに" },
+        { speaker: "まりん", text: "ケガした子猫を看病するうちに" },
         { speaker: "まりん", text: "獣医さんを目指したくなってきたと" },
       ],
       [
@@ -730,12 +745,74 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "現実的な夢ではあるけどね" },
       ],
       [
-        { speaker: "はじめ", text: "えーと、何学の学者さんだっけ……" },
-        { speaker: "はじめ", text: "……こ、考古学？" },
+        { speaker: "はじめ", text: "『何学の学者』さんだっけ？" },
+        { speaker: "はじめ", text: "えーと……こ、考古学？" },
       ],
       [
         { speaker: "まりん", text: "惜しい。それはインディ・ジョーンズ" },
         { speaker: "まりん", text: "私の専門は『大昔の生き物』だからね" },
+      ],
+    ],
+  },
+
+  論文: {
+    dialogue: [
+      [
+        { speaker: "まりん", text: "最新の論文をスマホで簡単に読める" },
+        { speaker: "まりん", text: "いい時代になったもんだね" },
+      ],
+      [
+        { speaker: "はじめ", text: "いや、私らデジタルネイティブでしょ" },
+        { speaker: "はじめ", text: "というか、なんの論文？" },
+      ],
+      [
+        { speaker: "まりん", text: "ティラノサウルス集団生活説の論文" },
+        { speaker: "はじめ", text: "うわ、全部英語だ！" },
+      ],
+      [
+        { speaker: "まりん", text: "大好きな昔の生き物を学びながら" },
+        { speaker: "まりん", text: "英語も学べて一石二鳥ってわけ" },
+      ],
+      [
+        { speaker: "はじめ", text: "【勉強】が楽しいって感覚" },
+        { speaker: "はじめ", text: "私には一生わからないかも……" },
+      ],
+      [
+        { speaker: "はじめ", text: "では、勉強嫌いなはじめちゃんに" },
+        { speaker: "はじめ", text: "私から、ためになるクイズです" },
+      ],
+      [
+        { speaker: "はじめ", text: "私が好きな【大昔の生き物】のことを" },
+        { speaker: "はじめ", text: "学術的にはなんと呼ぶでしょう？" },
+      ],
+    ],
+  },
+
+  古生物: {
+    dialogue: [
+      [
+        { speaker: "まりん", text: "正解、正解、大正解！" },
+        { speaker: "まりん", text: "私が好きなのは古生物です" },
+      ],
+      [
+        { speaker: "まりん", text: "古代生物じゃなくて古生物なのが" },
+        { speaker: "まりん", text: "学問的には重要なポイントね" },
+      ],
+      [
+        { speaker: "まりん", text: "これだけでも覚えて帰ってください" },
+        { speaker: "はじめ", text: "お笑い芸人みたいな文句だ……" },
+      ],
+      [
+        { speaker: "まりん", text: "ちなみに人類誕生以前に生きていた" },
+        { speaker: "はじめ", text: "生き物だけを指す呼び名ね" },
+      ],
+      [
+        { speaker: "はじめ", text: "あれ？　シーラカンスは？" },
+        { speaker: "まりん", text: "それは生きる化石ってやつね" },
+      ],
+      [
+        { speaker: "はじめ", text: "あー、なんか聞いたことがある" },
+        { speaker: "まりん", text: "またひとつ、世界の真実を知ったね" },
       ],
     ],
   },
@@ -784,16 +861,12 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "あんなすごいもの見つけたら" },
       ],
       [
-        { speaker: "はじめ", text: "まあ、まりんがハマるのもわかるよ" },
-        { speaker: "はじめ", text: "あんなすごいもの見つけたら" },
-      ],
-      [
         { speaker: "まりん", text: "小３の野外学習ではぐれたときね" },
         { speaker: "まりん", text: "まさか恐竜の頭蓋骨を見つけるとは" },
       ],
       [
         { speaker: "まりん", text: "元から昔の生き物は好きだったけど" },
-        { speaker: "まりん", text: "あれで化石のトリコになっちゃったな" },
+        { speaker: "まりん", text: "あれでトリコになっちゃったな～♪" },
       ],
       [
         { speaker: "まりん", text: "教授に出会ったのも、あのときだしね" },
@@ -964,7 +1037,7 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "『初めて』じゃなかったかな……" },
       ],
       [
-        { speaker: "まりん", text: "あごにアッパーをした？" },
+        { speaker: "まりん", text: "……あごにアッパーをした？" },
         { speaker: "はじめ", text: "１回でもするな、そんなこと！" },
       ],
     ],
@@ -1036,7 +1109,7 @@ const keywordDialogues = {
     dialogue: [
       [
         { speaker: "まりん", text: "はじめと喧嘩した原因……" },
-        { speaker: "まりん", text: "………………………………あっ" },
+        { speaker: "まりん", text: "…………………………あっ" },
       ],
       [
         { speaker: "はじめ", text: "ようやく思い出したんだ？" },
@@ -1085,8 +1158,8 @@ const keywordDialogues = {
         { speaker: "まりん", text: "仕事のできる大人の女だったでしょ？" },
       ],
       [
-        { speaker: "まりん", text: "私、真面目に小柴教授を尊敬してて" },
-        { speaker: "まりん", text: "会うたびに嬉しくなっちゃうから……" },
+        { speaker: "まりん", text: "私、ホントに小柴教授が大好きで" },
+        { speaker: "まりん", text: "会うとテンション爆上がりしちゃうから" },
       ],
       [
         { speaker: "まりん", text: "挨拶代わりに、ほっぺにちゅっと……" },
@@ -1127,7 +1200,7 @@ const keywordDialogues = {
       ],
       [
         { speaker: "まりん", text: "ん……？　そういえば……" },
-        { speaker: "はじめ", text: "遠足のおやつによく買ったよね" },
+        { speaker: "まりん", text: "遠足のおやつによく買ったよね" },
       ],
       [
         { speaker: "はじめ", text: "あ……うん。小学生のときとか" },
@@ -1452,8 +1525,8 @@ const keywordDialogues = {
         { speaker: "はじめ", text: "…………………………" },
       ],
       [
-        { speaker: "まりん", text: "はじめの視線がねっとりして気が……" },
-        { speaker: "まりん", text: "もしかして【エロい話】？" },
+        { speaker: "まりん", text: "なんか視線がねっとりしてる気が……" },
+        { speaker: "まりん", text: "もしかして、珍しく【エロい話】？" },
       ],
       [
         { speaker: "はじめ", text: "うぐっ……" },
@@ -1478,11 +1551,15 @@ const keywordDialogues = {
       ],
       [
         { speaker: "まりん", text: "おお、それは素直に照れるね" },
-        { speaker: "はじめ", text: "明るくて、才能あって、活動的で……" },
+        { speaker: "はじめ", text: "才能あって、活動的で、努力家で……" },
+      ],
+      [
+        { speaker: "はじめ", text: "明るくて、可愛くて、魅力的で……" },
+        { speaker: "まりん", text: "いやー、そんなにほめてくれるなんて" },
       ],
       [
         { speaker: "はじめ", text: "でも正直、眩しすぎるときがあるの" },
-        { speaker: "まりん", text: "おっと、話変わってきたな……" },
+        { speaker: "まりん", text: "おっと、流れが変わってきたな……" },
       ],
       [
         { speaker: "はじめ", text: "教授と楽しそうに電話してる時とか" },
@@ -1707,31 +1784,6 @@ const keywordDialogues = {
       [
         { speaker: "まりん", text: "英才教育の賜だったか" },
         { speaker: "はじめ", text: "私の狭い記憶領域が圧迫される……" },
-      ],
-    ],
-  },
-
-  論文: {
-    dialogue: [
-      [
-        { speaker: "まりん", text: "最新の論文をスマホで簡単に読める" },
-        { speaker: "まりん", text: "いい時代になったもんだね" },
-      ],
-      [
-        { speaker: "はじめ", text: "いや、私らデジタルネイティブでしょ" },
-        { speaker: "はじめ", text: "というか、なんの論文？" },
-      ],
-      [
-        { speaker: "まりん", text: "ティラノサウルス集団生活説の論文" },
-        { speaker: "はじめ", text: "うわ、全部英語だ！" },
-      ],
-      [
-        { speaker: "まりん", text: "大好きな昔の生き物を学びながら" },
-        { speaker: "まりん", text: "英語も学べて一石二鳥ってわけ" },
-      ],
-      [
-        { speaker: "はじめ", text: "【勉強】が楽しいって感覚" },
-        { speaker: "はじめ", text: "私には一生わからないかも……" },
       ],
     ],
   },
@@ -2226,33 +2278,32 @@ const specialKeywordListItems = [
   "始まりの物語",
 ];
 
+const quizAnswers = new Set(Object.values(quizData).map((data) => data.answer));
+
 const rawKeywordListItems = [
   ...[...new Set(breakMessages.map((item) => item.keyword))]
     .filter((keyword) => !quizData[keyword])
     .map((keyword) => ({
       type: "normal",
-      keyword: keyword,
+      keyword,
     })),
 
   ...Object.keys(keywordDialogues)
-    .filter(
-      (keyword) =>
-        !Object.values(quizData).some((data) => data.answer === keyword),
-    )
+    .filter((keyword) => !quizAnswers.has(keyword))
     .map((keyword) => ({
       type: "normal",
-      keyword: keyword,
+      keyword,
     })),
 
   ...Object.entries(quizData).map(([question, data]) => ({
     type: "quiz",
-    question: question,
+    question,
     answer: data.answer,
   })),
 
   ...specialKeywordListItems.map((keyword) => ({
     type: "normal",
-    keyword: keyword,
+    keyword,
   })),
 ];
 

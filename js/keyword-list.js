@@ -39,29 +39,26 @@ function showLockedKeywordHint(sourceType) {
   showHintNotice("まだ入手していないキーワードです");
 }
 
+function getKeywordSourceType(keyword) {
+  return breakMessages.some((message) => message.keyword === keyword)
+    ? "break"
+    : "dialogue";
+}
+
 // ==================================================
 // キーワードリスト
 // ==================================================
-function updateKeywordListContent(withAnimation = false) {
-  const content = document.getElementById("keywordListContent");
+function createQuizKeywordHtml(item, withAnimation) {
+  const question = item.question;
+  const answer = item.answer;
 
-  content.innerHTML = keywordListItems
-    .map((item) => {
-      if (item.type === "quiz") {
-        const question = item.question;
-        const answer = item.answer;
+  const hasQuestion = acquiredKeywords.includes(question);
+  const hasAnswer = acquiredKeywords.includes(answer);
 
-        const hasQuestion = acquiredKeywords.includes(question);
-        const hasAnswer = acquiredKeywords.includes(answer);
+  if (!hasQuestion && !hasAnswer) {
+    const sourceType = getKeywordSourceType(question);
 
-        if (!hasQuestion && !hasAnswer) {
-          const sourceType = breakMessages.some(
-            (msg) => msg.keyword === question,
-          )
-            ? "break"
-            : "dialogue";
-
-          return `
+    return `
 <div
   class="keywordListItem locked"
   onclick="showLockedKeywordHint('${sourceType}')"
@@ -69,71 +66,79 @@ function updateKeywordListContent(withAnimation = false) {
   🔒？？？
 </div>
 `;
-        }
+  }
 
-        if (hasQuestion && !hasAnswer) {
-          return `
-  <div class="keywordListItem unlocked" data-keyword="${question}" onclick="showQuizHint('${question}')">
-    🔒
-    <span class="keywordItemText unlocked">
-      ${question}
-    </span>
-  </div>
+  if (hasQuestion && !hasAnswer) {
+    return `
+<div class="keywordListItem unlocked" data-keyword="${question}" onclick="showQuizHint('${question}')">
+  🔒
+  <span class="keywordItemText unlocked">
+    ${question}
+  </span>
+</div>
 `;
-        }
+  }
 
-        if (withAnimation && !transformedQuizAnswers.includes(answer)) {
-          return `
-          <div class="keywordListItem" data-answer="${answer}">
-            🔒 ${question}
-          </div>
-        `;
-        }
+  if (withAnimation && !transformedQuizAnswers.includes(answer)) {
+    return `
+<div class="keywordListItem" data-answer="${answer}">
+  🔒 ${question}
+</div>
+`;
+  }
 
-        return `
+  return `
 <div class="keywordListItem unlocked" onclick="selectKeywordFromList('${answer}')">🔑
   <span class="keywordItemText unlocked active">
     ${answer}
   </span>
 </div>
 `;
-      }
+}
 
-      if (item.type === "normal") {
-        const keyword = item.keyword;
+function createNormalKeywordHtml(item) {
+  const keyword = item.keyword;
 
-        if (acquiredKeywords.includes(keyword)) {
-          const isActive = unlockedDialogueKeywords.includes(keyword);
-          const extraClass = isActive ? " active" : "";
-          const isNew = !isActive;
+  if (acquiredKeywords.includes(keyword)) {
+    const isActive = unlockedDialogueKeywords.includes(keyword);
+    const extraClass = isActive ? " active" : "";
+    const isNew = !isActive;
 
-          return `
+    return `
 <div class="keywordListItem unlocked" data-keyword="${keyword}" onclick="selectKeywordFromList('${keyword}')">
   🔑<span class="keywordItemText unlocked${extraClass}">${keyword}</span>${isNew ? '<span class="keywordNewBadge">NEW</span>' : ""}
 </div>
 `;
-        }
+  }
 
-        const sourceType = breakMessages.some(
-          (message) => message.keyword === keyword,
-        )
-          ? "break"
-          : "dialogue";
+  const sourceType = getKeywordSourceType(keyword);
 
-        return `
+  return `
 <div class="keywordListItem locked" onclick="showLockedKeywordHint('${sourceType}')">
   🔑？？？
 </div>
 `;
+}
+
+function updateKeywordListContent(withAnimation = false) {
+  const content = document.getElementById("keywordListContent");
+
+  content.innerHTML = keywordListItems
+    .map((item) => {
+      if (item.type === "quiz") {
+        return createQuizKeywordHtml(item, withAnimation);
+      }
+      if (item.type === "normal") {
+        return createNormalKeywordHtml(item);
       }
 
       return "";
     })
     .join("");
 
-  if (withAnimation) {
-    const targets = document.querySelectorAll(".keywordListItem[data-answer]");
+  const targets = document.querySelectorAll(".keywordListItem[data-answer]");
 
+  if (withAnimation) {
     if (targets.length > 0) {
       const lastTarget = targets[targets.length - 1];
 
@@ -180,11 +185,7 @@ function updateKeywordListContent(withAnimation = false) {
     }
   }
 
-  if (
-    withAnimation &&
-    lastAcquiredKeyword &&
-    document.querySelectorAll(".keywordListItem[data-answer]").length === 0
-  ) {
+  if (withAnimation && lastAcquiredKeyword && targets.length === 0) {
     const target = document.querySelector(
       `.keywordListItem[data-keyword="${lastAcquiredKeyword}"]`,
     );

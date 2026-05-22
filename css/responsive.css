@@ -1,4 +1,4 @@
-/* ==================================================
+/* responsive.css =====================================
   画面サイズごとの調整
   ================================================== */
 @media (max-width: 768px) {
@@ -18,32 +18,21 @@
     font-size: 14px;
   }
 
-  /* レイアウト幅 */
-  #imageArea {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-  }
-
   #controlRow {
     width: 96%;
-    max-width: none;
-
     margin: 18px auto 0;
     gap: 16px;
   }
 
   #buttonRow {
     width: 96%;
-    max-width: none;
-
     margin: 20px auto 0;
   }
 
   #imageArea {
     width: 100%;
     max-width: none;
-    margin: 0 auto 0;
+    margin: 0 auto;
 
     overflow: hidden;
     border-radius: 18px;
@@ -72,8 +61,8 @@
 
   .dialogLine.left,
   .dialogLine.right {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .line {
@@ -92,7 +81,6 @@
     font-size: 64px;
     margin-top: -4px;
     line-height: 0.95;
-    letter-spacing: 0.01em;
   }
 
   #timerPanel::before {
@@ -122,10 +110,6 @@
 
   #trackName {
     font-size: 17px;
-    margin-top: 0;
-    color: rgba(255, 248, 240, 0.92);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
     font-weight: 400;
     text-shadow: 0 0 10px rgba(255, 240, 200, 0.06);
     min-height: 20px;
@@ -157,17 +141,7 @@
 }
 
 @media (min-width: 769px) {
-  #timerPanel {
-    padding-left: 42px;
-    padding-right: 42px;
-  }
-
   #timerPanel::after {
     right: 68px;
-  }
-
-  #mode,
-  #timer {
-    margin-left: 14px;
   }
 }

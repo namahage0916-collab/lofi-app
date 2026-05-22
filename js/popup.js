@@ -1,3 +1,6 @@
+// popup.js
+const keywordListOverlay = document.getElementById("keywordListOverlay");
+
 function openPopup(overlay) {
   if (!overlay) return;
 
@@ -42,8 +45,7 @@ function notifyModeChange(text) {
 }
 
 function showClearPopup() {
-  clearOverlay.style.display = "flex";
-  keywordInput.blur();
+  openPopup(clearOverlay);
 
   if (!unlockedDialogueKeywords.includes("お別れは笑顔で")) {
     unlockedDialogueKeywords.push("お別れは笑顔で");
@@ -91,15 +93,11 @@ function closeVolumePopup() {
 }
 
 function showKeywordListPopup() {
-  const overlay = document.getElementById("keywordListOverlay");
-
-  openPopup(overlay);
+  openPopup(keywordListOverlay);
 
   updateKeywordListContent(true);
 }
 
 function closeKeywordListPopup() {
-  const overlay = document.getElementById("keywordListOverlay");
-
-  closePopup(overlay);
+  closePopup(keywordListOverlay);
 }

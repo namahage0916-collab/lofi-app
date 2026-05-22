@@ -1,4 +1,4 @@
-// ==================================================
+// theme.js
 // 現在のテーマ番号
 // ==================================================
 
@@ -7,14 +7,12 @@ let currentTheme = 0;
 // ==================================================
 // テーマ一覧
 // ==================================================
-// bodyBg           : 背景色 / 背景画像
-// bodyText         : body全体の文字色
-// panelBg          : パネル背景色
-// panelShadow      : パネル影
-// subText          : 補助テキスト色
-// mainText         : メイン文字色
-// visualizerColor  : ビジュアライザー色
-// popupBg          : ポップアップ背景色
+// bodyBg          : 背景色 / 背景画像
+// bodyText        : body全体の文字色
+// subText         : 補助テキスト色
+// mainText        : メイン文字色
+// visualizerColor : ビジュアライザー色
+// popupBg         : ポップアップ背景色
 // ==================================================
 
 const themes = [
@@ -52,32 +50,6 @@ const themes = [
 ];
 
 // ==================================================
-// パネルスタイル適用
-// ==================================================
-
-function applyPanelStyle(el, theme) {
-  if (!el) return;
-
-  el.style.boxShadow = "var(--panel-shadow)";
-  el.style.border = "var(--glass-border)";
-  el.style.backdropFilter = "blur(12px)";
-  el.style.webkitBackdropFilter = "blur(12px)";
-}
-
-// ==================================================
-// 全パネルへテーマ適用
-// ==================================================
-
-function applyPanels(theme) {
-  document.querySelectorAll(".panel").forEach((panel) => {
-    applyPanelStyle(panel, theme);
-  });
-
-  // messageBox は .panel ではないため個別適用
-  applyPanelStyle(messageBox, theme);
-}
-
-// ==================================================
 // ポップアップスタイル適用
 // ==================================================
 
@@ -85,12 +57,10 @@ function applyPopupStyle(el, theme) {
   if (!el) return;
 
   el.style.background = theme.popupBg;
-  el.style.boxShadow = "var(--panel-shadow)";
-  el.style.border = "var(--glass-border)";
-  el.style.color = theme.mainText;
 
-  el.style.backdropFilter = "blur(16px)";
-  el.style.webkitBackdropFilter = "blur(16px)";
+  // ポップアップ本体の基本文字色
+  // 内部テキストは個別上書きあり
+  el.style.color = theme.mainText;
 }
 
 // ==================================================
@@ -126,6 +96,25 @@ function applyElementTextColor(id, color) {
 }
 
 // ==================================================
+// 複数IDの文字色変更
+// ==================================================
+
+function applyElementsTextColor(ids, color) {
+  ids.forEach((id) => {
+    applyElementTextColor(id, color);
+  });
+}
+
+// ==================================================
+// ポップアップ＋テキスト適用
+// ==================================================
+
+function applyPopupWithText(boxId, textId, theme) {
+  applyPopupById(boxId, theme);
+  applyElementTextColor(textId, theme.mainText);
+}
+
+// ==================================================
 // ビジュアライザー色変更
 // ==================================================
 
@@ -155,23 +144,15 @@ function applyBodyStyle(theme) {
 function applyCssVariables(theme) {
   const root = document.documentElement;
 
-  root.style.setProperty("--panel-bg", theme.panelBg);
-
   root.style.setProperty("--timer-display-color", theme.mainText);
 
-  root.style.setProperty("--button-bg", theme.panelBg);
-
   root.style.setProperty("--button-text", theme.mainText);
-}
 
-// ==================================================
-// ポップアップボタン用CSS変数
-// ==================================================
+  root.style.setProperty("--popup-button-bg", theme.popupBg);
 
-function applyPopupButtonVariables(theme) {
-  document.documentElement.style.setProperty(
-    "--popup-button-bg",
-    theme.panelBg,
+  root.style.setProperty(
+    "--popup-button-hover-bg",
+    "rgba(255, 248, 220, 0.12)",
   );
 }
 
@@ -214,12 +195,6 @@ function applyTheme(theme) {
   applyCssVariables(theme);
 
   // ==================================================
-  // パネル
-  // ==================================================
-
-  applyPanels(theme);
-
-  // ==================================================
   // テキスト
   // ==================================================
 
@@ -227,9 +202,8 @@ function applyTheme(theme) {
   applyTextColor(".panelTitle", theme.mainText);
   applyTextColor(".line", theme.mainText);
 
-  applyElementTextColor("trackName", theme.subText);
-  applyElementTextColor("dateText", theme.subText);
-  applyElementTextColor("mode", theme.subText);
+  applyElementsTextColor(["trackName", "dateText", "mode"], theme.subText);
+
   applyElementTextColor("timer", theme.mainText);
 
   // ==================================================
@@ -246,24 +220,19 @@ function applyTheme(theme) {
 
   if (timerBox) {
     applyPopupStyle(timerBox, theme);
-    applyPopupButtonVariables(theme);
   }
 
   // ==================================================
   // 各種ポップアップ
   // ==================================================
 
-  applyPopupById("noticeBox", theme);
-  applyElementTextColor("noticeText", theme.mainText);
+  applyPopupWithText("noticeBox", "noticeText", theme);
 
-  applyPopupById("clearBox", theme);
-  applyElementTextColor("clearText", theme.mainText);
+  applyPopupWithText("clearBox", "clearText", theme);
 
-  applyPopupById("creditBox", theme);
-  applyElementTextColor("creditText", theme.mainText);
+  applyPopupWithText("creditBox", "creditText", theme);
 
-  applyPopupById("keywordListBox", theme);
-  applyElementTextColor("keywordListContent", theme.mainText);
+  applyPopupWithText("keywordListBox", "keywordListContent", theme);
 
   applyPopupById("volumeBox", theme);
 

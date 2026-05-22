@@ -207,20 +207,13 @@
             </div>
           </div>
 
-          <div id="timerActionButtons" style="display: none">
-            <div
-              id="timerActionModeText"
-              style="margin-bottom: 10px; font-size: 18px"
-            ></div>
+          <div id="timerActionButtons" class="hidden">
+            <div id="timerActionModeText"></div>
 
-            <div
-              id="timerActionTime"
-              style="font-size: 42px; font-weight: bold; margin-bottom: 18px"
-            >
-              25:00
-            </div>
+            <div id="timerActionTime">25:00</div>
 
             <div class="timerActionButtonList">
+              <button onclick="showTimerSettingForm()">時間を再設定</button>
               <button
                 id="pauseResumeButton"
                 onclick="togglePauseFromSettings()"
@@ -250,11 +243,11 @@
             <img
               src="image_idle.png"
               id="mainImage"
-              class="fade-in-long"
+              class="fade-in"
               alt="ドット絵イラスト"
             />
 
-            <div id="messageBox" class="fade-in">
+            <div id="messageBox" class="glassPanel fade-in">
               <div id="leftMessageBlock" class="dialogLine left">
                 <div id="leftMessageName" class="speaker">まりん</div>
                 <div id="leftMessage" class="line"></div>
@@ -280,7 +273,7 @@
           <div id="controlRow">
             <div
               id="timerPanel"
-              class="panel fade-in"
+              class="panel glassPanel glassHover fade-in"
               onclick="openTimerSettings()"
             >
               <div id="mode">タイマー設定</div>
@@ -387,7 +380,7 @@
             </div>
           </div>
 
-          <div id="musicBar">
+          <div id="musicBar" class="glassPanel">
             <div id="trackInfo">
               <div id="trackMeta">
                 <svg

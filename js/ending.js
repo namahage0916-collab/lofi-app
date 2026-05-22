@@ -1,3 +1,4 @@
+// ending.js //
 // ==================================================
 // エンディング演出設定
 // ==================================================
@@ -8,6 +9,17 @@ const ENDING_TIMING = {
   keyword1Delay: 9200, // 「また会う日まで」通知
   keyword2Delay: 11200, // 「お別れは笑顔で」通知
 };
+
+function playMusicWithVisualizer() {
+  music
+    .play()
+    .then(() => {
+      startVisualizer();
+    })
+    .catch(() => {
+      stopVisualizer();
+    });
+}
 
 function playSceneFade({
   color = "black",
@@ -28,8 +40,7 @@ function playSceneFade({
       stopVisualizer();
     }
 
-    sceneFade.classList.add(color);
-    sceneFade.classList.add("active");
+    sceneFade.classList.add(color, "active");
   }, fadeInDelay);
 
   setTimeout(
@@ -44,14 +55,7 @@ function playSceneFade({
   setTimeout(
     () => {
       if (resumeMusic && wasMusicPlaying) {
-        music
-          .play()
-          .then(() => {
-            startVisualizer();
-          })
-          .catch(() => {
-            stopVisualizer();
-          });
+        playMusicWithVisualizer();
       } else {
         stopVisualizer();
       }
@@ -102,10 +106,6 @@ function startEnding() {
     WHITEOUT_DURATION + ENDING_TIMING.keyword2Delay,
   );
 
-  const timerPanel = document.getElementById("timerPanel");
-  timerPanel.style.cursor = "default";
-  timerPanel.style.pointerEvents = "none";
-
   clearInterval(intervalId);
   intervalId = null;
   stopMessageLoop();
@@ -121,15 +121,12 @@ function startEnding() {
 
   keywordInput.blur();
 
-  sceneFade.classList.add("white");
-  sceneFade.classList.add("active");
+  sceneFade.classList.add("white", "active");
 
   setTimeout(() => {
     showEndingTimerPanel();
 
-    if (typeof showClearLineEffect === "function") {
-      showClearLineEffect();
-    }
+    showClearLineEffect();
   }, WHITEOUT_DURATION);
 
   setTimeout(() => {
@@ -155,14 +152,7 @@ function startEnding() {
 
     trackNameDisplay.innerText = "Nothing";
 
-    music
-      .play()
-      .then(() => {
-        startVisualizer();
-      })
-      .catch(() => {
-        stopVisualizer();
-      });
+    playMusicWithVisualizer();
   }, WHITEOUT_DURATION + ENDING_TIMING.clearTextDuration);
 }
 

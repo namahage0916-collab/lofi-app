@@ -1,5 +1,15 @@
+// keyword-effects.js
 const HINT_NOTICE_DURATION = 7000;
 const KEYWORD_INPUT_NOTICE_DELAY = 2000;
+
+const RESET_STORAGE_KEYS = [
+  "endingReached",
+  "afterEroTalkCount",
+  "acquiredKeywords",
+  "unlockedDialogueKeywords",
+  "transformedQuizAnswers",
+  "viewedKeywords",
+];
 
 function showToastNotice(text, duration) {
   const area = document.getElementById("keywordToastArea");
@@ -37,6 +47,16 @@ function playRepeatedAfterEroTalkEffect() {
     repeatedAfterEroDialogues.length - 1,
   );
 
+  if (
+    nextCount >= repeatedAfterEroDialogues.length &&
+    !unlockedDialogueKeywords.includes("めちゃくちゃのぐちゃぐちゃ")
+  ) {
+    unlockedDialogueKeywords.push("めちゃくちゃのぐちゃぐちゃ");
+
+    saveKeywordProgress();
+    updateKeywordDot();
+  }
+
   playSceneFade({
     color: "black",
     pauseMusic: true,
@@ -56,23 +76,14 @@ function playRepeatedAfterEroTalkEffect() {
 }
 
 async function resetStoryToBeginning() {
-  sceneFade.classList.add("white");
-  sceneFade.classList.add("active");
+  sceneFade.classList.add("white", "active");
 
   await wait(RESET_STORY_FIRST_WAIT);
-
-  sceneFade.classList.add("white");
-  sceneFade.classList.add("active");
-
   await wait(RESET_STORY_SECOND_WAIT);
 
-  localStorage.removeItem("endingReached");
-  localStorage.removeItem("afterEroTalkCount");
-
-  localStorage.removeItem("acquiredKeywords");
-  localStorage.removeItem("unlockedDialogueKeywords");
-  localStorage.removeItem("transformedQuizAnswers");
-  localStorage.removeItem("viewedKeywords");
+  RESET_STORAGE_KEYS.forEach((key) => {
+    localStorage.removeItem(key);
+  });
 
   location.reload();
 }

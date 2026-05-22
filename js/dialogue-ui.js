@@ -1,3 +1,4 @@
+/* dialogue-ui.js */
 let currentDialoguePages = null;
 let currentDialoguePageIndex = 0;
 let currentKeywordsByPage = null;
@@ -38,42 +39,50 @@ function showDialogue(dialogue, keywordsByPage = null) {
   showDialoguePage();
 }
 
+function highlightKeywords(text) {
+  // 【〜】で囲まれている部分を丸ごと取得
+  return text.replace(/【(.*?)】/g, (match) => {
+    return `<span class="keyword-highlight">${match}</span>`;
+  });
+}
+
+function getDialogueLineClass(speaker) {
+  if (speaker.trim() === "") {
+    return "dialogLine center";
+  }
+
+  return speaker === "まりん" ? "dialogLine left" : "dialogLine right";
+}
+
+function createDialogueLine(item) {
+  const lineBlock = document.createElement("div");
+
+  lineBlock.className = getDialogueLineClass(item.speaker);
+
+  if (item.speaker) {
+    const speakerEl = document.createElement("div");
+    speakerEl.className = "speaker";
+    speakerEl.innerText = item.speaker;
+    lineBlock.appendChild(speakerEl);
+  }
+
+  const textEl = document.createElement("div");
+  textEl.className = "line";
+  textEl.innerHTML = "「" + highlightKeywords(item.text) + "」";
+
+  lineBlock.appendChild(textEl);
+
+  return lineBlock;
+}
+
 function showDialoguePage() {
   const dialogue = currentDialoguePages[currentDialoguePageIndex];
 
-  messageBox.innerHTML = "";
+  messageBox.replaceChildren();
 
   dialogue.forEach((item) => {
-    const lineBlock = document.createElement("div");
-
-    if (item.speaker.trim() === "") {
-      lineBlock.className = "dialogLine center";
-    } else {
-      lineBlock.className =
-        item.speaker === "まりん" ? "dialogLine left" : "dialogLine right";
-    }
-
-    if (item.speaker) {
-      const speakerEl = document.createElement("div");
-      speakerEl.className = "speaker";
-      speakerEl.innerText = item.speaker;
-      lineBlock.appendChild(speakerEl);
-    }
-
-    const textEl = document.createElement("div");
-    textEl.className = "line";
-    textEl.innerHTML = "「" + highlightKeywords(item.text) + "」";
-
-    lineBlock.appendChild(textEl);
-    messageBox.appendChild(lineBlock);
+    messageBox.appendChild(createDialogueLine(item));
   });
-
-  function highlightKeywords(text) {
-    // 【〜】で囲まれている部分を丸ごと取得
-    return text.replace(/【(.*?)】/g, (match) => {
-      return `<span class="keyword-highlight">${match}</span>`;
-    });
-  }
 
   applyTheme(themes[currentTheme]);
 
@@ -81,22 +90,19 @@ function showDialoguePage() {
   const hasNextPage =
     currentDialoguePageIndex < currentDialoguePages.length - 1;
 
-  if (!hasMultiplePages) {
-    messageBox.classList.remove("has-next");
-    messageBox.classList.remove("has-end");
-  } else if (hasNextPage) {
+  messageBox.classList.remove("has-next", "has-end");
+
+  if (hasMultiplePages && hasNextPage) {
     messageBox.classList.add("has-next");
-    messageBox.classList.remove("has-end");
-  } else {
-    messageBox.classList.remove("has-next");
+  } else if (hasMultiplePages) {
     messageBox.classList.add("has-end");
   }
 
-  if (
-    currentKeywordsByPage &&
-    currentKeywordsByPage[currentDialoguePageIndex]
-  ) {
-    currentKeywordsByPage[currentDialoguePageIndex].forEach((keyword) => {
+  const keywordsOnCurrentPage =
+    currentKeywordsByPage?.[currentDialoguePageIndex];
+
+  if (keywordsOnCurrentPage) {
+    keywordsOnCurrentPage.forEach((keyword) => {
       acquireKeyword(keyword);
     });
   }
@@ -113,11 +119,10 @@ function showRandomMessage() {
 
   const selected = currentMessages[randomIndex];
 
+  showDialogue(timerState.mode === "break" ? selected.dialogue : selected);
+
   if (timerState.mode === "break") {
-    showDialogue(selected.dialogue);
     acquireKeyword(selected.keyword);
-  } else {
-    showDialogue(selected);
   }
 }
 

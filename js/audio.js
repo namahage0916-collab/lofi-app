@@ -1,3 +1,5 @@
+/* audio.js */
+
 const MUSIC_BASE_VOLUME = 0.3;
 const SE_MASTER_VOLUME = 0.5;
 
@@ -25,9 +27,7 @@ function setMusicVolume(v) {
 musicVolumeSlider.addEventListener("input", () => {
   const value = Number(musicVolumeSlider.value) / 100;
 
-  musicVolume = value;
-
-  applyMusicVolume();
+  setMusicVolume(value);
 });
 
 seVolumeSlider.addEventListener("input", () => {
@@ -82,7 +82,6 @@ function playRandomTrack() {
   updateTrackName(randomIndex);
   music.play().catch(() => {});
   startVisualizer();
-  recordIcon.style.animationPlayState = "running";
 }
 
 music.addEventListener("ended", () => {

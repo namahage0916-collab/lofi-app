@@ -12,6 +12,14 @@ let timerState = {
   endTime: null,
 };
 
+const MODE_LABELS = {
+  idle: "タイマー設定",
+  work: "作業時間",
+  break: "休憩時間",
+};
+
+const WEEK_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
+
 let intervalId = null;
 let messageIntervalId = null;
 
@@ -32,11 +40,15 @@ let isEnding = false;
    3. 画面表示の更新
    ================================================== */
 
+function formatTime(value) {
+  return String(value).padStart(2, "0");
+}
+
 function updateTimerDisplay() {
   const min = Math.floor(timerState.remainingTime / 60);
   const sec = timerState.remainingTime % 60;
 
-  timerDisplay.innerText = min + ":" + (sec < 10 ? "0" + sec : sec);
+  timerDisplay.innerText = `${min}:${formatTime(sec)}`;
 
   updateTimerActionTime();
 }
@@ -50,18 +62,11 @@ function updateTimerActionTime() {
 }
 
 function updateModeDisplay() {
-  if (timerState.mode === "idle") {
-    modeDisplay.innerText = "タイマー設定";
-  } else if (timerState.mode === "work") {
-    modeDisplay.innerText = "作業時間";
-  } else if (timerState.mode === "break") {
-    modeDisplay.innerText = "休憩時間";
-  }
+  modeDisplay.innerText = MODE_LABELS[timerState.mode];
 }
 
 function updateModeImage() {
-  mainImage.classList.remove("fade-in-long");
-  mainImage.classList.remove("fade-in-short");
+  mainImage.classList.remove("fade-in", "fade-in-short");
 
   mainImage.src = timerState.mode === "work" ? images.work : images.break;
 
@@ -77,8 +82,7 @@ function updateDate() {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
 
-  const week = ["日", "月", "火", "水", "木", "金", "土"];
-  const dayOfWeek = week[now.getDay()];
+  const dayOfWeek = WEEK_LABELS[now.getDay()];
 
   document.getElementById("dateText").innerText =
     `${year}/${month}/${day}（${dayOfWeek}）`;
@@ -147,12 +151,7 @@ function restoreEndingIfNeeded() {
   document.body.addEventListener(
     "click",
     () => {
-      music
-        .play()
-        .then(() => {
-          startVisualizer();
-        })
-        .catch(() => {});
+      playMusicWithVisualizer();
     },
     { once: true },
   );

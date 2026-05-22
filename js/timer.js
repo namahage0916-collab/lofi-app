@@ -1,26 +1,27 @@
+// timer.js
 /* ==================================================
    2. タイマー設定ポップアップ
    ================================================== */
 
+const timerSettingOverlay = document.getElementById("timerSettingOverlay");
+const timerSettingTitle = document.getElementById("timerSettingTitle");
+const timerSettingForm = document.getElementById("timerSettingForm");
+const timerActionButtons = document.getElementById("timerActionButtons");
+const timerActionModeText = document.getElementById("timerActionModeText");
+const pauseResumeButton = document.getElementById("pauseResumeButton");
+const finishModeButton = document.getElementById("finishModeButton");
+
 function openTimerSettings() {
   if (isEnding) return;
 
-  const overlay = document.getElementById("timerSettingOverlay");
-  const title = document.getElementById("timerSettingTitle");
-  const form = document.getElementById("timerSettingForm");
-  const actions = document.getElementById("timerActionButtons");
-  const actionModeText = document.getElementById("timerActionModeText");
-  const pauseResumeButton = document.getElementById("pauseResumeButton");
-  const finishModeButton = document.getElementById("finishModeButton");
-
-  overlay.style.display = "flex";
+  timerSettingOverlay.style.display = "flex";
 
   if (timerState.isRunning || timerState.isPaused) {
-    title.style.display = "none";
-    form.style.display = "none";
-    actions.style.display = "block";
+    timerSettingTitle.style.display = "none";
+    timerSettingForm.style.display = "none";
+    timerActionButtons.style.display = "block";
 
-    actionModeText.innerText =
+    timerActionModeText.innerText =
       timerState.mode === "work"
         ? timerState.isRunning
           ? "今は作業時間中です"
@@ -35,15 +36,15 @@ function openTimerSettings() {
     finishModeButton.innerText =
       timerState.mode === "work" ? "作業終了" : "休憩終了";
   } else {
-    title.style.display = "block";
-    form.style.display = "block";
-    actions.style.display = "none";
+    timerSettingTitle.style.display = "block";
+    timerSettingForm.style.display = "block";
+    timerActionButtons.style.display = "none";
   }
 }
 
 function closeTimerSettings() {
-  document.getElementById("timerSettingOverlay").style.display = "none";
-  document.getElementById("timerSettingTitle").style.display = "block";
+  timerSettingOverlay.style.display = "none";
+  timerSettingTitle.style.display = "block";
 }
 
 function startFromSettings() {
@@ -53,6 +54,8 @@ function startFromSettings() {
   );
 
   if (workMinutes < 1 || breakMinutes < 1) return;
+
+  stopTimerCore({ pauseMusic: true, pausedState: false });
 
   WORK_TIME = workMinutes * 60;
   BREAK_TIME = breakMinutes * 60;
@@ -157,8 +160,7 @@ function startTimer(showMessage = true) {
     if (!music.src) {
       playRandomTrack();
     } else {
-      music.play().catch(() => {});
-      startVisualizer();
+      playMusicWithVisualizer();
     }
   }
 
@@ -166,6 +168,12 @@ function startTimer(showMessage = true) {
 
   tickTimer();
   intervalId = setInterval(tickTimer, 250);
+}
+
+function showTimerSettingForm() {
+  timerSettingTitle.style.display = "block";
+  timerSettingForm.style.display = "block";
+  timerActionButtons.style.display = "none";
 }
 
 /* タイマー停止系の共通処理 */
