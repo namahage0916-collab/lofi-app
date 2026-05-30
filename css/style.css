@@ -1559,9 +1559,7 @@ body.theme-midnight #messageBox::before {
 
   transform: translate(-3px, 2px);
 
-  transition:
-    transform 0.15s ease,
-    opacity 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 #keywordSubmitButton:active .keywordSubmitIcon {
@@ -1591,7 +1589,6 @@ body.theme-midnight #messageBox::before {
 
   #keywordSubmitButton:hover .keywordSubmitIcon {
     opacity: 1;
-    transform: translate(-2px, 1px);
   }
 }
 

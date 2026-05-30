@@ -185,7 +185,10 @@ function handleSpecialKeyword(key) {
 async function checkKeyword() {
   const input = normalizeKeyword(keywordInput.value);
 
-  if (!input) return;
+  if (!input) {
+    playFailSE();
+    return;
+  }
 
   const key = findKeyword(input);
 
