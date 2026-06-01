@@ -108,7 +108,6 @@ function startEnding() {
 
   clearInterval(intervalId);
   intervalId = null;
-  stopMessageLoop();
 
   timerState.isRunning = false;
   timerState.isPaused = false;

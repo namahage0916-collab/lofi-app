@@ -236,8 +236,6 @@ async function checkKeyword() {
         showKeywordDialogue(keywordData);
       }, DIALOGUE_UNLOCKED_MESSAGE_DELAY);
     }
-
-    resetMessageLoop();
   }
 
   if (key) {

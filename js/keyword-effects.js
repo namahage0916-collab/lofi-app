@@ -70,8 +70,6 @@ function playRepeatedAfterEroTalkEffect() {
     },
   });
 
-  resetMessageLoop();
-
   console.log("めちゃくちゃのぐちゃぐちゃ入力回数:", nextCount);
 }
 

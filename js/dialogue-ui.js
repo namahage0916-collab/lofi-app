@@ -113,6 +113,12 @@ function showIdleMessage() {
 }
 
 function showFocusMessage() {
+  currentDialoguePages = null;
+  currentDialoguePageIndex = 0;
+  currentKeywordsByPage = null;
+
+  messageBox.classList.remove("has-next", "has-end");
+
   messageBox.innerHTML = `
     <div class="focusMessage">
       集中タイムです。<br>
