@@ -121,7 +121,7 @@ function showFocusMessage() {
 
   messageBox.innerHTML = `
     <div class="focusMessage">
-      集中タイムです。<br>
+      集中タイムです<br>
       作業に集中しましょう
     </div>
   `;
