@@ -213,15 +213,17 @@
             <div id="timerActionTime">25:00</div>
 
             <div class="timerActionButtonList">
+              <button id="finishModeButton" onclick="finishFromSettings()">
+                作業終了
+              </button>
+
               <button onclick="showTimerSettingForm()">時間を再設定</button>
+
               <button
                 id="pauseResumeButton"
                 onclick="togglePauseFromSettings()"
               >
                 一時停止
-              </button>
-              <button id="finishModeButton" onclick="finishFromSettings()">
-                作業終了
               </button>
             </div>
 
