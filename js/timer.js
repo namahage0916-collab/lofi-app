@@ -153,9 +153,12 @@ function startTimer(showMessage = true) {
 
   updateModeDisplay();
   if (showMessage) {
-    showRandomMessage();
+    if (timerState.mode === "work") {
+      showFocusMessage();
+    } else if (timerState.mode === "break") {
+      showRandomMessage();
+    }
   }
-
   if (music.paused) {
     if (!music.src) {
       playRandomTrack();
@@ -163,8 +166,6 @@ function startTimer(showMessage = true) {
       playMusicWithVisualizer();
     }
   }
-
-  startMessageLoop();
 
   tickTimer();
   intervalId = setInterval(tickTimer, 250);
@@ -196,7 +197,6 @@ function stopTimerCore({ pauseMusic = true, pausedState = false } = {}) {
     stopVisualizer();
   }
 
-  stopMessageLoop();
   updateTimerDisplay();
 }
 

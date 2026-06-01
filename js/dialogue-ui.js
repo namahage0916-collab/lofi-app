@@ -3,19 +3,6 @@ let currentDialoguePages = null;
 let currentDialoguePageIndex = 0;
 let currentKeywordsByPage = null;
 
-function getRandomMessageIndex() {
-  const currentMessages = timerState.mode === "work" ? messages : breakMessages;
-
-  if (currentMessages.length === 1) return 0;
-
-  let randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * currentMessages.length);
-  } while (randomIndex === lastMessageIndex);
-
-  return randomIndex;
-}
-
 function getRandomBreakMessageIndex() {
   const candidates = breakMessages
     .map((message, index) => ({ message, index }))
@@ -109,21 +96,15 @@ function showDialoguePage() {
 }
 
 function showRandomMessage() {
-  const currentMessages = timerState.mode === "work" ? messages : breakMessages;
-  const randomIndex =
-    timerState.mode === "break"
-      ? getRandomBreakMessageIndex()
-      : getRandomMessageIndex();
+  const randomIndex = getRandomBreakMessageIndex();
 
   lastMessageIndex = randomIndex;
 
-  const selected = currentMessages[randomIndex];
+  const selected = breakMessages[randomIndex];
 
-  showDialogue(timerState.mode === "break" ? selected.dialogue : selected);
+  showDialogue(selected.dialogue);
 
-  if (timerState.mode === "break") {
-    acquireKeyword(selected.keyword);
-  }
+  acquireKeyword(selected.keyword);
 }
 
 function showIdleMessage() {
@@ -131,28 +112,11 @@ function showIdleMessage() {
   showDialogue(idleMessages[randomIndex]);
 }
 
-function startMessageLoop() {
-  if (messageIntervalId) return;
-
-  messageIntervalId = setInterval(() => {
-    if (!timerState.isRunning) return;
-
-    // 作業中だけ、5分ごとにセリフを変える
-    if (timerState.mode !== "work") return;
-
-    showRandomMessage();
-  }, WORK_MESSAGE_INTERVAL);
-}
-
-function stopMessageLoop() {
-  clearInterval(messageIntervalId);
-  messageIntervalId = null;
-}
-
-function resetMessageLoop() {
-  stopMessageLoop();
-
-  if (timerState.isRunning) {
-    startMessageLoop();
-  }
+function showFocusMessage() {
+  messageBox.innerHTML = `
+    <div class="focusMessage">
+      集中タイムです。<br>
+      作業に集中しましょう
+    </div>
+  `;
 }

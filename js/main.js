@@ -21,18 +21,12 @@ const MODE_LABELS = {
 const WEEK_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
 
 let intervalId = null;
-let messageIntervalId = null;
-
-const WORK_MESSAGE_INTERVAL = 5 * 60 * 1000;
 
 let lastMessageIndex = -1;
 let currentTrackIndex = -1;
 
 let sessionCount = 0;
 const SESSION_GOAL = 5;
-
-let lastWorkEndIndex = -1;
-let lastResumeMessageIndex = -1;
 
 let isEnding = false;
 
@@ -96,27 +90,6 @@ function updateFocusDisplay() {
   const empty = "□".repeat(Math.max(SESSION_GOAL - sessionCount, 0));
 
   focusMeter.innerText = filled + empty;
-}
-
-/* ==================================================
-   4. 再開メッセージ
-   ================================================== */
-
-function showRandomResumeMessage() {
-  if (resumeMessages.length === 1) {
-    lastResumeMessageIndex = 0;
-    showDialogue(resumeMessages[0]);
-    return;
-  }
-
-  let randomIndex;
-
-  do {
-    randomIndex = Math.floor(Math.random() * resumeMessages.length);
-  } while (randomIndex === lastResumeMessageIndex);
-
-  lastResumeMessageIndex = randomIndex;
-  showDialogue(resumeMessages[randomIndex]);
 }
 
 /* ==================================================

@@ -307,33 +307,49 @@ input[type="range"] {
   border-radius: 12px;
   box-shadow: 0 12px 18px -6px rgba(0, 0, 0, 0.28);
   overflow: hidden;
+  min-height: 140px;
 }
 
 #messageBox::before {
   content: "";
-
   position: absolute;
-
   left: 50%;
   bottom: 8px;
-
   width: 32px;
   height: 32px;
-
   transform: translateX(-50%);
-
   background: url("../minileaf.png") center / contain no-repeat;
-
   opacity: 0.28;
-
   pointer-events: none;
-
   z-index: 0;
 }
 
 .dialogLine {
   position: relative;
   z-index: 1;
+
+  margin-bottom: 4px;
+  margin-top: 0;
+
+  animation: dialogueFadeIn 0.8s ease forwards;
+}
+
+.focusMessage {
+  min-height: 116px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  font-size: 17px;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+
+  color: rgba(255, 248, 240, 0.82);
+
+  animation: dialogueFadeIn 0.8s ease forwards;
 }
 
 #messageBox.has-next,
@@ -395,12 +411,6 @@ input[type="range"] {
   justify-content: center;
 }
 
-/* 会話行 */
-.dialogLine {
-  margin-bottom: 4px;
-  margin-top: 0;
-}
-
 /* 最後の会話行は下余白なし */
 .dialogLine:last-child {
   margin-bottom: 0;
@@ -442,10 +452,6 @@ input[type="range"] {
   color: rgba(255, 248, 240, 0.86);
   display: inline-block;
   min-height: 32px;
-}
-
-.dialogLine {
-  animation: dialogueFadeIn 0.8s ease forwards;
 }
 
 /* タイトル横の日付表示 */

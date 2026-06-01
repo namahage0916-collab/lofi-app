@@ -32,8 +32,7 @@ function closeNoticeAndStartNext() {
     showRandomMessage();
     startTimer(false);
   } else {
-    startTimer(false);
-    showRandomResumeMessage();
+    startTimer();
   }
 }
 
